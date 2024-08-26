@@ -4,6 +4,8 @@
  */
 package isi.deso.g10.deliverymanagementsystem;
 
+import static java.lang.Math.*;
+
 /**
  *
  * @author giuli
@@ -55,6 +57,31 @@ public class Vendedor {
         this.coordenadas = coordenadas;
     }
     
+    public double distancia(Cliente cliente){
+        
+        double R=6378;
+        
+        
+        //Latitudes
+        double latV= toRadians(this.coordenadas.getLat());
+        double latC= toRadians(cliente.getCoordenadas().getLat());
+        
+        
+        //Longitudes
+        double lngV= toRadians(this.coordenadas.getLng());
+        double lngC= toRadians(cliente.getCoordenadas().getLng());
+        
+        //Deltas
+        double dlat= latC-latV;
+        double dlng= lngC-lngV;
+        
+        double a= pow(sin(dlat)/2,2)+ cos(latV)* cos(latC) * pow(sin(dlng/2),2);
+        double c= 2* atan2(sqrt(a), sqrt(1-a));
+        
+        double distancia= R * c;
+        
+        return distancia;
+    }
     
     
     
