@@ -12,16 +12,19 @@ public class G10Deliverymanagementsystem {
 
     public static void main(String[] args) {
         
+        
+        // Coordenadas para Vendedores
         Coordenada coordenada1= new Coordenada(3.43,4.43);
         Coordenada coordenada2= new Coordenada(1.23,3.223);
         Coordenada coordenada3= new Coordenada(1.654,6.888);
         
+        // Vendedores
         Vendedor vendedor1= new Vendedor(1,"Juan","Azcuenaga 3000",coordenada1);
         Vendedor vendedor2= new Vendedor(2,"Manuel","San Martin 610",coordenada2);
         Vendedor vendedor3= new Vendedor(3,"Ian","Rivadavia 2032",coordenada3);
         
+        // Array de Vendedores
         Vendedor[] vendedores = new Vendedor[3];
-        
         vendedores[0]=vendedor1;
         vendedores[1]=vendedor2;
         vendedores[2]=vendedor3;
@@ -53,6 +56,10 @@ public class G10Deliverymanagementsystem {
         
          // Ejecutar pruebas
         //testearMetodos(vendedores, clientes);
+        
+        
+        //Distancia
+        System.out.println("Distancia Vendedor 2 y Cliente 3 : " + vendedor2.distancia(cliente3));
     }
     
     private static Vendedor buscarVendedor(Vendedor[] vendedores, int idVendedor){
@@ -150,12 +157,33 @@ public class G10Deliverymanagementsystem {
         }
     }
     
+       private static Cliente[] eliminarCliente(Cliente[] clientes, int idCliente){ 
+        
+           if(clientes == null || clientes.length == 0) return clientes;
+        
+        //Contar cantidad vendedores a eliminar
+        int count = 0;
+        for (int i = 0; i < clientes.length; i++) {
+            if(clientes[i].getId()== idCliente) count++;
+        }
+        
+        //Vendedor no presente en array
+        if(count == 0) return clientes;
+        
+        //Vendedor presente en el array una o mas veces
+        Cliente[] newClientes = new Cliente[clientes.length - count];
+        int j = 0;
+        for (int i = 0; i < clientes.length; i++) {
+            if(clientes[i].getId() != idCliente){
+                newClientes[j] = clientes[i];
+                j++;
+            }
+        }
+        
+        return newClientes;
+    }
     
-    /**
-     * AI-generated
-     * @param vendedores
-     * @param clientes 
-     */
+    
     private static void testearMetodos(Vendedor[] vendedores, Cliente[] clientes) {
         // Prueba de búsqueda de vendedor por ID
         System.out.println("\nPrueba de búsqueda de Vendedor por ID:");
@@ -197,5 +225,10 @@ public class G10Deliverymanagementsystem {
         } else {
             System.out.println("Cliente con nombre Maria no encontrado.");
         }
+        
+        //Prueba Eliminación de Cliente
+        System.out.println("\nPrueba de eliminación de Cliente:");
+        Cliente[] clientesActualizados = eliminarCliente(clientes, 2);
+        mostrarClientes(clientesActualizados);
     }
 }
