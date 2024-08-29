@@ -57,9 +57,10 @@ public class Vendedor {
         this.coordenadas = coordenadas;
     }
     
+    //el metodo creo que esta bien
     public double distancia(Cliente cliente){
-        
-        double R=6378;
+        //le puse final porque el radio de la tierra es cte
+        final  double R=6378;
         
         
         //Latitudes
