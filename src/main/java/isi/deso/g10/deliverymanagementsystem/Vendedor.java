@@ -64,13 +64,13 @@ public class Vendedor {
         
         
         //Latitudes
-        double latV= toRadians(this.coordenadas.getLat());
-        double latC= toRadians(cliente.getCoordenadas().getLat());
+        double latV= toRadians(this.coordenadas.getLatitud());
+        double latC= toRadians(cliente.getCoordenadas().getLatitud());
         
         
         //Longitudes
-        double lngV= toRadians(this.coordenadas.getLng());
-        double lngC= toRadians(cliente.getCoordenadas().getLng());
+        double lngV= toRadians(this.coordenadas.getLongitud());
+        double lngC= toRadians(cliente.getCoordenadas().getLongitud());
         
         //Deltas
         double dlat= latC-latV;

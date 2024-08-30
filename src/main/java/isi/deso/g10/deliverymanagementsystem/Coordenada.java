@@ -10,20 +10,20 @@ package isi.deso.g10.deliverymanagementsystem;
  */
 public class Coordenada {
     
-    private double lat;
-    private double lng;
+    private double latitud;
+    private double longitud;
 
     public Coordenada(double lat,double lng){
-        this.lat=lat;
-        this.lng=lng;
+        this.latitud=lat;
+        this.longitud=lng;
     }
     
-    public double getLat() {
-        return lat;
+    public double getLatitud() {
+        return latitud;
     }
 
-    public double getLng() {
-        return lng;
+    public double getLongitud() {
+        return longitud;
     }
     
     

@@ -115,8 +115,8 @@ public class G10Deliverymanagementsystem {
             System.out.println("ID: " + vendedor.getId()
                     + ", Nombre: " + vendedor.getNombre()
                     + ", Dirección: " + vendedor.getDireccion()
-                    + ", Coordenadas: (" + vendedor.getCoordenadas().getLat() + ", "
-                    + vendedor.getCoordenadas().getLng() + ")");
+                    + ", Coordenadas: (" + vendedor.getCoordenadas().getLatitud() + ", "
+                    + vendedor.getCoordenadas().getLongitud() + ")");
         }
     }
 
@@ -151,8 +151,8 @@ public class G10Deliverymanagementsystem {
                     + ", Nombre: " + cliente.getNombre()
                     + ", Email: " + cliente.getEmail()
                     + ", Dirección: " + cliente.getDireccion()
-                    + ", Coordenadas: (" + cliente.getCoordenadas().getLat() + ", "
-                    + cliente.getCoordenadas().getLng() + ")");
+                    + ", Coordenadas: (" + cliente.getCoordenadas().getLatitud() + ", "
+                    + cliente.getCoordenadas().getLongitud() + ")");
         }
     }
 
