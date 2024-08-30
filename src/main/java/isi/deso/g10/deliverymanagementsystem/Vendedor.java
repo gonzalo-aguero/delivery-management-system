@@ -5,24 +5,36 @@
 package isi.deso.g10.deliverymanagementsystem;
 
 import static java.lang.Math.*;
-
+import java.util.ArrayList;
 /**
  *
  * @author giuli
  */
 public class Vendedor {
     
+    //atributos
     private int id;
     private String nombre;
     private String direccion;
     private Coordenada coordenadas;
-
+    private ArrayList<ItemMenu> listaComidas;
     
+    //constructor
     public Vendedor(int id,String nombre,String direccion,Coordenada coordenadas){
         this.id=id;
         this.nombre=nombre;
         this.direccion=direccion;
         this.coordenadas=coordenadas;
+        this.listaComidas = new ArrayList();
+    }
+
+    //geters y setters
+    public ArrayList<ItemMenu> getListaComidas() {
+        return listaComidas;
+    }
+
+    public void setListaComidas(ArrayList<ItemMenu> listaComidas) {
+        this.listaComidas = listaComidas;
     }
     
     public int getId() {
