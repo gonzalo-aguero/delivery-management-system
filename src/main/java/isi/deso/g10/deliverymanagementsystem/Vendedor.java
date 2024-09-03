@@ -96,6 +96,44 @@ public class Vendedor {
         return distancia;
     }
     
-    
+    //metodos etapa 2 
+    //aca podria mostrarlos por pantalla, hay que charlarlo a eso
+    public ArrayList<ItemMenu> getItemBebida(){
+        ArrayList<ItemMenu> bebidas = new ArrayList();
+        for(ItemMenu item:listaComidas){
+            if(item.esBebida()){
+                bebidas.add(item);
+           }
+        }
+        return bebidas;
+    }
+    public ArrayList<ItemMenu> getItemComida(){
+        ArrayList<ItemMenu> comidas = new ArrayList();
+        for(ItemMenu item:listaComidas){
+            if(item.esComida()){
+                comidas.add(item);
+           }
+        }
+        return comidas;
+    }
+    public ArrayList<ItemMenu> getItemComidaVegana(){
+        ArrayList<ItemMenu> comidasVeganas = new ArrayList();
+        for(ItemMenu item:listaComidas){
+            if(item.esComida()  && item.aptoVegano()){
+                comidasVeganas.add(item);
+           }
+        }
+        return comidasVeganas;
+    }
+    public ArrayList<ItemMenu> getItemBebidaSinAlcohol(){
+        ArrayList<ItemMenu> bebidasSinAlcohol = new ArrayList();
+        for(ItemMenu item:listaComidas){
+            if(item.esBebida()  && ((Bebida) item).getGraduacionAlcoholica() == 0){
+                bebidasSinAlcohol.add(item);
+           }
+        }
+        return bebidasSinAlcohol;
+    }
+     
     
 }
