@@ -8,8 +8,8 @@ package isi.deso.g10.deliverymanagementsystem;
  *
  * @author lucas
  */
-public class Bebida  extends ItemMenu {
-    
+public class Bebida extends ItemMenu {
+
     //atributos propios de las bebidas
     private double graduacionAlcoholica;
     //sustituye al atributo tamanio del diagrama de clases del tp
@@ -21,42 +21,49 @@ public class Bebida  extends ItemMenu {
         this.graduacionAlcoholica = graduacionAlcoholica;
         this.volumenEnMl = volumenEnMl;
     }
-    
+
     //definicion de los metodos abstractos de ItemMenu
     @Override
-    public double peso(){
-        if(graduacionAlcoholica == 0){
+    public double peso() {
+        if (graduacionAlcoholica == 0) {
             double pesoBebida = volumenEnMl * 1.04;
             return pesoBebida + pesoBebida * 0.20;
-        }else{
+        } else {
             double pesoBebidaAlcoholica = volumenEnMl * 0.99;
             return pesoBebidaAlcoholica + pesoBebidaAlcoholica * 0.20;
         }
     }
+
     @Override
-    public boolean esComida(){
+    public boolean esComida() {
         return false;
     }
+
     @Override
-    public boolean esBebida(){
+    public boolean esBebida() {
         return true;
-    }    
+    }
+
     @Override
-    public boolean aptoVegano(){
+    public boolean aptoVegano() {
         return aptoVegano;
     }
-    @Override 
-    public boolean aptoVegetariano(){
+
+    @Override
+    public boolean aptoVegetariano() {
         return aptoVegetariano;
     }
+
     @Override
-    public boolean aptoCeliaco(){
+    public boolean aptoCeliaco() {
         return aptoCeliaco;
     }
+
     //getters
     public double getGraduacionAlcoholica() {
         return graduacionAlcoholica;
     }
+
     public double getVolumenEnMl() {
         return volumenEnMl;
     }

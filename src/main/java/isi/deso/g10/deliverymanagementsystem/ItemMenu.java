@@ -14,9 +14,9 @@ public abstract  class ItemMenu {
     protected int id;
     protected String nombre;
     protected String descripcion;
-    protected  double precio;
+    protected double precio;
     protected Categoria categoria;
-    protected int  calorias;
+    protected int calorias;
     protected boolean aptoCeliaco;
     protected boolean aptoVegetariano;
     protected boolean aptoVegano;

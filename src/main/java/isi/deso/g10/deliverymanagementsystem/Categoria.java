@@ -9,7 +9,11 @@ package isi.deso.g10.deliverymanagementsystem;
  * @author lucas
  */
 public class Categoria {
+    public enum TipoItem {
+        COMIDA, BEBIDA
+    }
+    
     private int id;
     private String descripcion;
-    private ItemMenu tipoItem;
+    private TipoItem tipoItem;
 }
