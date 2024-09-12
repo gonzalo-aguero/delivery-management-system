@@ -1,7 +1,12 @@
 package isi.deso.g10.deliverymanagementsystem;
-import isi.deso.g10.deliverymanagementsystem.Classes.*;
-import isi.deso.g10.deliverymanagementsystem.Dao.ItemNoEncontradoException;
-import isi.deso.g10.deliverymanagementsystem.Dao.ItemsPedidoMemory;
+import isi.deso.g10.deliverymanagementsystem.classes.ItemMenu;
+import isi.deso.g10.deliverymanagementsystem.classes.Coordenada;
+import isi.deso.g10.deliverymanagementsystem.classes.Bebida;
+import isi.deso.g10.deliverymanagementsystem.classes.Categoria;
+import isi.deso.g10.deliverymanagementsystem.classes.Comida;
+import isi.deso.g10.deliverymanagementsystem.classes.Vendedor;
+import isi.deso.g10.deliverymanagementsystem.dao.ItemNoEncontradoException;
+import isi.deso.g10.deliverymanagementsystem.dao.ItemsPedidoMemory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.junit.jupiter.api.*;
