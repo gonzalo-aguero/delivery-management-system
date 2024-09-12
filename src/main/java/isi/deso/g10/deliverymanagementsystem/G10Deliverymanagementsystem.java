@@ -3,9 +3,9 @@
  */
 package isi.deso.g10.deliverymanagementsystem;
 
-import isi.deso.g10.deliverymanagementsystem.classes.Coordenada;
-import isi.deso.g10.deliverymanagementsystem.classes.Vendedor;
-import isi.deso.g10.deliverymanagementsystem.classes.Cliente;
+import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
+import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
+import isi.deso.g10.deliverymanagementsystem.model.Cliente;
 import isi.deso.g10.deliverymanagementsystem.dao.ItemNoEncontradoException;
 
 /**

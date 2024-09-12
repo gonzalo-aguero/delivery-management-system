@@ -1,16 +1,15 @@
 package isi.deso.g10.deliverymanagementsystem.dao;
 
-import isi.deso.g10.deliverymanagementsystem.classes.Bebida;
-import isi.deso.g10.deliverymanagementsystem.classes.Categoria;
-import isi.deso.g10.deliverymanagementsystem.classes.Comida;
-import isi.deso.g10.deliverymanagementsystem.classes.ItemMenu;
-import isi.deso.g10.deliverymanagementsystem.classes.Vendedor;
+import isi.deso.g10.deliverymanagementsystem.model.Bebida;
+import isi.deso.g10.deliverymanagementsystem.model.Categoria;
+import isi.deso.g10.deliverymanagementsystem.model.Comida;
+import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
+import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
-import isi.deso.g10.deliverymanagementsystem.dao.*;
 
 public class ItemsPedidoMemory implements ItemsPedidoDao {
 
@@ -58,15 +57,13 @@ public class ItemsPedidoMemory implements ItemsPedidoDao {
         }
     }
      */
-   
-    
     @Override
     public ItemMenu buscarId(int id, List<Vendedor> Vendedores) throws ItemNoEncontradoException {
-    return Vendedores.stream()
-            .flatMap(vendedor -> vendedor.getMenu().stream()) // Combina todos los menús de todos los vendedores
-            .filter(item -> item.getId() == id)
-            .findFirst() 
-            .orElseThrow(() -> new ItemNoEncontradoException("Item con id " + id + " no encontrado."));
+        return Vendedores.stream()
+                .flatMap(vendedor -> vendedor.getMenu().stream()) // Combina todos los menús de todos los vendedores
+                .filter(item -> item.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new ItemNoEncontradoException("Item con id " + id + " no encontrado."));
     }
 
     @Override
@@ -98,7 +95,5 @@ public class ItemsPedidoMemory implements ItemsPedidoDao {
     public List<ItemMenu> buscarPorRestaurante(Vendedor vendedor) throws ItemNoEncontradoException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
 
-   
 }
