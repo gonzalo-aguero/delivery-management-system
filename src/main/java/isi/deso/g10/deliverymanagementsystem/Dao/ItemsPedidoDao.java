@@ -7,6 +7,7 @@ package isi.deso.g10.deliverymanagementsystem.Dao;
 import isi.deso.g10.deliverymanagementsystem.Classes.Categoria;
 import isi.deso.g10.deliverymanagementsystem.Classes.ItemMenu;
 import isi.deso.g10.deliverymanagementsystem.Classes.Vendedor;
+import java.util.List;
 
 /**
  *
@@ -14,7 +15,7 @@ import isi.deso.g10.deliverymanagementsystem.Classes.Vendedor;
  */
 public interface ItemsPedidoDao {
         
-    public ItemMenu buscarNombre(String nombre);
+    public ItemMenu buscarNombre (String nombre, List<ItemMenu> items) throws ItemNoEncontradoException;
     
     public ItemMenu buscarId(int id);
     

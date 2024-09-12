@@ -11,4 +11,19 @@
         <maven.compiler.target>21</maven.compiler.target>
         <exec.mainClass>isi.deso.g10.deliverymanagementsystem.G10Deliverymanagementsystem</exec.mainClass>
     </properties>
+    <dependencies>
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>5.1.0-M2</version>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>5.9.0</version>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
 </project>

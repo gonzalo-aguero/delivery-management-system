@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package isi.deso.g10.deliverymanagementsystem.Dao;
 
 import isi.deso.g10.deliverymanagementsystem.Classes.Categoria;
@@ -13,19 +9,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-/**
- *
- * @author giuli
- */
 public class ItemsPedidoMemory implements ItemsPedidoDao {
 
-    
+    /*
     private File itemsFile;
     private File categoriasFile;
     private List<Categoria> categorias;
     private List<ItemMenu> items;
-    
-    public ItemsPedidoMemory(String itemsDir,String categoriasDir) throws IOException{
+    */
+    /*
+    public ItemsPedidoMemory(String itemsDir, String categoriasDir) throws IOException{
         categoriasFile= new File(categoriasDir);
         
         try(BufferedReader br= new BufferedReader(new FileReader(categoriasFile))){
@@ -61,41 +54,42 @@ public class ItemsPedidoMemory implements ItemsPedidoDao {
              
         }
     }
-    
-    
+    */
     @Override
-    public ItemMenu buscarNombre(String nombre) {
-       
+    public ItemMenu buscarNombre(String nombre, List<ItemMenu> items) throws ItemNoEncontradoException{
+    return items.stream()
+                .filter(item -> item.getNombre().equals(nombre))
+                .findFirst()
+                .orElseThrow(() -> new ItemNoEncontradoException("Item con nombre " + nombre + " no encontrado"));
     }
 
     @Override
     public ItemMenu buscarId(int id) {
-       
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public ItemMenu buscarPorRangoPrecio(double minimo, double maximo) {
-        
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public ItemMenu buscarPorCategoria(Categoria categoria) {
-        
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public ItemMenu buscarComidas(Categoria categoria) {
-        
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public ItemMenu buscarBebidas(Categoria categoria) {
-        
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public ItemMenu buscarPorRestaurante(Vendedor vendedor) {
-        
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
 }

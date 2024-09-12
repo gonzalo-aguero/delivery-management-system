@@ -7,6 +7,10 @@ import java.util.Arrays;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ *
+ * @author migue
+ */
 public class ItemsPedidoMemoryTests {
     private Vendedor vendedor1;
     private Comida milanesa, pizzaMuzza, papasFritas, sandwichMilanesa,ensaladaCaesar,picadaClasica,empanadaCarne,empanadaJamonQueso,hamburguesaDoble,pancho,pizzaEspecial,sandwichVegano,tablaQuesos,pizzaVegana;

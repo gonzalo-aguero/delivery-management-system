@@ -57,6 +57,13 @@ public class G10Deliverymanagementsystem {
 
         // Ejecutar pruebas
         testearMetodos(vendedores, clientes);
+        
+        ItemsPedidoMemoryTests test = new ItemsPedidoMemoryTests();
+        try{
+            test.buscarNombre_DevuelveMilanesa_CuandoMilanesaPerteneceAUnVendedorValido();        
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     private static Vendedor buscarVendedor(Vendedor[] vendedores, int idVendedor) {
