@@ -3,6 +3,10 @@
  */
 package isi.deso.g10.deliverymanagementsystem;
 
+import isi.deso.g10.deliverymanagementsystem.Classes.Coordenada;
+import isi.deso.g10.deliverymanagementsystem.Classes.Vendedor;
+import isi.deso.g10.deliverymanagementsystem.Classes.Cliente;
+
 /**
  *
  * @author gonzalo-aguero
