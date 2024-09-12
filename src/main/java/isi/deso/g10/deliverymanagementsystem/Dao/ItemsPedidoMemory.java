@@ -16,8 +16,8 @@ public class ItemsPedidoMemory implements ItemsPedidoDao {
     private File categoriasFile;
     private List<Categoria> categorias;
     private List<ItemMenu> items;
-    */
-    /*
+     */
+ /*
     public ItemsPedidoMemory(String itemsDir, String categoriasDir) throws IOException{
         categoriasFile= new File(categoriasDir);
         
@@ -54,28 +54,21 @@ public class ItemsPedidoMemory implements ItemsPedidoDao {
              
         }
     }
-    */
+     */
     @Override
-    public ItemMenu buscarNombre(String nombre, List<ItemMenu> items) throws ItemNoEncontradoException{
-    return items.stream()
+    public ItemMenu buscarNombre(String nombre, List<ItemMenu> items) throws ItemNoEncontradoException {
+        return items.stream()
                 .filter(item -> item.getNombre().equals(nombre))
                 .findFirst()
                 .orElseThrow(() -> new ItemNoEncontradoException("Item con nombre " + nombre + " no encontrado"));
     }
 
     @Override
-    public ItemMenu buscarId(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public ItemMenu buscarPorRangoPrecio(double minimo, double maximo) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public ItemMenu buscarPorCategoria(Categoria categoria) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public ItemMenu buscarId(int id, List<ItemMenu> items) throws ItemNoEncontradoException {
+        return items.stream()
+                .filter(item -> item.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new ItemNoEncontradoException("Item con id " + id + " no encontrado."));
     }
 
     @Override
@@ -90,6 +83,16 @@ public class ItemsPedidoMemory implements ItemsPedidoDao {
 
     @Override
     public ItemMenu buscarPorRestaurante(Vendedor vendedor) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public ItemMenu buscarPorRangoPrecio(double minimo, double maximo, List<ItemMenu> items) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public List<ItemMenu> buscarPorCategoria(Categoria categoria, List<ItemMenu> items) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

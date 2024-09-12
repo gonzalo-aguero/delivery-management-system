@@ -14,19 +14,19 @@ import java.util.List;
  * @author giuli
  */
 public interface ItemsPedidoDao {
-        
-    public ItemMenu buscarNombre (String nombre, List<ItemMenu> items) throws ItemNoEncontradoException;
-    
-    public ItemMenu buscarId(int id);
-    
-    public ItemMenu buscarPorRangoPrecio(double minimo,double maximo);
-    
-    public ItemMenu buscarPorCategoria(Categoria categoria);
-    
+
+    public ItemMenu buscarNombre(String nombre, List<ItemMenu> items) throws ItemNoEncontradoException;
+
+    public ItemMenu buscarId(int id, List<ItemMenu> items) throws ItemNoEncontradoException;
+
+    public ItemMenu buscarPorRangoPrecio(double minimo, double maximo, List<ItemMenu> items);
+
+    public List<ItemMenu> buscarPorCategoria(Categoria categoria, List<ItemMenu> items);
+
     public ItemMenu buscarComidas(Categoria categoria);
-    
+
     public ItemMenu buscarBebidas(Categoria categoria);
-    
+
     public ItemMenu buscarPorRestaurante(Vendedor vendedor);
-        
+
 }

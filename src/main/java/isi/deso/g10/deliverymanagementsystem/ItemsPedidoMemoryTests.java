@@ -21,12 +21,12 @@ public class ItemsPedidoMemoryTests {
     
     @BeforeEach
     void setUp() {
-        Categoria minutas = new Categoria(1, "minuta", Categoria.TipoItem.COMIDA);
-        Categoria picadas = new Categoria(2, "picadas", Categoria.TipoItem.COMIDA);
-        Categoria pizzas = new Categoria(3, "pizzas", Categoria.TipoItem.COMIDA);
-        Categoria sandwiches = new Categoria(4, "sandwiches", Categoria.TipoItem.COMIDA);
-        Categoria bebidaAlcoholica = new Categoria(5, "bebidaAlcoholica", Categoria.TipoItem.BEBIDA);
-        Categoria bebidaNoAlcoholica = new Categoria(6, "bebidaNoAlcoholica", Categoria.TipoItem.BEBIDA);
+        minutas = new Categoria(1, "minuta", Categoria.TipoItem.COMIDA);
+        picadas = new Categoria(2, "picadas", Categoria.TipoItem.COMIDA);
+        pizzas = new Categoria(3, "pizzas", Categoria.TipoItem.COMIDA);
+        sandwiches = new Categoria(4, "sandwiches", Categoria.TipoItem.COMIDA);
+        bebidaAlcoholica = new Categoria(5, "bebidaAlcoholica", Categoria.TipoItem.BEBIDA);
+        bebidaNoAlcoholica = new Categoria(6, "bebidaNoAlcoholica", Categoria.TipoItem.BEBIDA);
         
         milanesa = new Comida(200, 1, "Milanesa de Pollo", "Milanesa de Pollo", 4500, minutas, 400, false, false, false);
         pizzaMuzza = new Comida(350, 2, "Pizza de Muzza", "Pizza con queso mozzarella", 3000, pizzas, 800, false, false, false);
@@ -53,7 +53,8 @@ public class ItemsPedidoMemoryTests {
         vendedor1 = new Vendedor(1, "MilfCoocker", "25 de mayo 3399", new Coordenada(13,24));
         vendedor1.setMenu(new ArrayList<ItemMenu>(Arrays.asList(
                 milanesa, pizzaMuzza, papasFritas, cocaCola, fernetBranca, sandwichMilanesa, ensaladaCaesar, picadaClasica,
-                cervezaArtesanal, empanadaCarne, empanadaJamonQueso, aguaMineral, hamburguesaDoble, pancho, pizzaEspecial, vinoTinto, sandwichVegano,sprite,tablaQuesos,pizzaVegana)));
+                cervezaArtesanal, empanadaCarne, empanadaJamonQueso, aguaMineral, hamburguesaDoble, pancho, pizzaEspecial, 
+                vinoTinto, sandwichVegano,sprite,tablaQuesos)));
 
     }
 
@@ -63,8 +64,47 @@ public class ItemsPedidoMemoryTests {
         try{
             var ret = buscador.buscarNombre("Milanesa de Pollo", vendedor1.getMenu());
             System.out.println("Milanesa Se encontro correctamente");
-            assertEquals(ret, milanesa);
-            assertEquals(ret.getNombre(), "Milanesa de Pollo");
+            assertEquals(milanesa, ret);
+            assertEquals("Milanesa de Pollo", ret.getNombre());
+        } catch (ItemNoEncontradoException e){
+            throw new ItemNoEncontradoException(e.getMessage());
+        }
+    }
+    
+    @Test
+    void buscarNombre_DevuelveError_pizzaVeganaNoPerteneceAVendedorValido() throws ItemNoEncontradoException {
+        setUp();
+        try{
+            var ret = buscador.buscarNombre("Pizza Vegana", vendedor1.getMenu());
+            System.out.println("Pizza Vegana se encontro correctamente");
+            assertEquals(pizzaVegana, ret);
+            assertEquals("Pizza Vegana", ret.getNombre());
+        } catch (ItemNoEncontradoException e){
+            throw new ItemNoEncontradoException(e.getMessage());
+        }
+    }
+    
+    @Test
+    void buscarId_DevuelvePapasFritas_CuandoId3PerteneceAUnVendedorValido() throws ItemNoEncontradoException {
+        setUp();
+        try{
+            var ret = buscador.buscarId(3, vendedor1.getMenu());
+            System.out.println("Item con ID 3 se encontro correctamente");
+            assertEquals(papasFritas, ret);
+            assertEquals(papasFritas.getId(), ret.getId());
+        } catch (ItemNoEncontradoException e){
+            throw new ItemNoEncontradoException(e.getMessage());
+        }
+    }
+    
+    @Test
+    void buscarId_DevuelveError_Id20NoPerteneceAUnVendedorValido() throws ItemNoEncontradoException {
+        setUp();
+        try{
+            var ret = buscador.buscarId(20, vendedor1.getMenu());
+            System.out.println("Item con ID 20 se encontro correctamente");
+            assertEquals(pizzaVegana, ret);
+            assertEquals(pizzaVegana.getId(), ret.getId());
         } catch (ItemNoEncontradoException e){
             throw new ItemNoEncontradoException(e.getMessage());
         }
