@@ -6,7 +6,6 @@ package isi.deso.g10.deliverymanagementsystem;
 import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
 import isi.deso.g10.deliverymanagementsystem.model.Cliente;
-import isi.deso.g10.deliverymanagementsystem.dao.ItemNoEncontradoException;
 
 /**
  *
@@ -59,33 +58,8 @@ public class G10Deliverymanagementsystem {
         // Ejecutar pruebas
         testearMetodos(vendedores, clientes);
         
-        
-        System.out.println("\n============== Pruebas Etapa 3 ==============\n");
-        ItemsPedidoMemoryTests test = new ItemsPedidoMemoryTests();
-        
-        try{
-            test.buscarNombre_DevuelveMilanesa_CuandoMilanesaPerteneceAUnVendedorValido();
-        } catch (ItemNoEncontradoException e){
-            System.out.println(e.getMessage());
-        }
-        
-        try {
-            test.buscarNombre_DevuelveError_pizzaVeganaNoPerteneceAVendedorValido();
-        } catch (ItemNoEncontradoException e) {
-            System.out.println(e.getMessage());
-        }
-        
-        try {
-            test.buscarId_DevuelvePapasFritas_CuandoId3PerteneceAUnVendedorValido();
-        } catch (ItemNoEncontradoException e) {
-            System.out.println(e.getMessage());
-        }
-        
-        try {
-            test.buscarId_DevuelveError_Id20NoPerteneceAUnVendedorValido();
-        } catch (ItemNoEncontradoException e) {
-            System.out.println(e.getMessage());
-        }
+        // Las pruebas de la etapa 3 ya están en la clase ItemsPedidoMemoryTest.
+        // Habría que hacer lo mismo con las pruebas de las etapas anteriores.
     }
 
     private static Vendedor buscarVendedor(Vendedor[] vendedores, int idVendedor) {

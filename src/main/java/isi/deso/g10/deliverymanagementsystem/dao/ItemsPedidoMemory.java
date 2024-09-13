@@ -68,7 +68,11 @@ public class ItemsPedidoMemory implements ItemsPedidoDao {
 
     @Override
     public ItemMenu buscarNombre(String nombre, List<Vendedor> Vendedores) throws ItemNoEncontradoException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return Vendedores.stream()
+                .flatMap(vendedor -> vendedor.getMenu().stream()) // Combina todos los menús de todos los vendedores
+                .filter(item -> item.getNombre() == nombre)
+                .findFirst()
+                .orElseThrow(() -> new ItemNoEncontradoException("Item con nombre " + nombre + " no encontrado."));
     }
 
     @Override
