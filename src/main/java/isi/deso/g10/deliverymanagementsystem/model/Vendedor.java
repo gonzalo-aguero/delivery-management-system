@@ -70,7 +70,6 @@ public class Vendedor {
         this.coordenadas = coordenadas;
     }
 
-    //el metodo creo que esta bien
     public double distancia(Cliente cliente) {
         //le puse final porque el radio de la tierra es cte
         final double R = 6378;
@@ -95,8 +94,14 @@ public class Vendedor {
         return distancia;
     }
 
-    //metodos etapa 2 
-    public ArrayList<Bebida> getItemsBebida() {
+    
+    
+    /**
+     * ----------- Métodos Etapa 2 -----------
+     */
+    
+    
+    public ArrayList<Bebida> getItemsBebidas() {
         ArrayList<Bebida> bebidas = new ArrayList();
         for (ItemMenu item : menu) {
             if (item.esBebida()) {
@@ -106,25 +111,26 @@ public class Vendedor {
         return bebidas;
     }
 
-    public ArrayList<Comida> getItemsComida() {
-        ArrayList<Comida> comidas = new ArrayList();
+    public ArrayList<Plato> getItemsComidas() {
+        ArrayList<Plato> comidas = new ArrayList();
         for (ItemMenu item : menu) {
             if (item.esComida()) {
-                comidas.add((Comida)item);
+                comidas.add((Plato)item);
             }
         }
         return comidas;
     }
 
-    public ArrayList<Comida> getItemsComidaVegana() {
-        ArrayList<Comida> comidasVeganas = new ArrayList();
+    public ArrayList<Plato> getItemsComidasVeganas() {
+        ArrayList<Plato> comidasVeganas = new ArrayList();
         for (ItemMenu item : menu) {
             if (item.esComida() && item.aptoVegano()) {
-                comidasVeganas.add((Comida)item);
+                comidasVeganas.add((Plato)item);
             }
         }
         return comidasVeganas;
     }
+    
     public ArrayList<Bebida> getItemsBebidasVeganas() {
         ArrayList<Bebida> bebidasVeganas = new ArrayList();
         for (ItemMenu item : menu) {
@@ -135,17 +141,17 @@ public class Vendedor {
         return bebidasVeganas;
     }
     
-        public ArrayList<Comida> getItemsComidasVegetarianas() {
-        ArrayList<Comida> comidasVegetarianas = new ArrayList();
+    public ArrayList<Plato> getItemsComidasVegetarianas() {
+        ArrayList<Plato> comidasVegetarianas = new ArrayList();
         for (ItemMenu item : menu) {
             if (item.esComida() && item.aptoVegetariano()) {
-                comidasVegetarianas.add((Comida)item);
+                comidasVegetarianas.add((Plato)item);
             }
         }
         return comidasVegetarianas;
     }
         
-     public ArrayList<Bebida> getItemsBebidasVegetarianas() {
+    public ArrayList<Bebida> getItemsBebidasVegetarianas() {
         ArrayList<Bebida> bebidasVegetarianas = new ArrayList();
         for (ItemMenu item : menu) {
             if (item.esBebida() && item.aptoVegetariano()) {
@@ -154,17 +160,17 @@ public class Vendedor {
         }
         return bebidasVegetarianas;
     }
-     
-    public ArrayList<Comida> getItemsComidasAptoCeliaco() {
-        ArrayList<Comida> comidasCeliaco = new ArrayList();
+    
+    public ArrayList<Plato> getItemsComidasAptoCeliaco() {
+        ArrayList<Plato> comidasCeliaco = new ArrayList();
         for (ItemMenu item : menu) {
             if (item.esComida() && item.aptoCeliaco()) {
-                comidasCeliaco.add((Comida)item);
+                comidasCeliaco.add((Plato)item);
             }
         }
         return comidasCeliaco;
     }
-     
+    
     public ArrayList<Bebida> getItemsBebidasAptoCeliaco() {
         ArrayList<Bebida> bebidasCeliaco = new ArrayList();
         for (ItemMenu item : menu) {

@@ -8,14 +8,33 @@ package isi.deso.g10.deliverymanagementsystem.model;
  *
  * @author lucas
  */
-public class Comida extends ItemMenu {
+public class Plato extends ItemMenu {
 
     //atributos especificos de la clase
     private double peso;
 
-    //constructor 
-    public Comida(double peso, int id, String nombre, String descripcion, double precio, Categoria categoria, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano) {
+    //constructor (eliminar y dejar el completo)
+    public Plato(double peso, int id, String nombre, String descripcion, double precio, Categoria categoria, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano) {
         super(id, nombre, descripcion, precio, categoria, calorias, aptoCeliaco, aptoVegetariano, aptoVegano);
+        this.peso = peso;
+    }
+    
+    /**
+     * Constructor con todos los atributos.
+     * @param id
+     * @param nombre
+     * @param descripcion
+     * @param precio
+     * @param categoria
+     * @param calorias
+     * @param aptoCeliaco
+     * @param aptoVegetariano
+     * @param aptoVegano 
+     * @param vendedor
+     * @param peso
+     */
+    public Plato(int id, String nombre, String descripcion, double precio, Categoria categoria, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano, Vendedor vendedor, double peso) {
+        super(id, nombre, descripcion, precio, categoria, calorias, aptoCeliaco, aptoVegetariano, aptoVegano, vendedor);
         this.peso = peso;
     }
 
@@ -48,6 +67,10 @@ public class Comida extends ItemMenu {
     @Override
     public boolean aptoCeliaco() {
         return aptoCeliaco;
+    }
+
+    public void setPeso(double peso) {
+        this.peso = peso;
     }
 
     //getters

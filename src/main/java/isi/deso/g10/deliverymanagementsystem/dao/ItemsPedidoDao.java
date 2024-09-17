@@ -6,9 +6,11 @@ package isi.deso.g10.deliverymanagementsystem.dao;
 
 import isi.deso.g10.deliverymanagementsystem.model.Bebida;
 import isi.deso.g10.deliverymanagementsystem.model.Categoria;
-import isi.deso.g10.deliverymanagementsystem.model.Comida;
+import isi.deso.g10.deliverymanagementsystem.model.Plato;
 import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
+import isi.deso.g10.deliverymanagementsystem.model.ItemsPedido;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +18,7 @@ import java.util.List;
  * @author giuli
  */
 public interface ItemsPedidoDao { 
+    ArrayList<ItemsPedido> itemsPedido = new ArrayList<>();
     
     ItemMenu buscarId(int id, List<Vendedor> Vendedores) throws ItemNoEncontradoException;
 
@@ -25,7 +28,7 @@ public interface ItemsPedidoDao {
 
     List<ItemMenu> buscarPorCategoria(Categoria categoria, List<Vendedor> Vendedores) throws ItemNoEncontradoException;
 
-    List<Comida> buscarComidas(List<Vendedor> Vendedores) throws ItemNoEncontradoException;
+    List<Plato> buscarComidas(List<Vendedor> Vendedores) throws ItemNoEncontradoException;
 
     List<Bebida> buscarBebidas(List<Vendedor> Vendedores) throws ItemNoEncontradoException;
 
