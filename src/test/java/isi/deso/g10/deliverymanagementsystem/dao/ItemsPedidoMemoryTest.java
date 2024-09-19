@@ -98,12 +98,12 @@ public class ItemsPedidoMemoryTest {
     }
 
     /**
-     * Tests of buscarId method, of class ItemsPedidoMemory.
+     * Tests of buscarPorIdVendedor method, of class ItemsPedidoMemory.
      */
     @Test
     void buscarId_DevuelveItemCorrecto_CuandoIdPerteneceAUnVendedor() throws Exception {
         System.out.println("buscarId (Devuelve Item)");
-        var ret = items.buscarId(3, vendedores);
+        var ret = items.buscarPorIdVendedor(3, vendedores);
         assertEquals(papasFritas, ret);
         assertEquals(papasFritas.getId(), ret.getId());
     }
@@ -113,17 +113,17 @@ public class ItemsPedidoMemoryTest {
         System.out.println("buscarId (ID inexistente)");
         // Verifica que se lanza la excepción "ItemNoEncontradoException"
         assertThrows(ItemNoEncontradoException.class, () -> {
-            items.buscarId(1000, vendedores); // Ejecuta la operación que debería lanzar la excepción
+            items.buscarPorIdVendedor(1000, vendedores); // Ejecuta la operación que debería lanzar la excepción
         }, "Se esperaba que se lanzara ItemNoEncontradoException para el ID 20");
     }
 
     /**
-     * Tests of buscarNombre method, of class ItemsPedidoMemory.
+     * Tests of buscarPorNombreVendedor method, of class ItemsPedidoMemory.
      */
     @Test
     void buscarNombre_DevuelveItemCorrecto_CuandoNombrePerteneceAUnVendedorValido() throws ItemNoEncontradoException {
         System.out.println("buscarNombre (Devuelve Item)");
-        var ret = items.buscarNombre("Milanesa de Pollo", vendedores);
+        var ret = items.buscarPorNombreVendedor("Milanesa de Pollo", vendedores);
         assertEquals(milanesaPollo, ret);
         assertEquals("Milanesa de Pollo", ret.getNombre());
     }
@@ -132,12 +132,12 @@ public class ItemsPedidoMemoryTest {
     void buscarNombre_DevuelveError_CuandoNombreNoExiste() {
         System.out.println("buscarNombre (Nombre inexistente)");
         assertThrows(ItemNoEncontradoException.class, () -> {
-            items.buscarNombre("Pizza con Ananá", vendedores);
+            items.buscarPorNombreVendedor("Pizza con Ananá", vendedores);
         });
     }
 
     /**
-     * Test of buscarPorRangoPrecio method, of class ItemsPedidoMemory.
+     * Test of buscarPorRangoMontoTotal method, of class ItemsPedidoMemory.
      */
     @Disabled("Test pendiente de implementación")
     @Test
@@ -148,7 +148,7 @@ public class ItemsPedidoMemoryTest {
         List<Vendedor> Vendedores = null;
         ItemsPedidoMemory instance = new ItemsPedidoMemory();
         List<ItemMenu> expResult = null;
-        List<ItemMenu> result = instance.buscarPorRangoPrecio(minimo, maximo, Vendedores);
+        List<ItemMenu> result = instance.buscarPorRangoMontoTotal(minimo, maximo, Vendedores);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -172,7 +172,7 @@ public class ItemsPedidoMemoryTest {
     }
 
     /**
-     * Test of buscarComidas method, of class ItemsPedidoMemory.
+     * Test of ordenarPorNombreVendedor method, of class ItemsPedidoMemory.
      */
     @Disabled("Test pendiente de implementación")
     @Test
@@ -181,14 +181,14 @@ public class ItemsPedidoMemoryTest {
         List<Vendedor> Vendedores = null;
         ItemsPedidoMemory instance = new ItemsPedidoMemory();
         List<Plato> expResult = null;
-        List<Plato> result = instance.buscarComidas(Vendedores);
+        List<Plato> result = instance.ordenarPorNombreVendedor(Vendedores);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
     /**
-     * Test of buscarBebidas method, of class ItemsPedidoMemory.
+     * Test of ordenarPorNombreCliente method, of class ItemsPedidoMemory.
      */
     @Disabled("Test pendiente de implementación")
     @Test
@@ -197,14 +197,14 @@ public class ItemsPedidoMemoryTest {
         List<Vendedor> Vendedores = null;
         ItemsPedidoMemory instance = new ItemsPedidoMemory();
         List<Bebida> expResult = null;
-        List<Bebida> result = instance.buscarBebidas(Vendedores);
+        List<Bebida> result = instance.ordenarPorNombreCliente(Vendedores);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
     /**
-     * Test of buscarPorRestaurante method, of class ItemsPedidoMemory.
+     * Test of ordenarPorMontoTotal method, of class ItemsPedidoMemory.
      */
     @Disabled("Test pendiente de implementación")
     @Test
@@ -213,7 +213,7 @@ public class ItemsPedidoMemoryTest {
         Vendedor vendedor = null;
         ItemsPedidoMemory instance = new ItemsPedidoMemory();
         List<ItemMenu> expResult = null;
-        List<ItemMenu> result = instance.buscarPorRestaurante(vendedor);
+        List<ItemMenu> result = instance.ordenarPorMontoTotal(vendedor);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

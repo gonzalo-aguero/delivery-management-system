@@ -12,6 +12,22 @@ public class Pedido {
     public enum EstadoPedido {
         EN_PROCESO, PENDIENTE_DE_PAGO, ENTREGADO, FINALIZADO
     }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public EstadoPedido getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoPedido estado) {
+        this.estado = estado;
+    }
     
     private Cliente cliente;
     private EstadoPedido estado;

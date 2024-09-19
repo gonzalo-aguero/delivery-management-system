@@ -4,34 +4,36 @@
  */
 package isi.deso.g10.deliverymanagementsystem.dao;
 
-import isi.deso.g10.deliverymanagementsystem.model.Bebida;
 import isi.deso.g10.deliverymanagementsystem.model.Categoria;
-import isi.deso.g10.deliverymanagementsystem.model.Plato;
 import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
 import isi.deso.g10.deliverymanagementsystem.model.ItemsPedido;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * 
+ * Filtrado por: nombreCliente, idVendedor, nombreVendedor, rangoMontoTotal
+ * Ordenamiento por: nombreCliente, nombreVendedor, montoTotal. (ASC or DESC)
+ * 
  * @author giuli
  */
-public interface ItemsPedidoDao { 
-    ArrayList<ItemsPedido> itemsPedido = new ArrayList<>();
+public interface ItemsPedidoDao {
     
-    ItemMenu buscarId(int id, List<Vendedor> Vendedores) throws ItemNoEncontradoException;
+    public enum TipoOrdenamiento {
+        ASC, DESC
+    }
+    
+    List<ItemsPedido> buscarPorIdVendedor(int idVendedor) throws ItemNoEncontradoException;
 
-    ItemMenu buscarNombre(String nombre, List<Vendedor> Vendedores) throws ItemNoEncontradoException;
+    List<ItemsPedido> buscarPorNombreVendedor(String nombreVendedor) throws ItemNoEncontradoException;
+    
+    List<ItemsPedido> buscarPorNombreCliente(String nombreCliente) throws ItemNoEncontradoException;
 
-    List<ItemMenu> buscarPorRangoPrecio(double minimo, double maximo, List<Vendedor> Vendedores) throws ItemNoEncontradoException;
+    List<ItemsPedido> buscarPorRangoMontoTotal(double montoMinimo, double montoMaximo) throws ItemNoEncontradoException;List<ItemMenu> buscarPorCategoria(Categoria categoria, List<Vendedor> Vendedores) throws ItemNoEncontradoException;
 
-    List<ItemMenu> buscarPorCategoria(Categoria categoria, List<Vendedor> Vendedores) throws ItemNoEncontradoException;
+    List<ItemsPedido> ordenarPorNombreVendedor(TipoOrdenamiento ordenamiento) throws ItemNoEncontradoException;
 
-    List<Plato> buscarComidas(List<Vendedor> Vendedores) throws ItemNoEncontradoException;
+    List<ItemsPedido> ordenarPorNombreCliente(TipoOrdenamiento ordenamiento) throws ItemNoEncontradoException;
 
-    List<Bebida> buscarBebidas(List<Vendedor> Vendedores) throws ItemNoEncontradoException;
-
-    List<ItemMenu> buscarPorRestaurante(Vendedor vendedor) throws ItemNoEncontradoException;
-
+    List<ItemsPedido> ordenarPorMontoTotal(TipoOrdenamiento ordenamiento) throws ItemNoEncontradoException;
 }

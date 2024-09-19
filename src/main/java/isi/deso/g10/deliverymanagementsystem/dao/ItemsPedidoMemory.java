@@ -4,52 +4,108 @@ import isi.deso.g10.deliverymanagementsystem.model.Bebida;
 import isi.deso.g10.deliverymanagementsystem.model.Categoria;
 import isi.deso.g10.deliverymanagementsystem.model.Plato;
 import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
+import isi.deso.g10.deliverymanagementsystem.model.ItemsPedido;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ *
+ * @author gonzalo90fa
+ */
 public class ItemsPedidoMemory implements ItemsPedidoDao {
 
-    @Override
-    public ItemMenu buscarId(int id, List<Vendedor> Vendedores) throws ItemNoEncontradoException {
-        return Vendedores.stream()
-                .flatMap(vendedor -> vendedor.getMenu().stream()) // Combina todos los menús de todos los vendedores
-                .filter(item -> item.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new ItemNoEncontradoException("Item con id " + id + " no encontrado."));
+    /**
+     * Por lo que entiendo, en "itemsPedidos" iriamos a guardar las instancias
+     * de cada "ItemsPedido", es decir, el detalle de pedido de todos los
+     * pedidos y vendedores juntos.
+     */
+    private ArrayList<ItemsPedido> itemsPedidos;
+
+    public ItemsPedidoMemory() {
+        this.itemsPedidos = new ArrayList<>();
     }
 
     @Override
-    public ItemMenu buscarNombre(String nombre, List<Vendedor> Vendedores) throws ItemNoEncontradoException {
-        return Vendedores.stream()
-                .flatMap(vendedor -> vendedor.getMenu().stream()) // Combina todos los menús de todos los vendedores
-                .filter(item -> item.getNombre().equals(nombre))
-                .findFirst()
-                .orElseThrow(() -> new ItemNoEncontradoException("Item con nombre " + nombre + " no encontrado."));
+    public List<ItemsPedido> buscarPorIdVendedor(int idVendedor) throws ItemNoEncontradoException {
+        List<ItemsPedido> resultados = itemsPedidos.stream()
+                .filter(itemsPedido -> itemsPedido.getVendedor().getId() == idVendedor)
+                .collect(Collectors.toList());
+
+        if (resultados.isEmpty()) {
+            throw new ItemNoEncontradoException("ItemsPedidos de vendedor con id " + idVendedor + " no encontrados.");
+        }
+
+        return resultados;
     }
 
     @Override
-    public List<ItemMenu> buscarPorRangoPrecio(double minimo, double maximo, List<Vendedor> Vendedores) throws ItemNoEncontradoException {
+    public List<ItemsPedido> buscarPorNombreVendedor(String nombreVendedor) throws ItemNoEncontradoException {
+        List<ItemsPedido> resultados = itemsPedidos.stream()
+                .filter(itemsPedido -> itemsPedido.getVendedor().getNombre().equalsIgnoreCase(nombreVendedor))
+                .collect(Collectors.toList());
+
+        if (resultados.isEmpty()) {
+            throw new ItemNoEncontradoException("ItemsPedidos de vendedor con nombre " + nombreVendedor + " no encontrados.");
+        }
+
+        return resultados;
+    }
+
+    @Override
+    public List<ItemsPedido> buscarPorNombreCliente(String nombreCliente) throws ItemNoEncontradoException {
+        List<ItemsPedido> resultados = itemsPedidos.stream()
+                .filter(itemsPedido -> itemsPedido.getPedido().getCliente().getNombre().equalsIgnoreCase(nombreCliente))
+                .collect(Collectors.toList());
+
+        if (resultados.isEmpty()) {
+            throw new ItemNoEncontradoException("ItemsPedidos de cliente con nombre " + nombreCliente + " no encontrados.");
+        }
+
+        return resultados;
+    }
+
+    @Override
+    public List<ItemsPedido> buscarPorRangoMontoTotal(double montoMinimo, double montoMaximo) throws ItemNoEncontradoException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public List<ItemMenu> buscarPorCategoria(Categoria categoria, List<Vendedor> Vendedores) throws ItemNoEncontradoException {
+    public List<ItemsPedido> ordenarPorNombreVendedor(TipoOrdenamiento ordenamiento) throws ItemNoEncontradoException {
+        List<ItemsPedido> resultados = itemsPedidos.stream()
+                .sorted((item1, item2) -> {
+                    int comparison = item1.getVendedor().getNombre().compareToIgnoreCase(item2.getVendedor().getNombre());
+                    return ordenamiento == TipoOrdenamiento.ASC ? comparison : -comparison;
+                })
+                .collect(Collectors.toList());
+
+        if (resultados.isEmpty()) {
+            throw new ItemNoEncontradoException("No se encontraron ItemsPedidos.");
+        }
+
+        return resultados;
+    }
+
+    @Override
+    public List<ItemsPedido> ordenarPorNombreCliente(TipoOrdenamiento ordenamiento) throws ItemNoEncontradoException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public List<Plato> buscarComidas(List<Vendedor> Vendedores) throws ItemNoEncontradoException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    public List<ItemsPedido> ordenarPorMontoTotal(TipoOrdenamiento ordenamiento) throws ItemNoEncontradoException {
+        List<ItemsPedido> resultados = itemsPedidos.stream()
+                .sorted((item1, item2) -> {
+                    int comparison = Double.compare(item1.calcularMontoTotal(), item2.calcularMontoTotal());
+                    return ordenamiento == TipoOrdenamiento.ASC ? comparison : -comparison;
+                })
+                .collect(Collectors.toList());
 
-    @Override
-    public List<Bebida> buscarBebidas(List<Vendedor> Vendedores) throws ItemNoEncontradoException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+        if (resultados.isEmpty()) {
+            throw new ItemNoEncontradoException("No se encontraron ItemsPedidos.");
+        }
 
-    @Override
-    public List<ItemMenu> buscarPorRestaurante(Vendedor vendedor) throws ItemNoEncontradoException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return resultados;
     }
 
 }
