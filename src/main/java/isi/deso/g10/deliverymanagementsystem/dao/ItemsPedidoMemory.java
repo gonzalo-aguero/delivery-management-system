@@ -68,7 +68,18 @@ public class ItemsPedidoMemory implements ItemsPedidoDao {
 
     @Override
     public List<ItemsPedido> buscarPorRangoMontoTotal(double montoMinimo, double montoMaximo) throws ItemNoEncontradoException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       List<ItemsPedido> resultados = itemsPedidos.stream()
+               .filter(itemPedido -> {
+                       double montototal = itemPedido.calcularMontoTotal();
+                       return montototal >= montoMinimo && montototal <= montoMaximo;
+               })
+               .collect(Collectors.toList());
+       
+       if (resultados.isEmpty()) {
+            throw new ItemNoEncontradoException("No se encontraron ItemsPedidos.");
+        }
+       
+       return resultados;
     }
 
     @Override
@@ -89,7 +100,17 @@ public class ItemsPedidoMemory implements ItemsPedidoDao {
 
     @Override
     public List<ItemsPedido> ordenarPorNombreCliente(TipoOrdenamiento ordenamiento) throws ItemNoEncontradoException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       List<ItemsPedido> resultados = itemsPedidos.stream()
+               .sorted((item1,item2) -> {
+                   int comparison =item1.getPedido().getCliente().getNombre().compareToIgnoreCase(item2.getPedido().getCliente().getNombre());
+                   return ordenamiento == TipoOrdenamiento.ASC ? comparison : -comparison;
+               })
+               .collect(Collectors.toList());
+       if (resultados.isEmpty()) {
+            throw new ItemNoEncontradoException("No se encontraron ItemsPedidos.");
+        }
+       
+       return resultados;
     }
 
     @Override
@@ -108,4 +129,5 @@ public class ItemsPedidoMemory implements ItemsPedidoDao {
         return resultados;
     }
 
+    
 }
