@@ -47,6 +47,7 @@ public class ItemsPedidoTest {
         
         // Inicializar ItemsPedido con los ítems y el pedido
         itemsPedido = new ItemsPedido(items, pedido);
+
     }
     
     @AfterEach

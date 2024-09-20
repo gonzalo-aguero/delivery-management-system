@@ -27,6 +27,10 @@ public class ItemsPedidoMemory implements ItemsPedidoDao {
         this.itemsPedidos = new ArrayList<>();
     }
 
+    public void agregarPedido(ItemsPedido pedido) {
+        this.itemsPedidos.add(pedido);
+    }
+
     @Override
     public List<ItemsPedido> buscarPorIdVendedor(int idVendedor) throws ItemNoEncontradoException {
         List<ItemsPedido> resultados = itemsPedidos.stream()
@@ -80,6 +84,11 @@ public class ItemsPedidoMemory implements ItemsPedidoDao {
         }
        
        return resultados;
+    }
+
+    @Override
+    public List<ItemMenu> buscarPorCategoria(Categoria categoria, List<Vendedor> Vendedores) throws ItemNoEncontradoException {
+        return List.of();
     }
 
     @Override
