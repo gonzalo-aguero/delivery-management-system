@@ -3,6 +3,10 @@
  */
 package isi.deso.g10.deliverymanagementsystem;
 
+import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
+import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
+import isi.deso.g10.deliverymanagementsystem.model.Cliente;
+
 /**
  *
  * @author gonzalo-aguero
@@ -53,6 +57,9 @@ public class G10Deliverymanagementsystem {
 
         // Ejecutar pruebas
         testearMetodos(vendedores, clientes);
+        
+        // Las pruebas de la etapa 3 ya están en la clase ItemsPedidoMemoryTest.
+        // Habría que hacer lo mismo con las pruebas de las etapas anteriores.
     }
 
     private static Vendedor buscarVendedor(Vendedor[] vendedores, int idVendedor) {

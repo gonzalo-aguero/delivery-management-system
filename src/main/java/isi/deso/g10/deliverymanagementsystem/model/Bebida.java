@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package isi.deso.g10.deliverymanagementsystem;
+package isi.deso.g10.deliverymanagementsystem.model;
 
 /**
  *
@@ -14,10 +14,39 @@ public class Bebida extends ItemMenu {
     private double graduacionAlcoholica;
     //sustituye al atributo tamanio del diagrama de clases del tp
     private double volumenEnMl;
+    
+    public void setGraduacionAlcoholica(double graduacionAlcoholica) {
+        this.graduacionAlcoholica = graduacionAlcoholica;
+    }
 
-    //constructor
+    public void setVolumenEnMl(double volumenEnMl) {
+        this.volumenEnMl = volumenEnMl;
+    }
+    
+    //constructor (eliminar y dejar el completo)
     public Bebida(double graduacionAlcoholica, double volumenEnMl, int id, String nombre, String descripcion, double precio, Categoria categoria, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano) {
         super(id, nombre, descripcion, precio, categoria, calorias, aptoCeliaco, aptoVegetariano, aptoVegano);
+        this.graduacionAlcoholica = graduacionAlcoholica;
+        this.volumenEnMl = volumenEnMl;
+    }
+    
+    /**
+     * Constructor con todos los atributos.
+     * @param id
+     * @param nombre
+     * @param descripcion
+     * @param precio
+     * @param categoria
+     * @param calorias
+     * @param aptoCeliaco
+     * @param aptoVegetariano
+     * @param aptoVegano
+     * @param vendedor
+     * @param graduacionAlcoholica
+     * @param volumenEnMl 
+     */
+    public Bebida(int id, String nombre, String descripcion, double precio, Categoria categoria, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano, Vendedor vendedor, double graduacionAlcoholica, double volumenEnMl) {
+        super(id, nombre, descripcion, precio, categoria, calorias, aptoCeliaco, aptoVegetariano, aptoVegano, vendedor);
         this.graduacionAlcoholica = graduacionAlcoholica;
         this.volumenEnMl = volumenEnMl;
     }

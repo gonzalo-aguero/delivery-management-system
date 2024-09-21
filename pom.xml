@@ -11,4 +11,14 @@
         <maven.compiler.target>21</maven.compiler.target>
         <exec.mainClass>isi.deso.g10.deliverymanagementsystem.G10Deliverymanagementsystem</exec.mainClass>
     </properties>
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params -->
+        <!-- VER: https://stackoverflow.com/questions/57040675/java-lang-noclassdeffounderror-org-junit-platform-commons-preconditionviolation-->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>5.9.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

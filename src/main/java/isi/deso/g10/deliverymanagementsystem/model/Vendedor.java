@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package isi.deso.g10.deliverymanagementsystem;
+package isi.deso.g10.deliverymanagementsystem.model;
 
 import static java.lang.Math.*;
 import java.util.ArrayList;
@@ -70,7 +70,6 @@ public class Vendedor {
         this.coordenadas = coordenadas;
     }
 
-    //el metodo creo que esta bien
     public double distancia(Cliente cliente) {
         //le puse final porque el radio de la tierra es cte
         final double R = 6378;
@@ -95,42 +94,98 @@ public class Vendedor {
         return distancia;
     }
 
-    //metodos etapa 2 
-    public ArrayList<ItemMenu> getItemsBebida() {
-        ArrayList<ItemMenu> bebidas = new ArrayList();
+    
+    
+    /**
+     * ----------- Métodos Etapa 2 -----------
+     */
+    
+    
+    public ArrayList<Bebida> getItemsBebidas() {
+        ArrayList<Bebida> bebidas = new ArrayList();
         for (ItemMenu item : menu) {
             if (item.esBebida()) {
-                bebidas.add(item);
+                bebidas.add((Bebida)item);
             }
         }
         return bebidas;
     }
 
-    public ArrayList<ItemMenu> getItemsComida() {
-        ArrayList<ItemMenu> comidas = new ArrayList();
+    public ArrayList<Plato> getItemsComidas() {
+        ArrayList<Plato> comidas = new ArrayList();
         for (ItemMenu item : menu) {
             if (item.esComida()) {
-                comidas.add(item);
+                comidas.add((Plato)item);
             }
         }
         return comidas;
     }
 
-    public ArrayList<ItemMenu> getItemsComidaVegana() {
-        ArrayList<ItemMenu> comidasVeganas = new ArrayList();
+    public ArrayList<Plato> getItemsComidasVeganas() {
+        ArrayList<Plato> comidasVeganas = new ArrayList();
         for (ItemMenu item : menu) {
             if (item.esComida() && item.aptoVegano()) {
-                comidasVeganas.add(item);
+                comidasVeganas.add((Plato)item);
             }
         }
         return comidasVeganas;
     }
-
-    public ArrayList<ItemMenu> getItemsBebidaSinAlcohol() {
-        ArrayList<ItemMenu> bebidasSinAlcohol = new ArrayList();
+    
+    public ArrayList<Bebida> getItemsBebidasVeganas() {
+        ArrayList<Bebida> bebidasVeganas = new ArrayList();
+        for (ItemMenu item : menu) {
+            if (item.esBebida() && item.aptoVegano()) {
+                bebidasVeganas.add((Bebida)item);
+            }
+        }
+        return bebidasVeganas;
+    }
+    
+    public ArrayList<Plato> getItemsComidasVegetarianas() {
+        ArrayList<Plato> comidasVegetarianas = new ArrayList();
+        for (ItemMenu item : menu) {
+            if (item.esComida() && item.aptoVegetariano()) {
+                comidasVegetarianas.add((Plato)item);
+            }
+        }
+        return comidasVegetarianas;
+    }
+        
+    public ArrayList<Bebida> getItemsBebidasVegetarianas() {
+        ArrayList<Bebida> bebidasVegetarianas = new ArrayList();
+        for (ItemMenu item : menu) {
+            if (item.esBebida() && item.aptoVegetariano()) {
+                bebidasVegetarianas.add((Bebida)item);
+            }
+        }
+        return bebidasVegetarianas;
+    }
+    
+    public ArrayList<Plato> getItemsComidasAptoCeliaco() {
+        ArrayList<Plato> comidasCeliaco = new ArrayList();
+        for (ItemMenu item : menu) {
+            if (item.esComida() && item.aptoCeliaco()) {
+                comidasCeliaco.add((Plato)item);
+            }
+        }
+        return comidasCeliaco;
+    }
+    
+    public ArrayList<Bebida> getItemsBebidasAptoCeliaco() {
+        ArrayList<Bebida> bebidasCeliaco = new ArrayList();
+        for (ItemMenu item : menu) {
+            if (item.esBebida() && item.aptoCeliaco()) {
+                bebidasCeliaco.add((Bebida)item);
+            }
+        }
+        return bebidasCeliaco;
+    }
+    
+    public ArrayList<Bebida> getItemsBebidaSinAlcohol() {
+        ArrayList<Bebida> bebidasSinAlcohol = new ArrayList();
         for (ItemMenu item : menu) {
             if (item.esBebida() && ((Bebida) item).getGraduacionAlcoholica() == 0) {
-                bebidasSinAlcohol.add(item);
+                bebidasSinAlcohol.add((Bebida)item);
             }
         }
         return bebidasSinAlcohol;
