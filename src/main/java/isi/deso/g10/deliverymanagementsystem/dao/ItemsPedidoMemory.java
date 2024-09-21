@@ -1,11 +1,6 @@
 package isi.deso.g10.deliverymanagementsystem.dao;
 
-import isi.deso.g10.deliverymanagementsystem.model.Bebida;
-import isi.deso.g10.deliverymanagementsystem.model.Categoria;
-import isi.deso.g10.deliverymanagementsystem.model.Plato;
-import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
 import isi.deso.g10.deliverymanagementsystem.model.ItemsPedido;
-import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +12,7 @@ import java.util.stream.Collectors;
 public class ItemsPedidoMemory implements ItemsPedidoDao {
 
     /**
-     * Por lo que entiendo, en "itemsPedidos" iriamos a guardar las instancias
+     * En "itemsPedidos" iriamos a guardar las instancias
      * de cada "ItemsPedido", es decir, el detalle de pedido de todos los
      * pedidos y vendedores juntos.
      */
@@ -27,8 +22,12 @@ public class ItemsPedidoMemory implements ItemsPedidoDao {
         this.itemsPedidos = new ArrayList<>();
     }
 
-    public void agregarPedido(ItemsPedido pedido) {
-        this.itemsPedidos.add(pedido);
+    /**
+     * Agrega el itemsPedido (Detalle del pedido) al array de itemsPedidos.  
+     * @param itemsPedido 
+     */
+    public void agregarPedido(ItemsPedido itemsPedido) {
+        this.itemsPedidos.add(itemsPedido);
     }
 
     @Override
@@ -84,11 +83,6 @@ public class ItemsPedidoMemory implements ItemsPedidoDao {
         }
        
        return resultados;
-    }
-
-    @Override
-    public List<ItemMenu> buscarPorCategoria(Categoria categoria, List<Vendedor> Vendedores) throws ItemNoEncontradoException {
-        return List.of();
     }
 
     @Override

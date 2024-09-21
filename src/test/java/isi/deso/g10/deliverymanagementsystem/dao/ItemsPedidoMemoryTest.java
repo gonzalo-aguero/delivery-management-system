@@ -5,6 +5,7 @@
 package isi.deso.g10.deliverymanagementsystem.dao;
 
 import isi.deso.g10.deliverymanagementsystem.builder.BebidaBuilder;
+import isi.deso.g10.deliverymanagementsystem.builder.PlatoBuilder;
 import isi.deso.g10.deliverymanagementsystem.model.*;
 
 import java.util.ArrayList;
@@ -28,10 +29,9 @@ public class ItemsPedidoMemoryTest {
     private Bebida cocaCola, fernetBranca, cervezaArtesanal, aguaMineral, vinoTinto, sprite;
     private Vendedor vendedor1;
     private ArrayList<ItemMenu> items;
-    private ItemsPedido itemsPedido1;
+    private ItemsPedido itemsPedido;
 
     public ItemsPedidoMemory itemsMemory = new ItemsPedidoMemory();
-
 
     @BeforeEach
     public void setUp() {
@@ -46,7 +46,7 @@ public class ItemsPedidoMemoryTest {
         bebidaAlcoholica = new Categoria(5, "bebidaAlcoholica", Categoria.TipoItem.BEBIDA);
         bebidaNoAlcoholica = new Categoria(6, "bebidaNoAlcoholica", Categoria.TipoItem.BEBIDA);
 
-        //CREACIÓN DE COMIDAS Y BEBIDAS
+//        //CREACIÓN DE COMIDAS Y BEBIDAS
         milanesaPollo = new Plato(200, 1, "Milanesa de Pollo", "Milanesa de Pollo", 4500, minutas, 400, false, false, false);
         pizzaMuzza = new Plato(350, 2, "Pizza de Muzza", "Pizza con queso mozzarella", 3000, pizzas, 800, false, false, false);
         papasFritas = new Plato(250, 3, "Papas Fritas", "Papas fritas crocantes", 1500, minutas, 600, false, true, true);
@@ -67,6 +67,28 @@ public class ItemsPedidoMemoryTest {
         sprite = new Bebida(0, 500, 18, "Sprite", "Gaseosa Sprite 500ml", 500, bebidaNoAlcoholica, 210, true, true, true);
         tablaQuesos = new Plato(350, 19, "Tabla de Quesos", "Tabla con varios tipos de quesos", 4000, picadas, 750, false, true, false);
         pizzaVegana = new Plato(350, 20, "Pizza Vegana", "Pizza con queso vegano y vegetales", 3200, pizzas, 700, true, true, true);
+        
+        
+        milanesaPollo = new PlatoBuilder().setId(1).setNombre("Milanesa de Pollo").setDescripcion("Milanesa de Pollo").setPrecio(4500).setCategoria(minutas).setCalorias(400).setAptoCeliaco(false).setAptoVegetariano(false).setAptoVegano(false).setPeso(200).build();
+        pizzaMuzza = new PlatoBuilder().setId(2).setNombre("Pizza de Muzza").setDescripcion("Pizza con queso mozzarella").setPrecio(3000).setCategoria(pizzas).setCalorias(800).setAptoCeliaco(false).setAptoVegetariano(false).setAptoVegano(false).setPeso(350).build();
+        papasFritas = new PlatoBuilder().setId(3).setNombre("Papas Fritas").setDescripcion("Papas fritas crocantes").setPrecio(1500).setCategoria(minutas).setCalorias(600).setAptoCeliaco(false).setAptoVegetariano(true).setAptoVegano(true).setPeso(250).build();
+        cocaCola = new BebidaBuilder().setId(4).setNombre("Coca Cola").setDescripcion("Gaseosa Coca Cola 500ml").setPrecio(500).setCategoria(bebidaNoAlcoholica).setCalorias(200).setAptoCeliaco(true).setAptoVegetariano(true).setAptoVegano(true).setGraduacionAlcoholica(0).setVolumenEnMl(500).build();
+        fernetBranca = new BebidaBuilder().setId(5).setNombre("Fernet Branca").setDescripcion("Fernet Branca 750ml").setPrecio(3500).setCategoria(bebidaAlcoholica).setCalorias(500).setAptoCeliaco(true).setAptoVegetariano(true).setAptoVegano(true).setGraduacionAlcoholica(14).setVolumenEnMl(750).build();
+        sandwichMilanesa = new PlatoBuilder().setId(6).setNombre("Sandwich de Milanesa").setDescripcion("Sandwich de milanesa completo").setPrecio(2500).setCategoria(sandwiches).setCalorias(600).setAptoCeliaco(false).setAptoVegetariano(false).setAptoVegano(false).setPeso(300).build();
+        ensaladaCesar = new PlatoBuilder().setId(7).setNombre("Ensalada Caesar").setDescripcion("Ensalada con pollo y crutones").setPrecio(2200).setCategoria(minutas).setCalorias(350).setAptoCeliaco(false).setAptoVegetariano(true).setAptoVegano(false).setPeso(180).build();
+        picadaClasica = new PlatoBuilder().setId(8).setNombre("Picada Clásica").setDescripcion("Picada con jamón, queso, aceitunas").setPrecio(3200).setCategoria(picadas).setCalorias(900).setAptoCeliaco(false).setAptoVegetariano(true).setAptoVegano(false).setPeso(400).build();
+        cervezaArtesanal = new BebidaBuilder().setId(9).setNombre("Cerveza Artesanal").setDescripcion("Cerveza IPA 500ml").setPrecio(800).setCategoria(bebidaAlcoholica).setCalorias(250).setAptoCeliaco(true).setAptoVegetariano(true).setAptoVegano(true).setGraduacionAlcoholica(5).setVolumenEnMl(500).build();
+        empanadaCarne = new PlatoBuilder().setId(10).setNombre("Empanada de Carne").setDescripcion("Empanada de carne cortada a cuchillo").setPrecio(200).setCategoria(minutas).setCalorias(350).setAptoCeliaco(false).setAptoVegetariano(false).setAptoVegano(false).setPeso(120).build();
+        empanadaJamonQueso = new PlatoBuilder().setId(11).setNombre("Empanada de Jamón y Queso").setDescripcion("Empanada con jamón y queso").setPrecio(200).setCategoria(minutas).setCalorias(400).setAptoCeliaco(false).setAptoVegetariano(false).setAptoVegano(false).setPeso(120).build();
+        aguaMineral = new BebidaBuilder().setId(12).setNombre("Agua Mineral").setDescripcion("Agua mineral sin gas 500ml").setPrecio(300).setCategoria(bebidaNoAlcoholica).setCalorias(0).setAptoCeliaco(true).setAptoVegetariano(true).setAptoVegano(true).setGraduacionAlcoholica(0).setVolumenEnMl(500).build();
+        hamburguesaDoble = new PlatoBuilder().setId(13).setNombre("Hamburguesa Doble").setDescripcion("Hamburguesa doble con queso").setPrecio(2800).setCategoria(minutas).setCalorias(700).setAptoCeliaco(false).setAptoVegetariano(false).setAptoVegano(false).setPeso(300).build();
+        pancho = new PlatoBuilder().setId(14).setNombre("Pancho").setDescripcion("Pancho con aderezos a elección").setPrecio(600).setCategoria(minutas).setCalorias(450).setAptoCeliaco(false).setAptoVegetariano(false).setAptoVegano(false).setPeso(150).build();
+        pizzaEspecial = new PlatoBuilder().setId(15).setNombre("Pizza Especial").setDescripcion("Pizza con jamón, morrones y huevo").setPrecio(3500).setCategoria(pizzas).setCalorias(900).setAptoCeliaco(false).setAptoVegetariano(false).setAptoVegano(false).setPeso(400).build();
+        vinoTinto = new BebidaBuilder().setId(16).setNombre("Vino Tinto Malbec").setDescripcion("Botella de vino tinto Malbec 750ml").setPrecio(2500).setCategoria(bebidaAlcoholica).setCalorias(400).setAptoCeliaco(true).setAptoVegetariano(true).setAptoVegano(true).setGraduacionAlcoholica(12).setVolumenEnMl(750).build();
+        sandwichVegano = new PlatoBuilder().setId(17).setNombre("Sandwich Vegano").setDescripcion("Sandwich con vegetales y hummus").setPrecio(1800).setCategoria(sandwiches).setCalorias(300).setAptoCeliaco(true).setAptoVegetariano(true).setAptoVegano(true).setPeso(200).build();
+        sprite = new BebidaBuilder().setId(18).setNombre("Sprite").setDescripcion("Gaseosa Sprite 500ml").setPrecio(500).setCategoria(bebidaNoAlcoholica).setCalorias(210).setAptoCeliaco(true).setAptoVegetariano(true).setAptoVegano(true).setGraduacionAlcoholica(0).setVolumenEnMl(500).build();
+        tablaQuesos = new PlatoBuilder().setId(19).setNombre("Tabla de Quesos").setDescripcion("Tabla con varios tipos de quesos").setPrecio(4000).setCategoria(picadas).setCalorias(750).setAptoCeliaco(false).setAptoVegetariano(true).setAptoVegano(false).setPeso(350).build();
+        pizzaVegana = new PlatoBuilder().setId(20).setNombre("Pizza Vegana").setDescripcion("Pizza con queso vegano y vegetales").setPrecio(3200).setCategoria(pizzas).setCalorias(700).setAptoCeliaco(true).setAptoVegetariano(true).setAptoVegano(true).setPeso(350).build();
 
         // CREACIÓN DE VENDEDORES
         vendedor1 = new Vendedor(1, "MilfCoocker", "25 de mayo 3399", new Coordenada(13, 24));
@@ -82,18 +104,17 @@ public class ItemsPedidoMemoryTest {
         items.add(milanesaPollo);
         cervezaArtesanal.setVendedor(vendedor1);
         items.add(cervezaArtesanal);
-        cervezaArtesanal.setVendedor(vendedor1);
-        items.add(cervezaArtesanal);
-
+        sandwichVegano.setVendedor(vendedor1);
+        items.add(sandwichVegano);
 
         // Crear un pedido
         Pedido pedido = new Pedido();
         pedido.setCliente(new Cliente(1, "20-45341666-0", "Miguel Centurion", "mc@hot.com", "25 de mayo 3350", new Coordenada(10, 10)));
 
         // Inicializar ItemsPedido con los ítems y el pedido
-        itemsPedido1 = new ItemsPedido(items, pedido);
+        itemsPedido = new ItemsPedido(items, pedido);
 
-        itemsMemory.agregarPedido(itemsPedido1);
+        itemsMemory.agregarPedido(itemsPedido);
     }
 
     @Test
@@ -102,7 +123,7 @@ public class ItemsPedidoMemoryTest {
         var ret = itemsMemory.buscarPorIdVendedor(1);
 
         // Assert
-        assertEquals(ret.getFirst(), itemsPedido1);
+        assertEquals(ret.getFirst(), itemsPedido);
     }
 
     @Test
@@ -123,7 +144,7 @@ public class ItemsPedidoMemoryTest {
         var ret = itemsMemory.buscarPorNombreVendedor(vendedor1.getNombre());
 
         // Assert
-        assertEquals(ret.getFirst(), itemsPedido1);
+        assertEquals(ret.getFirst(), itemsPedido);
     }
 
     @Test
@@ -140,26 +161,26 @@ public class ItemsPedidoMemoryTest {
     @Test
     public void buscarPorNombreCliente_DevuelveLosItemsPedidosDelCliente_CuandoExisteCliente() throws Exception {
         // Action
-        var pedidos = itemsMemory.buscarPorNombreCliente("Miguel Centurion");
+        var itemsPedidos = itemsMemory.buscarPorNombreCliente("Miguel Centurion");
 
         // Asert
-        assertEquals(pedidos.getFirst(), itemsPedido1);
-        assertEquals(pedidos.getFirst().getPedido().getCliente().getNombre(), "Miguel Centurion");
+        assertEquals(itemsPedidos.getFirst(), itemsPedido);
+        assertEquals(itemsPedidos.getFirst().getPedido().getCliente().getNombre(), "Miguel Centurion");
     }
 
     @Test
-    public void BuscarPorRangoDePrecios_DevuelvePedidos_CuandoExisteAlgunPedidoEnElRango() throws Exception {
+    public void buscarPorRangoMontoTotal_DevuelveItemsPedidos_CuandoExisteAlgunPedidoEnElRango() throws Exception {
         // Arrenge
         double minimo = 0;
-        double maximo = itemsPedido1.calcularMontoTotal();
+        double maximo = itemsPedido.calcularMontoTotal();
 
         // Action
         List<ItemsPedido> res = itemsMemory.buscarPorRangoMontoTotal(minimo, maximo);
-        assertEquals(res.getFirst(), itemsPedido1);
+        assertEquals(res.getFirst(), itemsPedido);
     }
 
     @Test
-    public void BuscarPorRangoDePrecios_NoDevuelvePedidos_CuandoNoExistePedidoEnElRango() throws Exception {
+    public void buscarPorRangoMontoTotal_LanzaItemNoEncontradoException_CuandoNoExistePedidoEnElRango() throws Exception {
         // Arrenge
         double minimo = 0;
         double maximo = -1;

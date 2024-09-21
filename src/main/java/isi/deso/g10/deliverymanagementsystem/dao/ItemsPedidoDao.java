@@ -4,10 +4,7 @@
  */
 package isi.deso.g10.deliverymanagementsystem.dao;
 
-import isi.deso.g10.deliverymanagementsystem.model.Categoria;
-import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
 import isi.deso.g10.deliverymanagementsystem.model.ItemsPedido;
-import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
 import java.util.List;
 
 /**
@@ -29,7 +26,7 @@ public interface ItemsPedidoDao {
     
     List<ItemsPedido> buscarPorNombreCliente(String nombreCliente) throws ItemNoEncontradoException;
 
-    List<ItemsPedido> buscarPorRangoMontoTotal(double montoMinimo, double montoMaximo) throws ItemNoEncontradoException;List<ItemMenu> buscarPorCategoria(Categoria categoria, List<Vendedor> Vendedores) throws ItemNoEncontradoException;
+    List<ItemsPedido> buscarPorRangoMontoTotal(double montoMinimo, double montoMaximo) throws ItemNoEncontradoException;
 
     List<ItemsPedido> ordenarPorNombreVendedor(TipoOrdenamiento ordenamiento) throws ItemNoEncontradoException;
 
