@@ -4,15 +4,24 @@
  */
 package isi.deso.g10.deliverymanagementsystem.model;
 
+import java.util.List;
+
 /**
  *
  * @author gonzalo90fa
  */
 public class Pedido {
     public enum EstadoPedido {
-        EN_PROCESO, PENDIENTE_DE_PAGO, ENTREGADO, FINALIZADO
+       RECIBIDO, EN_PROCESO, PENDIENTE_DE_PAGO, ENTREGADO, FINALIZADO
     }
 
+    private Cliente cliente;
+    private EstadoPedido estado;
+    private List<ItemPedido> itemsPedido;
+    
+   
+    
+    
     public Cliente getCliente() {
         return cliente;
     }
@@ -28,7 +37,9 @@ public class Pedido {
     public void setEstado(EstadoPedido estado) {
         this.estado = estado;
     }
+
+    public List<ItemPedido> getItemsPedido() {
+        return itemsPedido;
+    }
     
-    private Cliente cliente;
-    private EstadoPedido estado;
 }

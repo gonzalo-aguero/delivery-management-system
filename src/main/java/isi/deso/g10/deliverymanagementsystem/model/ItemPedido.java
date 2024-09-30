@@ -11,12 +11,12 @@ import java.util.ArrayList;
  *
  * @author gonzalo90fa
  */
-public class ItemsPedido {
+public class ItemPedido {
 
     private ArrayList<ItemMenu> items = new ArrayList<>(); //Cada pedido puede involucrar una o más instancias de ItemMenu
     private Pedido pedido;
 
-    public ItemsPedido(ArrayList<ItemMenu> items, Pedido pedido) {
+    public ItemPedido(ArrayList<ItemMenu> items, Pedido pedido) {
         this.items = items;
         this.pedido = pedido;
     }
