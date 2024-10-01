@@ -4,6 +4,9 @@
  */
 package isi.deso.g10.deliverymanagementsystem.model;
 
+import isi.deso.g10.deliverymanagementsystem.strategy.ContextoPedido;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,15 +14,23 @@ import java.util.List;
  * @author gonzalo90fa
  */
 public class Pedido {
+    public Pedido() {
+        this.itemsPedido = new ArrayList<>();
+    }
+    public Pedido(List<ItemMenu> itemsPedido, Cliente cliente) {
+        this.itemsPedido = itemsPedido;
+        this.cliente = cliente;
+        this.contextoPedido = new ContextoPedido();
+    }
+
     public enum EstadoPedido {
        RECIBIDO, EN_PROCESO, PENDIENTE_DE_PAGO, ENTREGADO, FINALIZADO
     }
 
     private Cliente cliente;
     private EstadoPedido estado;
-    private List<ItemPedido> itemsPedido;
-    
-   
+    private List<ItemMenu> itemsPedido;
+    private ContextoPedido contextoPedido;
     
     
     public Cliente getCliente() {
@@ -30,6 +41,14 @@ public class Pedido {
         this.cliente = cliente;
     }
 
+    public void setFormaDePago(String formaDePago) {
+        if(formaDePago.equalsIgnoreCase("mercadopago")) {
+            this.contextoPedido.setFormaMercadoPago();
+        } else if(formaDePago.equalsIgnoreCase("transferencia")){
+            this.contextoPedido.setFormaTransferencia();
+        }
+    }
+
     public EstadoPedido getEstado() {
         return estado;
     }
@@ -38,8 +57,16 @@ public class Pedido {
         this.estado = estado;
     }
 
-    public List<ItemPedido> getItemsPedido() {
-        return itemsPedido;
+    public List<ItemMenu> getItemsPedido() {
+        return this.itemsPedido;
     }
-    
+
+    public void AddItemsPedido(ItemMenu item) {
+        this.itemsPedido.add(item);
+    }
+
+    public void SetItemsPedido(ArrayList<ItemMenu> items) {
+        this.itemsPedido = items;
+    }
+
 }

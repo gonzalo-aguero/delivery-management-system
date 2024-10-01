@@ -6,28 +6,20 @@ package isi.deso.g10.deliverymanagementsystem.strategy;
 
 import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
 import isi.deso.g10.deliverymanagementsystem.model.Pedido;
-import java.util.ArrayList;
-import java.util.List;
 
-/**
- *
- * @author giuli
- */
+import java.util.ArrayList;
+
+
 public class ContextoPedido {
     private FormaDePago _formaDePago;
-    private List<ItemMenu> itemsMenu;
     
-    
-    public ContextoPedido(){
-       _formaDePago = new FormaTransferencia();
-       itemsMenu = new ArrayList<>();
-    }
+    public ContextoPedido() { }
 
     public Pedido pedido(){
-        
+        return new Pedido();
     }
     
-    public double totalizar(){
+    public double totalizar(ArrayList<ItemMenu> itemsMenu){
         double total = 0;
         
 
@@ -40,15 +32,6 @@ public class ContextoPedido {
         total = _formaDePago.totalizar(total);
         
         return total;
-    }
-    
-    
-    public List<ItemMenu> getItemsMenu() {
-        return itemsMenu;
-    }
-
-    public void setItemsMenu(List<ItemMenu> itemsMenu) {
-        this.itemsMenu = itemsMenu;
     }
     
     public void setFormaTransferencia(){
