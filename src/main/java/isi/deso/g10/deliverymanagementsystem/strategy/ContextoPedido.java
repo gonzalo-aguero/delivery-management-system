@@ -41,6 +41,11 @@ public class ContextoPedido {
     public void setFormaMercadoPago(){
         _formaDePago = new FormaMercadoPago();
     }
+
+    public FormaDePago getFormaDePago() {
+        return _formaDePago;
+    }
+    
     
     
     

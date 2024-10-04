@@ -4,9 +4,13 @@
 package isi.deso.g10.deliverymanagementsystem;
 
 import isi.deso.g10.deliverymanagementsystem.model.*;
+import isi.deso.g10.deliverymanagementsystem.strategy.FormaDePago;
+import isi.deso.g10.deliverymanagementsystem.strategy.FormaMercadoPago;
+import isi.deso.g10.deliverymanagementsystem.strategy.FormaTransferencia;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  *
@@ -89,6 +93,24 @@ public class G10Deliverymanagementsystem {
         // mostrar formas de pago
         String formaDePago = scanner.nextLine();
         pedido.setFormaDePago(formaDePago);
+
+        FormaDePago forma = pedido.getContextoPedido().getFormaDePago();
+          
+        if (forma instanceof FormaMercadoPago formaMercadoPago) {
+            System.out.println("Ingrese su alias: ");
+            String alias = scanner.nextLine();
+            formaMercadoPago.setAlias(alias);
+        } else if (forma instanceof FormaTransferencia formaTransferencia) {
+            System.out.println("Ingrese su CUIT:");
+            String cuit = scanner.nextLine();
+            formaTransferencia.setCuit(cuit);
+            System.out.println("Ingrese su cbu:");
+            String cbu = scanner.nextLine();
+            formaTransferencia.setCbu(cbu);
+            
+        }
+        
+        
         System.out.println("El Costo total del pedido es: " + pedido.costoFinal());
     }
 

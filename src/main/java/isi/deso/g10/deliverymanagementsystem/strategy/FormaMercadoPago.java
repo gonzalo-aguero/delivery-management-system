@@ -12,8 +12,16 @@ package isi.deso.g10.deliverymanagementsystem.strategy;
  */
 public class FormaMercadoPago extends FormaDePago {
     
+    private String alias;
+    
     public FormaMercadoPago(){
         super.recargo= 2;
     }
     
+    public String getAlias(){
+        return alias;
+    }
+    public void setAlias(String alias){
+        this.alias=alias;
+    }
 }

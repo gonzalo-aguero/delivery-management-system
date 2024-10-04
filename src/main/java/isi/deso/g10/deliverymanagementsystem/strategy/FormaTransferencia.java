@@ -12,8 +12,29 @@ package isi.deso.g10.deliverymanagementsystem.strategy;
  */
 public class FormaTransferencia extends FormaDePago {
     
+    private String cbu;
+    private String cuit;
+    
     public FormaTransferencia(){
         super.recargo= 2;
     }
+
+    public String getCbu() {
+        return cbu;
+    }
+
+    public void setCbu(String cbu) {
+        this.cbu = cbu;
+    }
+
+    public String getCuit() {
+        return cuit;
+    }
+
+    public void setCuit(String cuit) {
+        this.cuit = cuit;
+    }
+    
+    
     
 }

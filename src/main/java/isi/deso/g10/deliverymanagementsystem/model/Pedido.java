@@ -72,4 +72,10 @@ public class Pedido {
         this.detallePedido = detallePedido;
     }
 
+    public ContextoPedido getContextoPedido() {
+        return contextoPedido;
+    }
+    
+    
+
 }
