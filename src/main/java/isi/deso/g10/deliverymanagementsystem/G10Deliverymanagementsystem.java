@@ -84,7 +84,7 @@ public class G10Deliverymanagementsystem {
         System.out.println(pedido.getItemsPedido().getFirst().getNombre());
 
         System.out.println("Seleccione Forma de pago");
-        // mostrar forma
+        // mostrar formas de pago
         String formaDePago = scanner.nextLine();
         pedido.setFormaDePago(formaDePago);
     }

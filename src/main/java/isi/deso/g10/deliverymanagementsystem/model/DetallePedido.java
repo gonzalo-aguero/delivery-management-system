@@ -11,19 +11,18 @@ import java.util.ArrayList;
  *
  * @author gonzalo90fa
  */
-public class ItemPedido {
+public class DetallePedido {
 
-    private ArrayList<ItemMenu> items = new ArrayList<>(); //Cada pedido puede involucrar una o más instancias de ItemMenu
+    private ArrayList<ItemMenu> items = new ArrayList<>();
     private Pedido pedido;
 
-    public ItemPedido(ArrayList<ItemMenu> items, Pedido pedido) {
+    public DetallePedido(ArrayList<ItemMenu> items) {
         this.items = items;
-        this.pedido = pedido;
     }
 
     public double calcularMontoTotal() {
         return items.stream()
-                .map(item -> item.getPrecio())
+                .map(ItemMenu::getPrecio)
                 .reduce(0d, Double::sum);
     }
     
@@ -36,18 +35,6 @@ public class ItemPedido {
 
     public ArrayList<ItemMenu> getItems() {
         return items;
-    }
-
-    public void setItems(ArrayList<ItemMenu> items) {
-        this.items = items;
-    }
-
-    public Pedido getPedido() {
-        return pedido;
-    }
-
-    public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
     }
 
 }

@@ -14,11 +14,10 @@ import java.util.List;
  * @author gonzalo90fa
  */
 public class Pedido {
-    public Pedido() {
-        this.itemsPedido = new ArrayList<>();
-    }
-    public Pedido(List<ItemMenu> itemsPedido, Cliente cliente) {
-        this.itemsPedido = itemsPedido;
+    public Pedido() { }
+
+    public Pedido(ArrayList<ItemMenu> itemsPedido, Cliente cliente) {
+        this.detallePedido = new DetallePedido(itemsPedido);
         this.cliente = cliente;
         this.contextoPedido = new ContextoPedido();
     }
@@ -29,7 +28,7 @@ public class Pedido {
 
     private Cliente cliente;
     private EstadoPedido estado;
-    private List<ItemMenu> itemsPedido;
+    private DetallePedido detallePedido;
     private ContextoPedido contextoPedido;
     
     
@@ -57,16 +56,16 @@ public class Pedido {
         this.estado = estado;
     }
 
-    public List<ItemMenu> getItemsPedido() {
-        return this.itemsPedido;
+    public ArrayList<ItemMenu> getItemsPedido() {
+        return this.detallePedido.getItems();
     }
 
-    public void AddItemsPedido(ItemMenu item) {
-        this.itemsPedido.add(item);
+    public DetallePedido getDetallePedido() {
+        return detallePedido;
     }
 
-    public void SetItemsPedido(ArrayList<ItemMenu> items) {
-        this.itemsPedido = items;
+    public void setDetallePedido(DetallePedido detallePedido) {
+        this.detallePedido = detallePedido;
     }
 
 }
