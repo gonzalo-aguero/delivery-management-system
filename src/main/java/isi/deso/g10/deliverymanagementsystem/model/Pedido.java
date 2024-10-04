@@ -47,6 +47,10 @@ public class Pedido {
             this.contextoPedido.setFormaTransferencia();
         }
     }
+    // Punto de entrada para obtener el costo total del pedido
+    public double costoFinal() {
+        return this.contextoPedido.totalizar(detallePedido.getItems());
+    }
 
     public EstadoPedido getEstado() {
         return estado;

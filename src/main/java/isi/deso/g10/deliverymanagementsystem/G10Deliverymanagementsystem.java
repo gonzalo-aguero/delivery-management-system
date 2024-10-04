@@ -63,14 +63,17 @@ public class G10Deliverymanagementsystem {
         vendedor1.setMenu(menuVendedor1);
         vendedor2.setMenu(menuVendedor2);
 
-        // Cadena de ejecucion
-
+        // Cadena de ejecucion Etapa 4
+        System.out.println("Prueba de Etapa 4");
         System.out.println("Seleccionar Vendedor");
         System.out.println("1. "+vendedor1.getNombre());
         System.out.println("2. "+vendedor2.getNombre());
         Integer numVendedor = Integer.parseInt(scanner.nextLine())-1;
+        System.out.println("Seleccione productos separados por coma");
+        int i = 1;
         for(ItemMenu item :  vendedores.get(numVendedor).getMenu()) {
-            System.out.println(item.getNombre());
+            System.out.println(i+". "+item.getNombre());
+            i++;
         }
 
         String resp = scanner.nextLine();
@@ -81,12 +84,12 @@ public class G10Deliverymanagementsystem {
         }
         Pedido pedido = new Pedido(itemsPedidos, cliente1);
 
-        System.out.println(pedido.getItemsPedido().getFirst().getNombre());
+        System.out.println("Ingrese Forma de pago (MercadoPago, Transferencia)");
 
-        System.out.println("Seleccione Forma de pago");
         // mostrar formas de pago
         String formaDePago = scanner.nextLine();
         pedido.setFormaDePago(formaDePago);
+        System.out.println("El Costo total del pedido es: " + pedido.costoFinal());
     }
 
     private static Vendedor buscarVendedor(Vendedor[] vendedores, int idVendedor) {
