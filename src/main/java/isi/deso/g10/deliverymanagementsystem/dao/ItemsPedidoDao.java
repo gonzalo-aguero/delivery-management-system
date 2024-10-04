@@ -4,7 +4,9 @@
  */
 package isi.deso.g10.deliverymanagementsystem.dao;
 
-import isi.deso.g10.deliverymanagementsystem.model.ItemsPedido;
+import isi.deso.g10.deliverymanagementsystem.exception.ItemNoEncontradoException;
+import isi.deso.g10.deliverymanagementsystem.model.Pedido;
+
 import java.util.List;
 
 /**
@@ -20,17 +22,17 @@ public interface ItemsPedidoDao {
         ASC, DESC
     }
     
-    List<ItemsPedido> buscarPorIdVendedor(int idVendedor) throws ItemNoEncontradoException;
+    List<Pedido> buscarPorIdVendedor(int idVendedor) throws ItemNoEncontradoException;
 
-    List<ItemsPedido> buscarPorNombreVendedor(String nombreVendedor) throws ItemNoEncontradoException;
+    List<Pedido> buscarPorNombreVendedor(String nombreVendedor) throws ItemNoEncontradoException;
     
-    List<ItemsPedido> buscarPorNombreCliente(String nombreCliente) throws ItemNoEncontradoException;
+    List<Pedido> buscarPorNombreCliente(String nombreCliente) throws ItemNoEncontradoException;
 
-    List<ItemsPedido> buscarPorRangoMontoTotal(double montoMinimo, double montoMaximo) throws ItemNoEncontradoException;
+    List<Pedido> buscarPorRangoMontoTotal(double montoMinimo, double montoMaximo) throws ItemNoEncontradoException;
 
-    List<ItemsPedido> ordenarPorNombreVendedor(TipoOrdenamiento ordenamiento) throws ItemNoEncontradoException;
+    List<Pedido> ordenarPorNombreVendedor(TipoOrdenamiento ordenamiento) throws ItemNoEncontradoException;
 
-    List<ItemsPedido> ordenarPorNombreCliente(TipoOrdenamiento ordenamiento) throws ItemNoEncontradoException;
+    List<Pedido> ordenarPorNombreCliente(TipoOrdenamiento ordenamiento) throws ItemNoEncontradoException;
 
-    List<ItemsPedido> ordenarPorMontoTotal(TipoOrdenamiento ordenamiento) throws ItemNoEncontradoException;
+    List<Pedido> ordenarPorMontoTotal(TipoOrdenamiento ordenamiento) throws ItemNoEncontradoException;
 }

@@ -2,14 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package isi.deso.g10.deliverymanagementsystem.dao;
+package isi.deso.g10.deliverymanagementsystem.strategy;
+
+
 
 /**
  *
- * @author migue
+ * @author giuli
  */
-public class ItemNoEncontradoException extends Exception{
-    public ItemNoEncontradoException(String mensaje){
-        super(mensaje);
+public class FormaTransferencia extends FormaDePago {
+    
+    public FormaTransferencia(){
+        super.recargo= 2;
     }
+    
 }

@@ -3,9 +3,10 @@
  */
 package isi.deso.g10.deliverymanagementsystem;
 
-import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
-import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
-import isi.deso.g10.deliverymanagementsystem.model.Cliente;
+import isi.deso.g10.deliverymanagementsystem.model.*;
+
+import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
@@ -14,22 +15,20 @@ import isi.deso.g10.deliverymanagementsystem.model.Cliente;
 public class G10Deliverymanagementsystem {
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
         // Coordenadas para Vendedores
         Coordenada coordenada1 = new Coordenada(3.43, 4.43);
         Coordenada coordenada2 = new Coordenada(1.23, 3.223);
-        Coordenada coordenada3 = new Coordenada(1.654, 6.888);
 
         // Vendedores
         Vendedor vendedor1 = new Vendedor(1, "Juan", "Azcuenaga 3000", coordenada1);
         Vendedor vendedor2 = new Vendedor(2, "Manuel", "San Martin 610", coordenada2);
-        Vendedor vendedor3 = new Vendedor(3, "Ian", "Rivadavia 2032", coordenada3);
 
         // Array de Vendedores
-        Vendedor[] vendedores = new Vendedor[3];
-        vendedores[0] = vendedor1;
-        vendedores[1] = vendedor2;
-        vendedores[2] = vendedor3;
+        ArrayList<Vendedor> vendedores = new ArrayList<>();
+        vendedores.add(vendedor1);
+        vendedores.add(vendedor2);
 
         // Crear coordenadas para clientes
         Coordenada coordenada4 = new Coordenada(4.56, 7.89);
@@ -38,28 +37,59 @@ public class G10Deliverymanagementsystem {
 
         // Crear instancias de Cliente
         Cliente cliente1 = new Cliente(1, "20-12345678-9", "Jorge", "cliente1@example.com", "Calle Falsa 123", coordenada4);
-        Cliente cliente2 = new Cliente(2, "20-87654321-0", "Maria", "cliente2@example.com", "Avenida Siempre Viva 742", coordenada5);
-        Cliente cliente3 = new Cliente(3, "20-13579246-1", "Paul", "cliente3@example.com", "Boulevard de los Sueños Rotos 10", coordenada6);
 
         // Crear array de clientes
         Cliente[] clientes = new Cliente[3];
         clientes[0] = cliente1;
-        clientes[1] = cliente2;
-        clientes[2] = cliente3;
 
-        // Mostrar vendedores
-        System.out.println("Vendedores:");
-        mostrarVendedores(vendedores);
+        // Etapa 4
+        Categoria minutas = new Categoria(1, "minuta", Categoria.TipoItem.COMIDA);
+        Categoria bebida = new Categoria(1, "bebida", Categoria.TipoItem.BEBIDA);
 
-        // Mostrar clientes
-        System.out.println("Clientes:");
-        mostrarClientes(clientes);
+        Plato milanesaPollo = new Plato(200, 1, "Milanesa de Pollo", "Milanesa de Pollo", 4500, minutas, 400, false, false, false);
+        Plato pizzaMuzza = new Plato(350, 2, "Pizza de Muzza", "Pizza con queso mozzarella", 3000, minutas, 800, false, false, false);
+        Plato papasFritas = new Plato(250, 3, "Papas Fritas", "Papas fritas crocantes", 1500, minutas, 600, false, true, true);
+        Bebida cocaCola = new Bebida(0, 500, 4, "Coca Cola", "Gaseosa Coca Cola 500ml", 500, bebida, 200, true, true, true);
 
-        // Ejecutar pruebas
-        testearMetodos(vendedores, clientes);
-        
-        // Las pruebas de la etapa 3 ya están en la clase ItemsPedidoMemoryTest.
-        // Habría que hacer lo mismo con las pruebas de las etapas anteriores.
+        ArrayList<ItemMenu> menuVendedor1 = new ArrayList<ItemMenu>();
+        ArrayList<ItemMenu> menuVendedor2 = new ArrayList<ItemMenu>();
+
+        menuVendedor1.add(milanesaPollo);
+        menuVendedor1.add(pizzaMuzza);
+        menuVendedor2.add(papasFritas);
+        menuVendedor2.add(cocaCola);
+
+
+        vendedor1.setMenu(menuVendedor1);
+        vendedor2.setMenu(menuVendedor2);
+
+        // Cadena de ejecucion Etapa 4
+        System.out.println("Prueba de Etapa 4");
+        System.out.println("Seleccionar Vendedor");
+        System.out.println("1. "+vendedor1.getNombre());
+        System.out.println("2. "+vendedor2.getNombre());
+        Integer numVendedor = Integer.parseInt(scanner.nextLine())-1;
+        System.out.println("Seleccione productos separados por coma");
+        int i = 1;
+        for(ItemMenu item :  vendedores.get(numVendedor).getMenu()) {
+            System.out.println(i+". "+item.getNombre());
+            i++;
+        }
+
+        String resp = scanner.nextLine();
+        String[] partes = resp.split(",");
+        ArrayList<ItemMenu> itemsPedidos = new ArrayList<ItemMenu>();
+        for (String parte : partes) {
+            itemsPedidos.add(vendedores.get(numVendedor).getMenu().get(Integer.parseInt(parte)-1));
+        }
+        Pedido pedido = new Pedido(itemsPedidos, cliente1);
+
+        System.out.println("Ingrese Forma de pago (MercadoPago, Transferencia)");
+
+        // mostrar formas de pago
+        String formaDePago = scanner.nextLine();
+        pedido.setFormaDePago(formaDePago);
+        System.out.println("El Costo total del pedido es: " + pedido.costoFinal());
     }
 
     private static Vendedor buscarVendedor(Vendedor[] vendedores, int idVendedor) {

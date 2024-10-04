@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
- */
+
 package isi.deso.g10.deliverymanagementsystem.model;
 
 import isi.deso.g10.deliverymanagementsystem.builder.BebidaBuilder;
@@ -19,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class ItemsPedidoTest {
 
-    private ItemsPedido itemsPedido;
+    Pedido pedido;
     
     public ItemsPedidoTest() {
     }
@@ -43,11 +40,7 @@ public class ItemsPedidoTest {
         items.add(new BebidaBuilder().setPrecio(35).build());
         
         // Crear un pedido
-        Pedido pedido = new Pedido();
-        
-        // Inicializar ItemsPedido con los ítems y el pedido
-        itemsPedido = new ItemsPedido(items, pedido);
-
+        pedido = new Pedido(items, new Cliente(1,"23","mig","mig.com","Iriondo 860", new Coordenada(11,11)));
     }
     
     @AfterEach
@@ -61,7 +54,7 @@ public class ItemsPedidoTest {
     public void testCalcularMontoTotal() {
         double expectedTotal = 140;
         
-        double actualTotal = itemsPedido.calcularMontoTotal();
+        double actualTotal = pedido.getDetallePedido().calcularMontoTotal();
         
         assertEquals(expectedTotal, actualTotal, "El monto total calculado no es el correcto.");
     }

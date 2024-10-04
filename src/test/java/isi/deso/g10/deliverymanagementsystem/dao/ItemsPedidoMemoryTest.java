@@ -6,6 +6,7 @@ package isi.deso.g10.deliverymanagementsystem.dao;
 
 import isi.deso.g10.deliverymanagementsystem.builder.BebidaBuilder;
 import isi.deso.g10.deliverymanagementsystem.builder.PlatoBuilder;
+import isi.deso.g10.deliverymanagementsystem.exception.ItemNoEncontradoException;
 import isi.deso.g10.deliverymanagementsystem.model.*;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class ItemsPedidoMemoryTest {
     private Bebida cocaCola, fernetBranca, cervezaArtesanal, aguaMineral, vinoTinto, sprite;
     private Vendedor vendedor1;
     private ArrayList<ItemMenu> items;
-    private ItemsPedido itemsPedido;
+    private Pedido pedido;
 
     public ItemsPedidoMemory itemsMemory = new ItemsPedidoMemory();
 
@@ -108,13 +109,13 @@ public class ItemsPedidoMemoryTest {
         items.add(sandwichVegano);
 
         // Crear un pedido
-        Pedido pedido = new Pedido();
+        pedido = new Pedido();
         pedido.setCliente(new Cliente(1, "20-45341666-0", "Miguel Centurion", "mc@hot.com", "25 de mayo 3350", new Coordenada(10, 10)));
 
         // Inicializar ItemsPedido con los ítems y el pedido
-        itemsPedido = new ItemsPedido(items, pedido);
+        pedido.setDetallePedido(new DetallePedido(items));
 
-        itemsMemory.agregarPedido(itemsPedido);
+        itemsMemory.agregarPedido(pedido);
     }
 
     @Test
@@ -123,7 +124,7 @@ public class ItemsPedidoMemoryTest {
         var ret = itemsMemory.buscarPorIdVendedor(1);
 
         // Assert
-        assertEquals(ret.getFirst(), itemsPedido);
+        assertEquals(ret.getFirst(), pedido);
     }
 
     @Test
@@ -144,7 +145,7 @@ public class ItemsPedidoMemoryTest {
         var ret = itemsMemory.buscarPorNombreVendedor(vendedor1.getNombre());
 
         // Assert
-        assertEquals(ret.getFirst(), itemsPedido);
+        assertEquals(ret.getFirst(), pedido);
     }
 
     @Test
@@ -164,19 +165,19 @@ public class ItemsPedidoMemoryTest {
         var itemsPedidos = itemsMemory.buscarPorNombreCliente("Miguel Centurion");
 
         // Asert
-        assertEquals(itemsPedidos.getFirst(), itemsPedido);
-        assertEquals(itemsPedidos.getFirst().getPedido().getCliente().getNombre(), "Miguel Centurion");
+        assertEquals(itemsPedidos.getFirst(), pedido);
+        assertEquals(itemsPedidos.getFirst().getCliente().getNombre(), "Miguel Centurion");
     }
 
     @Test
     public void buscarPorRangoMontoTotal_DevuelveItemsPedidos_CuandoExisteAlgunPedidoEnElRango() throws Exception {
         // Arrenge
         double minimo = 0;
-        double maximo = itemsPedido.calcularMontoTotal();
+        double maximo = pedido.getDetallePedido().calcularMontoTotal();
 
         // Action
-        List<ItemsPedido> res = itemsMemory.buscarPorRangoMontoTotal(minimo, maximo);
-        assertEquals(res.getFirst(), itemsPedido);
+        List<Pedido> res = itemsMemory.buscarPorRangoMontoTotal(minimo, maximo);
+        assertEquals(res.getFirst(), pedido);
     }
 
     @Test
