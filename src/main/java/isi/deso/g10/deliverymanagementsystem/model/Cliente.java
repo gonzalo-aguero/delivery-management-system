@@ -4,11 +4,16 @@
  */
 package isi.deso.g10.deliverymanagementsystem.model;
 
+import java.util.Date;
+
+import isi.deso.g10.deliverymanagementsystem.model.Pedido.EstadoPedido;
+import isi.deso.g10.deliverymanagementsystem.observer.PedidoObserver;
+
 /**
  *
  * @author giuli
  */
-public class Cliente {
+public class Cliente implements PedidoObserver{
 
     private int id;
     private String cuit;
@@ -72,7 +77,33 @@ public class Cliente {
 
     public void setCoordenadas(Coordenada coordenadas) {
         this.coordenadas = coordenadas;
-    }    
+    }
+
+    @Override
+    public void update(Pedido pedido) {
+        System.out.println("El pedido " + pedido.getId() + " ha cambiado de estado a " + pedido.getEstado());    
+        if(pedido.getEstado().equals(EstadoPedido.EN_ENVIO)) {
+            generarPago(pedido);
+        }
+    }
+
+    // crea un objeto con los datos del pago, fecha, monto, etc
+    private Pago generarPago(Pedido pedido) {
+        System.out.println("Generando pago para el pedido " + pedido.getId() + "...");
+        
+        Pago pago = new Pago(
+            pedido.getId(), // Pedido ID
+            new Date(), // Fecha de Pago
+            this.nombre, // Cliente Nombre
+            this.cuit, // Cliente CUIT
+            pedido.costoFinal(), // Monto
+            pedido.getContextoPedido().getFormaDePago().getNombre() // Forma de Pago
+        );
+
+        pago.printPagoInfo();
+
+        return pago;
+    }
 
     
     

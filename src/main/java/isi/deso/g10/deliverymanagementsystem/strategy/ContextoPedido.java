@@ -19,6 +19,13 @@ public class ContextoPedido {
         return new Pedido();
     }
     
+    /**
+     * Calculates the total cost of the given list of menu items, including any additional charges
+     * based on the payment method.
+     *
+     * @param itemsMenu the list of menu items to be totaled
+     * @return the total cost after applying the payment method charges
+     */
     public double totalizar(ArrayList<ItemMenu> itemsMenu){
         double total = 0;
         
@@ -42,6 +49,8 @@ public class ContextoPedido {
         _formaDePago = new FormaMercadoPago();
     }
     
-    
+    public FormaDePago getFormaDePago() {
+        return _formaDePago;
+    }
     
 }

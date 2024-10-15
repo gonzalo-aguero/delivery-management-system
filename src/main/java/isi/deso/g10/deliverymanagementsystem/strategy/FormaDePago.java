@@ -26,6 +26,10 @@ public class FormaDePago {
     public double getRecargo() {
         return recargo;
     }
+
+    public String getNombre() {
+        return this.getClass().getSimpleName();
+    }
     
     
     

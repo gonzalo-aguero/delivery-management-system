@@ -4,6 +4,7 @@
 package isi.deso.g10.deliverymanagementsystem;
 
 import isi.deso.g10.deliverymanagementsystem.model.*;
+import isi.deso.g10.deliverymanagementsystem.model.Pedido.EstadoPedido;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -42,7 +43,9 @@ public class G10Deliverymanagementsystem {
         Cliente[] clientes = new Cliente[3];
         clientes[0] = cliente1;
 
-        // Etapa 4
+        /**
+         * Demostración Etapa 4
+         */
         Categoria minutas = new Categoria(1, "minuta", Categoria.TipoItem.COMIDA);
         Categoria bebida = new Categoria(1, "bebida", Categoria.TipoItem.BEBIDA);
 
@@ -64,7 +67,7 @@ public class G10Deliverymanagementsystem {
         vendedor2.setMenu(menuVendedor2);
 
         // Cadena de ejecucion Etapa 4
-        System.out.println("Prueba de Etapa 4");
+        System.out.println("\n==================== Demostración de Etapa 4 ====================");
         System.out.println("Seleccionar Vendedor");
         System.out.println("1. "+vendedor1.getNombre());
         System.out.println("2. "+vendedor2.getNombre());
@@ -82,7 +85,7 @@ public class G10Deliverymanagementsystem {
         for (String parte : partes) {
             itemsPedidos.add(vendedores.get(numVendedor).getMenu().get(Integer.parseInt(parte)-1));
         }
-        Pedido pedido = new Pedido(itemsPedidos, cliente1);
+        Pedido pedido = new Pedido(1, itemsPedidos, cliente1);
 
         System.out.println("Ingrese Forma de pago (MercadoPago, Transferencia)");
 
@@ -90,6 +93,20 @@ public class G10Deliverymanagementsystem {
         String formaDePago = scanner.nextLine();
         pedido.setFormaDePago(formaDePago);
         System.out.println("El Costo total del pedido es: " + pedido.costoFinal());
+
+        /**
+         * Demostración Etapa 5
+         */
+        System.out.println("\n==================== Demostración de Etapa 5 ====================");
+        
+        // Suscribir cliente a notificaciones del pedido
+        pedido.addObserver(cliente1);
+        
+        // Cambiar estado del pedido. Se notificará al cliente en cada caso.
+        pedido.setEstado(EstadoPedido.RECIBIDO);
+        pedido.setEstado(EstadoPedido.EN_ENVIO);
+        pedido.setEstado(EstadoPedido.ENTREGADO);
+
     }
 
     private static Vendedor buscarVendedor(Vendedor[] vendedores, int idVendedor) {

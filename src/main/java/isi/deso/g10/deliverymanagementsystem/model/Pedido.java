@@ -4,6 +4,8 @@
  */
 package isi.deso.g10.deliverymanagementsystem.model;
 
+import isi.deso.g10.deliverymanagementsystem.observer.Observable;
+import isi.deso.g10.deliverymanagementsystem.observer.PedidoObserver;
 import isi.deso.g10.deliverymanagementsystem.strategy.ContextoPedido;
 
 import java.util.ArrayList;
@@ -13,24 +15,37 @@ import java.util.List;
  *
  * @author gonzalo90fa
  */
-public class Pedido {
-    public Pedido() { }
+public class Pedido implements Observable {
 
-    public Pedido(ArrayList<ItemMenu> itemsPedido, Cliente cliente) {
+    public Pedido() { }
+    
+    public Pedido(int idPedido ,ArrayList<ItemMenu> itemsPedido, Cliente cliente) {
+        this.id = idPedido;
         this.detallePedido = new DetallePedido(itemsPedido);
         this.cliente = cliente;
         this.contextoPedido = new ContextoPedido();
+        
+        this.observers = new ArrayList<>();
     }
 
     public enum EstadoPedido {
-       RECIBIDO, EN_PROCESO, PENDIENTE_DE_PAGO, ENTREGADO, FINALIZADO
+       RECIBIDO, EN_ENVIO, EN_PROCESO, PENDIENTE_DE_PAGO, ENTREGADO, FINALIZADO
     }
 
+    private int id;
     private Cliente cliente;
     private EstadoPedido estado;
     private DetallePedido detallePedido;
     private ContextoPedido contextoPedido;
+    private List<PedidoObserver> observers;
     
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     
     public Cliente getCliente() {
         return cliente;
@@ -57,7 +72,11 @@ public class Pedido {
     }
 
     public void setEstado(EstadoPedido estado) {
-        this.estado = estado;
+        //Esto evita que se notifique a los observadores si el estado no cambia
+        if (this.estado != estado) {
+            this.estado = estado;
+            notifyObservers();
+        }
     }
 
     public ArrayList<ItemMenu> getItemsPedido() {
@@ -70,6 +89,38 @@ public class Pedido {
 
     public void setDetallePedido(DetallePedido detallePedido) {
         this.detallePedido = detallePedido;
+    }
+
+    public ContextoPedido getContextoPedido() {
+        return contextoPedido;
+    }
+
+    public void setContextoPedido(ContextoPedido contextoPedido) {
+        this.contextoPedido = contextoPedido;
+    }
+
+    @Override
+    public void addObserver(PedidoObserver o) {
+        if (o != null && !observers.contains(o)) {
+            observers.add(o);
+        }
+    }
+
+    @Override
+    public boolean removeObserver(PedidoObserver o) {
+        return observers.remove(o);
+    }
+
+    /**
+     * Notifies all registered observers about changes to the current Pedido instance.
+     * This method iterates through the list of observers and calls their update method,
+     * passing the current instance of Pedido as a parameter.
+     */
+    @Override
+    public void notifyObservers() {
+        for (PedidoObserver observer : observers) {
+            observer.update(this);
+        }
     }
 
 }
