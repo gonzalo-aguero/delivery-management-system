@@ -6,7 +6,7 @@ package isi.deso.g10.deliverymanagementsystem.model;
 
 import isi.deso.g10.deliverymanagementsystem.observer.Observable;
 import isi.deso.g10.deliverymanagementsystem.observer.PedidoObserver;
-import isi.deso.g10.deliverymanagementsystem.strategy.ContextoPedido;
+import isi.deso.g10.deliverymanagementsystem.strategy.FormaPagoI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,15 +16,29 @@ import java.util.List;
  * @author gonzalo90fa
  */
 public class Pedido implements Observable {
+    //LA ESTRATEGIA ESTA APLICADA EN FORMA DE PAGO
+    private int id;
+    private Cliente cliente;
+    private EstadoPedido estado;
+    private DetallePedido detallePedido;
+    private FormaPagoI formapago;
+    private List<PedidoObserver> observers;
 
     public Pedido() { }
-    
+
     public Pedido(int idPedido ,ArrayList<ItemMenu> itemsPedido, Cliente cliente) {
         this.id = idPedido;
         this.detallePedido = new DetallePedido(itemsPedido);
         this.cliente = cliente;
-        this.contextoPedido = new ContextoPedido();
-        
+        this.observers = new ArrayList<>();
+    }
+
+    public Pedido(int idPedido ,ArrayList<ItemMenu> itemsPedido, Cliente cliente, FormaPagoI formapago) {
+        this.id = idPedido;
+        this.detallePedido = new DetallePedido(itemsPedido);
+        this.cliente = cliente;
+        //me faltaria modificar el estado
+        this.formapago = formapago;
         this.observers = new ArrayList<>();
     }
 
@@ -32,13 +46,6 @@ public class Pedido implements Observable {
        RECIBIDO, EN_ENVIO, EN_PROCESO, PENDIENTE_DE_PAGO, ENTREGADO, FINALIZADO
     }
 
-    private int id;
-    private Cliente cliente;
-    private EstadoPedido estado;
-    private DetallePedido detallePedido;
-    private ContextoPedido contextoPedido;
-    private List<PedidoObserver> observers;
-    
     public int getId() {
         return id;
     }
@@ -55,16 +62,18 @@ public class Pedido implements Observable {
         this.cliente = cliente;
     }
 
-    public void setFormaDePago(String formaDePago) {
-        if(formaDePago.equalsIgnoreCase("mercadopago")) {
-            this.contextoPedido.setFormaMercadoPago();
-        } else if(formaDePago.equalsIgnoreCase("transferencia")){
-            this.contextoPedido.setFormaTransferencia();
-        }
+    public void setFormapago(FormaPagoI formapago) {
+        //me faltaria modificar el estado
+        this.formapago = formapago;
     }
     // Punto de entrada para obtener el costo total del pedido
     public double costoFinal() {
-        return this.contextoPedido.totalizar(detallePedido.getItems());
+        if(formapago == null) {
+            System.out.println("No se ha ingresado una forma de pago aun :(");
+            return 0d;
+        }else{
+            return formapago.totalizar(detallePedido.calcularMontoTotal());
+        }
     }
 
     public EstadoPedido getEstado() {
@@ -91,13 +100,6 @@ public class Pedido implements Observable {
         this.detallePedido = detallePedido;
     }
 
-    public ContextoPedido getContextoPedido() {
-        return contextoPedido;
-    }
-
-    public void setContextoPedido(ContextoPedido contextoPedido) {
-        this.contextoPedido = contextoPedido;
-    }
 
     @Override
     public void addObserver(PedidoObserver o) {
