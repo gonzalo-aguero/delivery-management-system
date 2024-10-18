@@ -5,6 +5,8 @@ package isi.deso.g10.deliverymanagementsystem;
 
 import isi.deso.g10.deliverymanagementsystem.model.*;
 import isi.deso.g10.deliverymanagementsystem.model.Pedido.EstadoPedido;
+import isi.deso.g10.deliverymanagementsystem.strategy.FormaMercadoPago;
+import isi.deso.g10.deliverymanagementsystem.strategy.FormaTransferencia;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -91,13 +93,24 @@ public class G10Deliverymanagementsystem {
 
         // mostrar formas de pago
         String formaDePago = scanner.nextLine();
-        pedido.setFormaDePago(formaDePago);
+        if(formaDePago.equals("MercadoPago")) {
+            System.out.println("Ingrese su alias");
+            String alias = scanner.nextLine();
+            pedido.setFormapago(new FormaMercadoPago(alias));
+        }else{
+            System.out.println("Ingrese su cuit");
+            String cuit = scanner.nextLine();
+            System.out.println("Ingrese su cbu");
+            String cbu = scanner.nextLine();
+            pedido.setFormapago(new FormaTransferencia(cuit, cbu));
+        }
+
         System.out.println("El Costo total del pedido es: " + pedido.costoFinal());
 
         /**
          * Demostración Etapa 5
          */
-        System.out.println("\n==================== Demostración de Etapa 5 ====================");
+       System.out.println("\n==================== Demostración de Etapa 5 ====================");
         
         // Suscribir cliente a notificaciones del pedido
         pedido.addObserver(cliente1);
