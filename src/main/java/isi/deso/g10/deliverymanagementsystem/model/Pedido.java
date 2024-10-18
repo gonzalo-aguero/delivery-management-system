@@ -21,6 +21,7 @@ public class Pedido implements Observable {
     private Cliente cliente;
     private EstadoPedido estado;
     private DetallePedido detallePedido;
+    private Pago datosPago;
     private FormaPagoI formapago;
     private List<PedidoObserver> observers;
 
@@ -62,9 +63,20 @@ public class Pedido implements Observable {
         this.cliente = cliente;
     }
 
+    public void setDatosPago(Pago datosPago) {
+        this.datosPago = datosPago;
+    }
+    public Pago getDatosPago() {
+        return datosPago;
+    }
+
     public void setFormapago(FormaPagoI formapago) {
         //me faltaria modificar el estado
         this.formapago = formapago;
+    }
+
+    public FormaPagoI getFormapago() {
+        return formapago;
     }
     // Punto de entrada para obtener el costo total del pedido
     public double costoFinal() {

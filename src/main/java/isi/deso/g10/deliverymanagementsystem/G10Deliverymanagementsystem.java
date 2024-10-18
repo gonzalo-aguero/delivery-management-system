@@ -89,6 +89,14 @@ public class G10Deliverymanagementsystem {
         }
         Pedido pedido = new Pedido(1, itemsPedidos, cliente1);
 
+        /**
+         * Demostración Etapa 5
+         */
+       System.out.println("\n==================== Demostración de Etapa 5 ====================");
+        
+        // Suscribir cliente a notificaciones del pedido
+        pedido.addObserver(cliente1);
+
         System.out.println("Ingrese Forma de pago (MercadoPago, Transferencia)");
 
         // mostrar formas de pago
@@ -98,26 +106,17 @@ public class G10Deliverymanagementsystem {
             String alias = scanner.nextLine();
             pedido.setFormapago(new FormaMercadoPago(alias));
         }else{
-            System.out.println("Ingrese su cuit");
-            String cuit = scanner.nextLine();
             System.out.println("Ingrese su cbu");
             String cbu = scanner.nextLine();
-            pedido.setFormapago(new FormaTransferencia(cuit, cbu));
+            pedido.setFormapago(new FormaTransferencia(cliente1.getCuit(),cbu));
         }
-
-        System.out.println("El Costo total del pedido es: " + pedido.costoFinal());
-
-        /**
-         * Demostración Etapa 5
-         */
-       System.out.println("\n==================== Demostración de Etapa 5 ====================");
-        
-        // Suscribir cliente a notificaciones del pedido
-        pedido.addObserver(cliente1);
-        
-        // Cambiar estado del pedido. Se notificará al cliente en cada caso.
         pedido.setEstado(EstadoPedido.RECIBIDO);
+        System.out.println("El costo final de su pedido es: "+pedido.costoFinal());
+
         pedido.setEstado(EstadoPedido.EN_ENVIO);
+
+        pedido.setEstado(EstadoPedido.RECIBIDO);
+
         pedido.setEstado(EstadoPedido.ENTREGADO);
 
     }
