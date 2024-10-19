@@ -18,9 +18,7 @@ public class Categoria {
         this.descripcion = descripcion;
         this.tipoItem = tipoItem;
     }
-    
-    
-    
+
     private int id;
     private String descripcion;
     private TipoItem tipoItem;

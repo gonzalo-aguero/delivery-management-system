@@ -16,7 +16,6 @@ import java.util.List;
  * @author gonzalo90fa
  */
 public class Pedido implements Observable {
-    //LA ESTRATEGIA ESTA APLICADA EN FORMA DE PAGO
     private int id;
     private Cliente cliente;
     private EstadoPedido estado;
@@ -38,7 +37,6 @@ public class Pedido implements Observable {
         this.id = idPedido;
         this.detallePedido = new DetallePedido(itemsPedido);
         this.cliente = cliente;
-        //me faltaria modificar el estado
         this.formapago = formapago;
         this.observers = new ArrayList<>();
     }
@@ -71,14 +69,12 @@ public class Pedido implements Observable {
     }
 
     public void setFormapago(FormaPagoI formapago) {
-        //me faltaria modificar el estado
         this.formapago = formapago;
     }
 
     public FormaPagoI getFormapago() {
         return formapago;
     }
-    // Punto de entrada para obtener el costo total del pedido
     public double costoFinal() {
         if(formapago == null) {
             System.out.println("No se ha ingresado una forma de pago aun :(");
@@ -125,11 +121,6 @@ public class Pedido implements Observable {
         return observers.remove(o);
     }
 
-    /**
-     * Notifies all registered observers about changes to the current Pedido instance.
-     * This method iterates through the list of observers and calls their update method,
-     * passing the current instance of Pedido as a parameter.
-     */
     @Override
     public void notifyObservers() {
         for (PedidoObserver observer : observers) {

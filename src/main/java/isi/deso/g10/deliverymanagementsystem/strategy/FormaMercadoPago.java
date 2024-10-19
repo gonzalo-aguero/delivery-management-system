@@ -18,6 +18,7 @@ public class FormaMercadoPago implements FormaPagoI{
         this.alias = alias;
     }
 
+    @Override
     public double totalizar(double montoInicial){
         montoFinal = montoInicial + montoInicial * RECARGO_MP;
         return montoFinal;

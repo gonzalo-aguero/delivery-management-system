@@ -3,9 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package isi.deso.g10.deliverymanagementsystem.strategy;
-
-
-
 /**
  *
  * @author giuli
@@ -26,5 +23,4 @@ public class FormaTransferencia implements FormaPagoI {
         montoFinal = montoInicial + montoInicial * RECARGO_TRANSFERENCIA;
         return montoFinal;
     }
-    
 }

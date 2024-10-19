@@ -71,7 +71,6 @@ public class Vendedor {
     }
 
     public double distancia(Cliente cliente) {
-        //le puse final porque el radio de la tierra es cte
         final double R = 6378;
 
         //Latitudes
