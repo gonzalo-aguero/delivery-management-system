@@ -5,7 +5,7 @@
 package isi.deso.g10.deliverymanagementsystem.controller;
 
 import isi.deso.g10.deliverymanagementsystem.dao.PruebaVendedores;
-import isi.deso.g10.deliverymanagementsystem.dao.VendedoresDao;
+import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedoresDao;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
 import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanel;
 import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanelEditor;
@@ -54,6 +54,8 @@ public class VendedorController implements Controller {
         
         table.getColumn("Acciones").setCellRenderer(new ButtonsPanelRenderer());
         table.getColumn("Acciones").setCellEditor(new ButtonsPanelEditor(new ButtonsPanel()));
+        
+        
         
         HashSet<Vendedor> vendedores = vendedoresDao.getVendedores();
         

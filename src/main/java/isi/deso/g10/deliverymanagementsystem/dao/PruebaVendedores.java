@@ -4,6 +4,7 @@
  */
 package isi.deso.g10.deliverymanagementsystem.dao;
 
+import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedoresDao;
 import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
 import java.util.HashSet;

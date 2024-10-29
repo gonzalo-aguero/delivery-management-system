@@ -45,8 +45,8 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jPanel3" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -62,16 +62,6 @@
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
-            </Property>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
-                <BevelBorder bevelType="1">
-                  <Color PropertyName="highlightOuter" blue="0" green="ff" id="green" palette="1" red="0" type="palette"/>
-                  <Color PropertyName="highlightInner" blue="0" green="ff" id="green" palette="1" red="0" type="palette"/>
-                  <Color PropertyName="shadowOuter" blue="0" green="ff" id="green" palette="1" red="0" type="palette"/>
-                  <Color PropertyName="shadowInner" blue="0" green="ff" id="green" palette="1" red="0" type="palette"/>
-                </BevelBorder>
-              </Border>
             </Property>
           </Properties>
 
@@ -101,7 +91,7 @@
                       <Component id="itemsButton" min="-2" pref="46" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="pedidosButton" min="-2" pref="46" max="-2" attributes="0"/>
-                      <EmptySpace pref="252" max="32767" attributes="0"/>
+                      <EmptySpace pref="256" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -161,32 +151,22 @@
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
-                <BevelBorder>
-                  <Color PropertyName="highlightOuter" blue="0" green="ff" id="green" palette="1" red="0" type="palette"/>
-                  <Color PropertyName="highlightInner" blue="0" green="ff" id="green" palette="1" red="0" type="palette"/>
-                  <Color PropertyName="shadowOuter" blue="0" green="ff" id="green" palette="1" red="0" type="palette"/>
-                  <Color PropertyName="shadowInner" blue="0" green="ff" id="green" palette="1" red="0" type="palette"/>
-                </BevelBorder>
-              </Border>
-            </Property>
           </Properties>
 
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane1" pref="634" max="32767" attributes="0"/>
-                          <Component id="tituloLabel" max="32767" attributes="0"/>
-                          <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="jScrollPane1" max="32767" attributes="0"/>
+                          <Component id="tituloLabel" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
                               <Component id="crearButton" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="159" max="-2" attributes="0"/>
                               <Component id="jLabel2" min="-2" pref="60" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="buscarTextField" max="32767" attributes="0"/>
+                              <Component id="buscarTextField" pref="253" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -216,6 +196,9 @@
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Segoe UI" size="18" style="0"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" value="Lista de vendedores"/>
@@ -250,13 +233,8 @@
             <Component class="javax.swing.JTextField" name="buscarTextField">
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
-                    <BevelBorder>
-                      <Color PropertyName="highlightOuter" blue="ff" green="ff" id="white" palette="1" red="ff" type="palette"/>
-                      <Color PropertyName="highlightInner" blue="0" green="ff" id="green" palette="1" red="0" type="palette"/>
-                      <Color PropertyName="shadowOuter" blue="ff" green="ff" id="white" palette="1" red="ff" type="palette"/>
-                      <Color PropertyName="shadowInner" blue="0" green="ff" id="green" palette="1" red="0" type="palette"/>
-                    </BevelBorder>
+                  <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                    <LineBorder/>
                   </Border>
                 </Property>
               </Properties>

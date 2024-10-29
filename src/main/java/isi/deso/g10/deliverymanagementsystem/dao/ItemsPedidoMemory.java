@@ -1,5 +1,6 @@
 package isi.deso.g10.deliverymanagementsystem.dao;
 
+import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ItemsPedidoDao;
 import isi.deso.g10.deliverymanagementsystem.exception.ItemNoEncontradoException;
 import isi.deso.g10.deliverymanagementsystem.model.Pedido;
 

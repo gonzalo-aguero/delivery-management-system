@@ -4,7 +4,7 @@
  */
 package isi.deso.g10.deliverymanagementsystem.controller;
 
-import isi.deso.g10.deliverymanagementsystem.dao.VendedoresDao;
+import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedoresDao;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
 import isi.deso.g10.deliverymanagementsystem.view.PantallaPrincipal;
 import java.awt.event.ActionEvent;
@@ -46,7 +46,12 @@ public class MenuController implements Controller{
             public void actionPerformed(ActionEvent e) {
                 setVendedores();
             }
-           
+        });
+        menu.getClientesButton().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setClientes();
+            }
         });
     }
     
@@ -59,8 +64,16 @@ public class MenuController implements Controller{
         tableModel.setRowCount(0);
         
         subController = new VendedorController(menu);
+    }
+    
+    private void setClientes(){
+        menu.getTituloLabel().setText(title + "clientes");
+        menu.getCrearButton().setText(crearButton + "cliente");
         
+        //Borra todos los elementos en la tabla
+        tableModel.setRowCount(0);
         
+        subController = new ClienteController(menu);
     }
     
     

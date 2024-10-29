@@ -4,6 +4,7 @@
  */
 package isi.deso.g10.deliverymanagementsystem.view;
 
+import java.awt.FlowLayout;
 import javax.swing.JToggleButton;
 
 /**
@@ -16,6 +17,7 @@ public class ButtonsPanel extends javax.swing.JPanel {
      * Creates new form ButtonsPanel
      */
     public ButtonsPanel() {
+        setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
         initComponents();
     }
 
