@@ -22,10 +22,7 @@ public class MenuController implements Controller{
     PantallaPrincipal menu;
     DefaultTableModel tableModel;
    
-    
-    
-    
-    
+   
     Controller subController;
     
     
@@ -35,7 +32,12 @@ public class MenuController implements Controller{
     public MenuController(PantallaPrincipal menu){
         this.menu = menu;
         tableModel = (DefaultTableModel) menu.getTabla().getModel();
-        subController = new VendedorController(menu);
+        addFrameListeners();
+        setVendedores();
+        
+        menu.setVisible(true);
+        
+        
     }
     @Override
     public void addFrameListeners() {
