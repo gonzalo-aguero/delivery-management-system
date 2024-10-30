@@ -11,6 +11,7 @@ import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanel;
 import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanelEditor;
 import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanelRenderer;
 import isi.deso.g10.deliverymanagementsystem.view.PantallaPrincipal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -21,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ClienteController implements Controller{
 
+    DefaultTableModel tableModel;
     
     //DAO
     ClientesDao clientesDao;
@@ -31,7 +33,6 @@ public class ClienteController implements Controller{
     public ClienteController(PantallaPrincipal menu) {
         this.menu=menu;
         clientesDao = new PruebaClientes();
-        setTablaClientes();
     }
 
     @Override
@@ -55,7 +56,7 @@ public class ClienteController implements Controller{
         table.getColumn("Acciones").setCellRenderer(new ButtonsPanelRenderer());
         table.getColumn("Acciones").setCellEditor(new ButtonsPanelEditor(new ButtonsPanel()));
         
-         HashSet<Cliente> clientes = clientesDao.getClientes();
+         ArrayList<Cliente> clientes = clientesDao.getClientes();
         
         //Llena la tabla de vendedores
         for(Cliente cliente: clientes){
@@ -68,6 +69,16 @@ public class ClienteController implements Controller{
                 new ButtonsPanel()
             });
         }
+    }
+
+    @Override
+    public void setTable() {
+       tableModel = (DefaultTableModel) menu.getTabla().getModel();
+        
+        //Vacia la tabla para cualquier modelo
+        tableModel.setRowCount(0);
+        
+        setTablaClientes();
     }
     
 }

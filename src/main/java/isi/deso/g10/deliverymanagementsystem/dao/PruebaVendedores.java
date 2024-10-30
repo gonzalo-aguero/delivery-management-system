@@ -7,8 +7,7 @@ package isi.deso.g10.deliverymanagementsystem.dao;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedoresDao;
 import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
 
 /**
  *
@@ -17,8 +16,8 @@ import java.util.Set;
 public class PruebaVendedores implements VendedoresDao{
 
     @Override
-    public HashSet<Vendedor> getVendedores() {
-        HashSet<Vendedor> vendedores = new HashSet();
+    public ArrayList<Vendedor> getVendedores() {
+        ArrayList<Vendedor> vendedores = new ArrayList();
         
         Coordenada coordenada1 = new Coordenada(10, 20);
         Coordenada coordenada2 = new Coordenada(15, 25);

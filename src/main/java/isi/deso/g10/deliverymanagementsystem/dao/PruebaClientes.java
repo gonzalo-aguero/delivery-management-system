@@ -7,7 +7,8 @@ package isi.deso.g10.deliverymanagementsystem.dao;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ClientesDao;
 import isi.deso.g10.deliverymanagementsystem.model.Cliente;
 import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -16,8 +17,8 @@ import java.util.HashSet;
 public class PruebaClientes implements ClientesDao {
 
     @Override
-    public HashSet<Cliente> getClientes() {
-        HashSet<Cliente> clientes = new HashSet<>();
+    public ArrayList<Cliente> getClientes() {
+        ArrayList<Cliente> clientes = new ArrayList<>();
 
         // Crear 5 instancias de Cliente
         clientes.add(new Cliente(1, "20-12345678-9", "Cliente Uno", "clienteuno@example.com", "Direccion Uno", new Coordenada(40.7128, -74.0060)));

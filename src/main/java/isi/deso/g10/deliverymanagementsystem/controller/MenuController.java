@@ -19,38 +19,53 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MenuController implements Controller{
 
-    PantallaPrincipal menu;
-    DefaultTableModel tableModel;
+    private PantallaPrincipal menu;
+    private DefaultTableModel tableModel;
    
    
-    Controller subController;
+    private Controller subController;
+    private final VendedorController vendedorController;
+    private final ClienteController clienteController;
     
     
-    String title= "Lista de ";
-    String crearButton= "Crear nuevo ";
+    private String title= "Lista de ";
+    private String crearButton= "Crear nuevo ";
     
     public MenuController(PantallaPrincipal menu){
         this.menu = menu;
+        
+        this.vendedorController = new VendedorController(this.menu);
+        this.clienteController = new ClienteController(this.menu);
         tableModel = (DefaultTableModel) menu.getTabla().getModel();
         addFrameListeners();
         setVendedores();
+        subController.setTable();
+        
+      
+        
         
         menu.setVisible(true);
         
-        
     }
+    
     @Override
     public void addFrameListeners() {
         menu.getVendedoresButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVendedores();
+                subController.setTable();
+                //menu.setTable();
+                
             }
         });
         menu.getClientesButton().addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
                 setClientes();
+                subController.setTable();
+                //menu.setTable();
+                
             }
         });
     }
@@ -59,22 +74,26 @@ public class MenuController implements Controller{
     private void setVendedores(){
         menu.getTituloLabel().setText(title + "vendedores");
         menu.getCrearButton().setText(crearButton + "vendedor");
+       
+        subController = vendedorController;
         
-        //Borra todos los elementos en la tabla
-        tableModel.setRowCount(0);
         
-        subController = new VendedorController(menu);
+        
     }
     
     private void setClientes(){
         menu.getTituloLabel().setText(title + "clientes");
         menu.getCrearButton().setText(crearButton + "cliente");
         
-        //Borra todos los elementos en la tabla
-        tableModel.setRowCount(0);
-        
-        subController = new ClienteController(menu);
+        subController = clienteController;
     }
+
+    @Override
+    public void setTable() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+   
     
     
 }

@@ -11,6 +11,7 @@ import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanel;
 import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanelEditor;
 import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanelRenderer;
 import isi.deso.g10.deliverymanagementsystem.view.PantallaPrincipal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import javax.swing.JButton;
 import javax.swing.JTable;
@@ -23,6 +24,7 @@ import javax.swing.table.DefaultTableModel;
 public class VendedorController implements Controller {
 
     PantallaPrincipal menu;
+    DefaultTableModel tableModel;
     
     //DAOS
     VendedoresDao vendedoresDao;
@@ -32,7 +34,6 @@ public class VendedorController implements Controller {
     public VendedorController(PantallaPrincipal menu) {
         this.menu = menu;
         vendedoresDao = new PruebaVendedores();
-        setTablaVendedores();
     }
 
     @Override
@@ -57,7 +58,7 @@ public class VendedorController implements Controller {
         
         
         
-        HashSet<Vendedor> vendedores = vendedoresDao.getVendedores();
+        ArrayList<Vendedor> vendedores = vendedoresDao.getVendedores();
         
         //Llena la tabla de vendedores
         for(Vendedor vendedor: vendedores){
@@ -71,6 +72,17 @@ public class VendedorController implements Controller {
         
         
         
+        
+    }
+
+    @Override
+    public void setTable() {
+        tableModel = (DefaultTableModel) menu.getTabla().getModel();
+        
+        //Vacia la tabla para cualquier modelo
+        tableModel.setRowCount(0);
+        
+        setTablaVendedores();
         
     }
     

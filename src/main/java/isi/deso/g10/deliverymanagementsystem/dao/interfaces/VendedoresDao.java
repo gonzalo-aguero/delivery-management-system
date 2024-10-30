@@ -5,7 +5,7 @@
 package isi.deso.g10.deliverymanagementsystem.dao.interfaces;
 
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
-import java.util.HashSet;
+import java.util.ArrayList;
 
 /**
  *
@@ -13,5 +13,5 @@ import java.util.HashSet;
  */
 public interface VendedoresDao {
 
-    public HashSet<Vendedor> getVendedores();
+    public ArrayList<Vendedor> getVendedores();
 }
