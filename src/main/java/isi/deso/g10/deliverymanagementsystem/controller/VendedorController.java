@@ -13,6 +13,7 @@ import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanelRenderer;
 import isi.deso.g10.deliverymanagementsystem.view.PantallaPrincipal;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -29,7 +30,7 @@ public class VendedorController implements Controller {
     //DAOS
     VendedoresDao vendedoresDao;
     
-    HashSet<Vendedor> vendedores;
+    List<Vendedor> vendedores;
     
     public VendedorController(PantallaPrincipal menu) {
         this.menu = menu;
@@ -41,8 +42,10 @@ public class VendedorController implements Controller {
         //Aca debería haber listeners del frame de creacion, edición y eliminación, creo que la busqueda se podría hacer en el MenuController tranquilamente
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
-    private void setTablaVendedores(){
+   
+
+    @Override
+    public void setTable() {
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("ID");
         modelo.addColumn("Nombre");
@@ -58,7 +61,7 @@ public class VendedorController implements Controller {
         
         
         
-        ArrayList<Vendedor> vendedores = vendedoresDao.getVendedores();
+        vendedores = vendedoresDao.getVendedores();
         
         //Llena la tabla de vendedores
         for(Vendedor vendedor: vendedores){
@@ -69,20 +72,6 @@ public class VendedorController implements Controller {
                 new ButtonsPanel()
             });
         }
-        
-        
-        
-        
-    }
-
-    @Override
-    public void setTable() {
-        tableModel = (DefaultTableModel) menu.getTabla().getModel();
-        
-        //Vacia la tabla para cualquier modelo
-        tableModel.setRowCount(0);
-        
-        setTablaVendedores();
         
     }
     

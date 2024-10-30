@@ -39,10 +39,7 @@ public class MenuController implements Controller{
         tableModel = (DefaultTableModel) menu.getTabla().getModel();
         addFrameListeners();
         setVendedores();
-        subController.setTable();
-        
-      
-        
+       
         
         menu.setVisible(true);
         
@@ -54,8 +51,8 @@ public class MenuController implements Controller{
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVendedores();
-                subController.setTable();
-                //menu.setTable();
+               
+              
                 
             }
         });
@@ -63,8 +60,8 @@ public class MenuController implements Controller{
             @Override
             public void actionPerformed(ActionEvent e) {
                 setClientes();
-                subController.setTable();
-                //menu.setTable();
+                
+            
                 
             }
         });
@@ -76,7 +73,7 @@ public class MenuController implements Controller{
         menu.getCrearButton().setText(crearButton + "vendedor");
        
         subController = vendedorController;
-        
+        subController.setTable();
         
         
     }
@@ -86,11 +83,12 @@ public class MenuController implements Controller{
         menu.getCrearButton().setText(crearButton + "cliente");
         
         subController = clienteController;
+        subController.setTable();
     }
 
     @Override
     public void setTable() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        subController.setTable();
     }
     
    

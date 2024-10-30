@@ -13,6 +13,7 @@ import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanelRenderer;
 import isi.deso.g10.deliverymanagementsystem.view.PantallaPrincipal;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -22,14 +23,15 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ClienteController implements Controller{
 
-    DefaultTableModel tableModel;
+    private DefaultTableModel tableModel;
     
     //DAO
-    ClientesDao clientesDao;
+    private final ClientesDao clientesDao;
     
-    HashSet<Cliente> clientes;
+    private List<Cliente> clientes;
     
-    PantallaPrincipal menu;
+    private final PantallaPrincipal menu;
+    
     public ClienteController(PantallaPrincipal menu) {
         this.menu=menu;
         clientesDao = new PruebaClientes();
@@ -40,8 +42,10 @@ public class ClienteController implements Controller{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
-    private void setTablaClientes(){
-        DefaultTableModel modelo = new DefaultTableModel();
+
+    @Override
+    public void setTable() {
+       DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("ID");
         modelo.addColumn("Cuit");
         modelo.addColumn("Nombre");
@@ -56,7 +60,7 @@ public class ClienteController implements Controller{
         table.getColumn("Acciones").setCellRenderer(new ButtonsPanelRenderer());
         table.getColumn("Acciones").setCellEditor(new ButtonsPanelEditor(new ButtonsPanel()));
         
-         ArrayList<Cliente> clientes = clientesDao.getClientes();
+        clientes = clientesDao.getClientes();
         
         //Llena la tabla de vendedores
         for(Cliente cliente: clientes){
@@ -69,16 +73,6 @@ public class ClienteController implements Controller{
                 new ButtonsPanel()
             });
         }
-    }
-
-    @Override
-    public void setTable() {
-       tableModel = (DefaultTableModel) menu.getTabla().getModel();
-        
-        //Vacia la tabla para cualquier modelo
-        tableModel.setRowCount(0);
-        
-        setTablaClientes();
     }
     
 }
