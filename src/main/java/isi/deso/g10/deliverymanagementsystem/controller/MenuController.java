@@ -26,6 +26,8 @@ public class MenuController implements Controller{
     private Controller subController;
     private final VendedorController vendedorController;
     private final ClienteController clienteController;
+    private final ItemMenuController itemMenuController; 
+    private final PedidoController pedidoController;
     
     
     private String title= "Lista de ";
@@ -36,6 +38,8 @@ public class MenuController implements Controller{
         
         this.vendedorController = new VendedorController(this.menu);
         this.clienteController = new ClienteController(this.menu);
+        this.itemMenuController = new ItemMenuController(this.menu);
+        this.pedidoController = new PedidoController(this.menu);
         tableModel = (DefaultTableModel) menu.getTabla().getModel();
         addFrameListeners();
         setVendedores();
@@ -51,19 +55,25 @@ public class MenuController implements Controller{
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVendedores();
-               
-              
-                
             }
         });
         menu.getClientesButton().addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
                 setClientes();
-                
-            
-                
             }
+        });
+        menu.getItemsButton().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               setItemsMenu();
+            }
+        });
+        menu.getPedidosButton().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setPedidos();
+            } 
         });
     }
     
@@ -85,6 +95,23 @@ public class MenuController implements Controller{
         subController = clienteController;
         subController.setTable();
     }
+    
+    private void setItemsMenu(){
+        menu.getTituloLabel().setText(title + "items menu");
+        menu.getCrearButton().setText(crearButton + "item menu");
+        
+        subController = itemMenuController;
+        subController.setTable();
+    }
+    
+    private void setPedidos(){
+        menu.getTituloLabel().setText(title + "pedidos");
+        menu.getCrearButton().setText(crearButton + "pedido");
+        
+        subController = pedidoController;
+        subController.setTable();
+    }
+    
 
     @Override
     public void setTable() {

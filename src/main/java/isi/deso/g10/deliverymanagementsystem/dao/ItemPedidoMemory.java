@@ -1,18 +1,18 @@
 package isi.deso.g10.deliverymanagementsystem.dao;
 
-import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ItemsPedidoDao;
 import isi.deso.g10.deliverymanagementsystem.exception.ItemNoEncontradoException;
 import isi.deso.g10.deliverymanagementsystem.model.Pedido;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ItemPedidoDao;
 
 /**
  *
  * @author gonzalo90fa
  */
-public class ItemsPedidoMemory implements ItemsPedidoDao {
+public class ItemPedidoMemory implements ItemPedidoDao {
 
     /**
      * En "itemsPedidos" iriamos a guardar las instancias
@@ -21,7 +21,7 @@ public class ItemsPedidoMemory implements ItemsPedidoDao {
      */
     private ArrayList<Pedido> pedidos;
 
-    public ItemsPedidoMemory() {
+    public ItemPedidoMemory() {
         this.pedidos = new ArrayList<>();
     }
 

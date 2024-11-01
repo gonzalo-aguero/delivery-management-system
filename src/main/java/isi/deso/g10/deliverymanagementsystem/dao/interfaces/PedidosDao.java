@@ -4,13 +4,15 @@
  */
 package isi.deso.g10.deliverymanagementsystem.dao.interfaces;
 
-import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
+import isi.deso.g10.deliverymanagementsystem.model.Pedido;
 import java.util.ArrayList;
 
 /**
  *
  * @author giuli
  */
-public interface ItemMenuDao {
-    public ArrayList<ItemMenu> getItemMenus();
+public interface PedidosDao {
+
+    public ArrayList<Pedido> getPedidos();
+    
 }

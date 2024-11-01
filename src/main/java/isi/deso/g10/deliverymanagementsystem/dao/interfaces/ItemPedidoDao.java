@@ -16,7 +16,7 @@ import java.util.List;
  * 
  * @author giuli
  */
-public interface ItemsPedidoDao {
+public interface ItemPedidoDao {
     
     public enum TipoOrdenamiento {
         ASC, DESC
