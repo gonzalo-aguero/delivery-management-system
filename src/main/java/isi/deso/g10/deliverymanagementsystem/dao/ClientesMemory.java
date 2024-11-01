@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author giuli
  */
-public class PruebaClientes implements ClientesDao {
+public class ClientesMemory implements ClientesDao {
 
     @Override
     public ArrayList<Cliente> getClientes() {

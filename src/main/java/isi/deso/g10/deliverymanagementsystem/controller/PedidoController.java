@@ -14,6 +14,8 @@ import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanelRenderer;
 import isi.deso.g10.deliverymanagementsystem.view.PantallaPrincipal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -54,10 +56,23 @@ public class PedidoController implements Controller {
        modelo.addColumn("Acciones");
        
        JTable table = menu.getTabla();
-        table.setModel(modelo);
-        
-       table.getColumn("Acciones").setCellRenderer(new ButtonsPanelRenderer());
-       table.getColumn("Acciones").setCellEditor(new ButtonsPanelEditor(new ButtonsPanel()));
+       table.setModel(modelo);
+       this.tableModel = modelo;
+
+        // CONFIGURACION BOTONES EDITAR Y ELIMINAR
+        table.getColumn("Acciones").setCellRenderer(new ButtonsPanelRenderer());
+
+        // Creamos y configuramos los botones para cada elemento
+        ButtonsPanel buttonsPanel = new ButtonsPanel();
+
+        // Define acciones personalizadas para cada botón
+        Consumer<Integer> editAction = (row) -> editarButtonHandler(row);
+        Consumer<Integer> deleteAction = (row) -> eliminarButtonHandler(row);
+
+        // Crea el editor de la celda pasando las acciones como parámetros
+        ButtonsPanelEditor buttonsPanelEditor = new ButtonsPanelEditor(buttonsPanel, editAction, deleteAction);
+
+        table.getColumn("Acciones").setCellEditor(buttonsPanelEditor);
        
        pedidos = pedidosDao.getPedidos();
        
@@ -67,12 +82,20 @@ public class PedidoController implements Controller {
            pedido.getCliente().getId(),
            pedido.getEstado(),
            pedido.getDetallePedido().calcularMontoTotal(),
-           pedido.getDatosPago().getFormaPago(),
-           new ButtonsPanel()
+           pedido.getDatosPago().getFormaPago()
            });
        
        }
        
     }
     
+    private void editarButtonHandler(int row) {
+        Object id = this.tableModel.getValueAt(row, 0);
+        JOptionPane.showMessageDialog(this.menu.getParent(), "Editar en fila: " + row + " ID: " + id.toString());
+    }
+
+    private void eliminarButtonHandler(int row) {
+        Object id = this.tableModel.getValueAt(row, 0);
+        JOptionPane.showMessageDialog(this.menu.getParent(), "Eliminar en fila: " + row + " ID: " + id.toString());
+    }
 }

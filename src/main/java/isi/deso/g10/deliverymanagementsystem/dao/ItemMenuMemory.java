@@ -6,23 +6,24 @@ package isi.deso.g10.deliverymanagementsystem.dao;
 
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ItemMenuDao;
 import isi.deso.g10.deliverymanagementsystem.model.*;
-import  isi.deso.g10.deliverymanagementsystem.exception.*;
+import isi.deso.g10.deliverymanagementsystem.exception.*;
 import java.util.ArrayList;
 import java.util.Random;
-
 
 /**
  *
  * @author giuli
  */
 public class ItemMenuMemory implements ItemMenuDao {
+
     private ArrayList<ItemMenu> items;
-    
-    public ItemMenuMemory(){
+
+    public ItemMenuMemory() {
+        this.items = new ArrayList<>();
         this.generarItems();
     }
-    
-    private void  generarItems(){
+
+    private void generarItems() {
         Categoria minutas = new Categoria(1, "minuta", Categoria.TipoItem.COMIDA);
         Categoria bebida = new Categoria(1, "bebida", Categoria.TipoItem.BEBIDA);
         Plato milanesaPollo = new Plato(200, 1, "Milanesa de Pollo", "Milanesa de Pollo", 4500, minutas, 400, false, false, false);
@@ -34,10 +35,10 @@ public class ItemMenuMemory implements ItemMenuDao {
         Bebida cocaCola = new Bebida(0, 500, 4, "Coca Cola", "Gaseosa Coca Cola 500ml", 500, bebida, 200, true, true, true);
         items.add(cocaCola);
         //double graduacionAlcoholica, double volumenEnMl, int id, String nombre, String descripcion, double precio, Categoria categoria, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano
-       //double peso, int id, String nombre, String descripcion, double precio, Categoria categoria, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano
-        Bebida agua = new Bebida(0,500,5,"Agua mineral","Agua sin gas 500ml",300.00,bebida,100,true,true,true);
+        //double peso, int id, String nombre, String descripcion, double precio, Categoria categoria, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano
+        Bebida agua = new Bebida(0, 500, 5, "Agua mineral", "Agua sin gas 500ml", 300.00, bebida, 100, true, true, true);
         items.add(agua);
-        Bebida cerveza = new Bebida(5.70,700,6,"Cerveza DUFF","Cerveza DUFF 700ml",600.00,bebida,500,true,true,true);
+        Bebida cerveza = new Bebida(5.70, 700, 6, "Cerveza DUFF", "Cerveza DUFF 700ml", 600.00, bebida, 500, true, true, true);
         items.add(cerveza);
     }
 
@@ -45,65 +46,67 @@ public class ItemMenuMemory implements ItemMenuDao {
     public ArrayList<ItemMenu> getItemMenus() {
         return items;
     }
+
     @Override
-    public ItemMenu buscarItemMenu(int id){
-        try{
+    public ItemMenu buscarItemMenu(int id) {
+        try {
             ItemMenu itemRet = null;
-            for(ItemMenu item: items){
-                if(item.getId() == id){
+            for (ItemMenu item : items) {
+                if (item.getId() == id) {
                     itemRet = item;
                 }
             }
-            if(itemRet == null){
+            if (itemRet == null) {
                 throw new ItemNoEncontradoException("No se han encontrado el item menu que deseaba");
-            }
-            else{
+            } else {
                 return itemRet;
             }
-        }
-        catch(ItemNoEncontradoException item){
+        } catch (ItemNoEncontradoException item) {
             return null;
         }
     }
+
     @Override
-    public boolean eliminarItemMenu(int id){
+    public boolean eliminarItemMenu(int id) {
         boolean borrado = false;
-        for (ItemMenu item: items){
-             if(item.getId() == id){
-                    items.remove(item);
-                    borrado = true;
-                }
+        for (ItemMenu item : items) {
+            if (item.getId() == id) {
+                items.remove(item);
+                borrado = true;
+            }
         }
         return borrado;
     }
+
     @Override
-    public boolean modificarItemMenu(String descripcion, double precio,int id){
+    public boolean modificarItemMenu(String descripcion, double precio, int id) {
         boolean modificado = false;
-         for (ItemMenu item: items){
-             if(item.getId() == id){
-                    item.setDescripcion(descripcion);
-                    item.setPrecio(precio);
-                    modificado = true;
-            }   
-         }
+        for (ItemMenu item : items) {
+            if (item.getId() == id) {
+                item.setDescripcion(descripcion);
+                item.setPrecio(precio);
+                modificado = true;
+            }
+        }
         return modificado;
     }
+
     @Override
-    public ItemMenu crearNuevoItemMenu(String tipo,Categoria cat, double peso,double graduacionAlcoholica, double volumenEnMl,String nombre,String descripcion,double precio,int calorias,boolean aptoCeliaco,boolean aptoVegetariano, boolean aptoVegano){
-        if(tipo.equals("Bebida")){
+    public ItemMenu crearNuevoItemMenu(String tipo, Categoria cat, double peso, double graduacionAlcoholica, double volumenEnMl, String nombre, String descripcion, double precio, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano) {
+        if (tipo.equals("Bebida")) {
             Random random = new Random(System.currentTimeMillis());
             int intRan = random.nextInt();
-            if(intRan < 0) {
-                intRan = intRan*(-1);
+            if (intRan < 0) {
+                intRan = intRan * (-1);
             }
-            return new Bebida(graduacionAlcoholica,volumenEnMl,intRan,nombre,descripcion,precio,cat,calorias,aptoCeliaco,aptoVegetariano,aptoVegano);
-        }else{
+            return new Bebida(graduacionAlcoholica, volumenEnMl, intRan, nombre, descripcion, precio, cat, calorias, aptoCeliaco, aptoVegetariano, aptoVegano);
+        } else {
             Random random = new Random(System.currentTimeMillis());
             int intRan = random.nextInt();
-            if(intRan < 0) {
-                intRan = intRan*(-1);
+            if (intRan < 0) {
+                intRan = intRan * (-1);
             }
-            return new Plato (peso,intRan,nombre,descripcion,precio,cat,calorias,aptoCeliaco,aptoVegetariano,aptoVegano);
+            return new Plato(peso, intRan, nombre, descripcion, precio, cat, calorias, aptoCeliaco, aptoVegetariano, aptoVegano);
         }
-    }   
+    }
 }

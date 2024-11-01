@@ -4,7 +4,7 @@
  */
 package isi.deso.g10.deliverymanagementsystem.controller;
 
-import isi.deso.g10.deliverymanagementsystem.dao.PruebaVendedores;
+import isi.deso.g10.deliverymanagementsystem.dao.VendedoresMemory;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedoresDao;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
 import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanel;
@@ -14,7 +14,9 @@ import isi.deso.g10.deliverymanagementsystem.view.PantallaPrincipal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.function.Consumer;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -34,7 +36,7 @@ public class VendedorController implements Controller {
     
     public VendedorController(PantallaPrincipal menu) {
         this.menu = menu;
-        vendedoresDao = new PruebaVendedores();
+        vendedoresDao = new VendedoresMemory();
     }
 
     @Override
@@ -55,17 +57,29 @@ public class VendedorController implements Controller {
       
         JTable table = menu.getTabla();
         table.setModel(modelo);
-        
+        this.tableModel = modelo;
+
+        // CONFIGURACION BOTONES EDITAR Y ELIMINAR
         table.getColumn("Acciones").setCellRenderer(new ButtonsPanelRenderer());
-        table.getColumn("Acciones").setCellEditor(new ButtonsPanelEditor(new ButtonsPanel()));
-        
-        
+
+        // Creamos y configuramos los botones para cada elemento
+        ButtonsPanel buttonsPanel = new ButtonsPanel();
+
+        // Define acciones personalizadas para cada botón
+        Consumer<Integer> editAction = (row) -> editarButtonHandler(row);
+        Consumer<Integer> deleteAction = (row) -> eliminarButtonHandler(row);
+
+        // Crea el editor de la celda pasando las acciones como parámetros
+        ButtonsPanelEditor buttonsPanelEditor = new ButtonsPanelEditor(buttonsPanel, editAction, deleteAction);
+
+        table.getColumn("Acciones").setCellEditor(buttonsPanelEditor);
         
         vendedores = vendedoresDao.getVendedores();
         
         //Llena la tabla de vendedores
         for(Vendedor vendedor: vendedores){
-            modelo.addRow(new Object[]{vendedor.getId(),
+            modelo.addRow(new Object[]{
+                vendedor.getId(),
                 vendedor.getNombre(),
                 vendedor.getDireccion(),
                 "[" + vendedor.getCoordenadas().getLatitud() + ";" + vendedor.getCoordenadas().getLongitud() + "]",
@@ -73,6 +87,16 @@ public class VendedorController implements Controller {
             });
         }
         
+    }
+    
+    private void editarButtonHandler(int row) {
+        Object id = this.tableModel.getValueAt(row, 0);
+        JOptionPane.showMessageDialog(this.menu.getParent(), "Editar en fila: " + row + " ID: " + id.toString());
+    }
+
+    private void eliminarButtonHandler(int row) {
+        Object id = this.tableModel.getValueAt(row, 0);
+        JOptionPane.showMessageDialog(this.menu.getParent(), "Eliminar en fila: " + row + " ID: " + id.toString());
     }
     
 }

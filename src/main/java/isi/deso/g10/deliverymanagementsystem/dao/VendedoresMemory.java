@@ -13,7 +13,7 @@ import java.util.ArrayList;
  *
  * @author giuli
  */
-public class PruebaVendedores implements VendedoresDao{
+public class VendedoresMemory implements VendedoresDao{
 
     @Override
     public ArrayList<Vendedor> getVendedores() {
