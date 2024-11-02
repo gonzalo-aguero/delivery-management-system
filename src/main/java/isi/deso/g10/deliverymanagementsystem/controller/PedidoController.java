@@ -29,9 +29,11 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ClienteDao;
 import isi.deso.g10.deliverymanagementsystem.model.Cliente;
+import isi.deso.g10.deliverymanagementsystem.model.Pedido.EstadoPedido;
 import isi.deso.g10.deliverymanagementsystem.strategy.FormaMercadoPago;
 import isi.deso.g10.deliverymanagementsystem.strategy.FormaPagoI;
 import isi.deso.g10.deliverymanagementsystem.strategy.FormaTransferencia;
+import isi.deso.g10.deliverymanagementsystem.view.EditarPedidoDialog;
 import isi.deso.g10.deliverymanagementsystem.view.crear.FormaDePagoDialog;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -117,7 +119,7 @@ public class PedidoController implements Controller {
         //Editar pedido
         int id = (int) this.tableModel.getValueAt(row, 0);
         Pedido pedido = pedidoDao.buscarPedidoPorId(id);
-        //editar(pedido);
+        editar(pedido);
 
         //Actualizar tabla
         setTable();
@@ -230,6 +232,82 @@ public class PedidoController implements Controller {
         });
 
         crearPedidoDialog.setVisible(true);
+    }
+    
+    public void editar(Pedido pedido){
+        EditarPedidoDialog editarPedido = new EditarPedidoDialog(menu,true);
+        editarPedido.setLocationRelativeTo(null);
+        
+        for (EstadoPedido estadoPedido : EstadoPedido.values()) {
+            editarPedido.getEstadoBox().addItem(estadoPedido);
+        }
+        editarPedido.getEstadoBox().setSelectedItem(pedido.getEstado());
+        
+        editarPedido.getFormaBox().addItem("Mercado Pago");
+        editarPedido.getFormaBox().addItem("Transferencia");
+        
+        if(pedido.getFormapago() instanceof FormaMercadoPago) editarPedido.getFormaBox().setSelectedItem("Mercado Pago");
+        else editarPedido.getFormaBox().setSelectedItem("Transferencia");
+        
+        
+        editarPedido.getFormaBox().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String aliasCbu = editarPedido.getCbuField().getText();
+                String cuit = editarPedido.getCuitField().getText();
+
+                if (editarPedido.getFormaBox().getSelectedItem().equals("Mercado Pago")) {
+                    formaDePago = new FormaMercadoPago(aliasCbu);
+                } else if (editarPedido.getFormaBox().getSelectedItem().equals("Transferencia")) {
+                    formaDePago = new FormaTransferencia(cuit, aliasCbu);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Elija una forma de pago");
+                    throw new RuntimeException("Elija una forma de pago");
+                }
+
+                double total = obtenerSubtotalDeItems(pedido.getDetallePedido().getItems());
+                double subtotal = formaDePago.totalizar(total);
+                editarPedido.getSubTotalField().setText(String.valueOf(subtotal));
+            }
+        });
+
+        editarPedido.getEditarButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EstadoPedido estadoSeleccionado = (EstadoPedido) editarPedido.getEstadoBox().getSelectedItem();
+                pedido.setEstado(estadoSeleccionado);
+
+                
+                String aliasCbu = editarPedido.getCbuField().getText();
+                String cuit = editarPedido.getCuitField().getText();
+                if (editarPedido.getFormaBox().getSelectedItem().equals("Mercado Pago")) {
+                    pedido.setFormapago(new FormaMercadoPago(aliasCbu));
+                } else if (editarPedido.getFormaBox().getSelectedItem().equals("Transferencia")) {
+                    pedido.setFormapago(new FormaTransferencia(cuit, aliasCbu));
+                }
+
+                
+                try {
+                    pedidoDao.actualizarPedido(pedido);
+                    JOptionPane.showMessageDialog(editarPedido, "Pedido actualizado exitosamente.");
+                    editarPedido.dispose();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(editarPedido, "Error al actualizar el pedido: " + ex.getMessage());
+                    throw new RuntimeException("Error al actualizar el pedido", ex);
+                }
+            }
+    });
+
+    // Cancelar edición
+    editarPedido.getCancelarButton().addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            editarPedido.dispose();
+        }
+    });
+
+    editarPedido.setVisible(true);
+        
     }
 
     private void buscarVendedor(Vendedor vendedor) {
