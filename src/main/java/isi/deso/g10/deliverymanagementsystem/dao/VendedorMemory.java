@@ -20,7 +20,7 @@ public class VendedorMemory implements VendedorDao {
     private ArrayList<Vendedor> vendedores;
 
     private VendedorMemory() {
-        this.vendedores = new ArrayList<>();
+        this.vendedores = generarVendedores();
         self = this;
     }
 
