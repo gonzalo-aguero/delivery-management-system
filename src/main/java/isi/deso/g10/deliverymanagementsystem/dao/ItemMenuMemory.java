@@ -5,8 +5,10 @@
 package isi.deso.g10.deliverymanagementsystem.dao;
 
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ItemMenuDao;
+import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedorDao;
 import isi.deso.g10.deliverymanagementsystem.model.*;
 import isi.deso.g10.deliverymanagementsystem.exception.*;
+import isi.deso.g10.deliverymanagementsystem.model.Categoria.TipoItem;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,11 +21,23 @@ public class ItemMenuMemory implements ItemMenuDao {
 
     private ArrayList<ItemMenu> items;
     private static ItemMenuMemory self;
+    private ArrayList<Categoria> categorias;
+    private final VendedorDao vendedorDao;
 
     private ItemMenuMemory() {
+        this.vendedorDao = VendedorMemory.getInstance();
         this.items = new ArrayList<>();
-        this.generarItems();
         self = this;
+        this.categorias = new ArrayList<Categoria>();
+        this.categorias.add(new Categoria(1, "Carnes", TipoItem.COMIDA));
+        this.categorias.add(new Categoria(2, "Pastas", TipoItem.COMIDA));
+        this.categorias.add(new Categoria(3, "Cervezas", TipoItem.BEBIDA));
+        this.categorias.add(new Categoria(4, "Vinos", TipoItem.BEBIDA));
+        this.generarItems(vendedorDao.obtenerVendedores());
+    }
+    
+    public List<Categoria> getCategorias() {
+        return categorias;
     }
 
     public static ItemMenuMemory getInstance() {
@@ -33,22 +47,26 @@ public class ItemMenuMemory implements ItemMenuDao {
         return self;
     }
 
-    private void generarItems() {
-        Categoria minutas = new Categoria(1, "minuta", Categoria.TipoItem.COMIDA);
-        Categoria bebida = new Categoria(1, "bebida", Categoria.TipoItem.BEBIDA);
-        Plato milanesaPollo = new Plato(200, 1, "Milanesa de Pollo", "Milanesa de Pollo", 4500, minutas, 400, false, false, false);
+    private void generarItems(List<Vendedor> vendedores) {
+        Plato milanesaPollo = new Plato(200, 1, "Milanesa de Pollo", "Milanesa de Pollo", 4500, this.categorias.getFirst(), 400, false, false, false);
+        milanesaPollo.setVendedor(vendedores.get(0));
         items.add(milanesaPollo);
-        Plato pizzaMuzza = new Plato(350, 2, "Pizza de Muzza", "Pizza con queso mozzarella", 3000, minutas, 800, false, false, false);
+        Plato pizzaMuzza = new Plato(350, 2, "Pizza de Muzza", "Pizza con queso mozzarella", 3000, this.categorias.getFirst(), 800, false, false, false);
+        pizzaMuzza.setVendedor(vendedores.get(1));
         items.add(pizzaMuzza);
-        Plato papasFritas = new Plato(250, 3, "Papas Fritas", "Papas fritas crocantes", 1500, minutas, 600, false, true, true);
+        Plato papasFritas = new Plato(250, 3, "Papas Fritas", "Papas fritas crocantes", 1500, this.categorias.getFirst(), 600, false, true, true);
+        papasFritas.setVendedor(vendedores.get(2));
         items.add(papasFritas);
-        Bebida cocaCola = new Bebida(0, 500, 4, "Coca Cola", "Gaseosa Coca Cola 500ml", 500, bebida, 200, true, true, true);
+        Bebida cocaCola = new Bebida(0, 500, 4, "Coca Cerveza", "Cerveza Coca Cola 500ml", 500, this.categorias.get(2), 200, true, true, true);
+        cocaCola.setVendedor(vendedores.get(3));
         items.add(cocaCola);
         //double graduacionAlcoholica, double volumenEnMl, int id, String nombre, String descripcion, double precio, Categoria categoria, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano
         //double peso, int id, String nombre, String descripcion, double precio, Categoria categoria, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano
-        Bebida agua = new Bebida(0, 500, 5, "Agua mineral", "Agua sin gas 500ml", 300.00, bebida, 100, true, true, true);
+        Bebida agua = new Bebida(0, 500, 5, "Cerveza mineral", "Cerveza sin gas 500ml", 300.00, this.categorias.get(2), 100, true, true, true);
+        agua.setVendedor(vendedores.get(2));
         items.add(agua);
-        Bebida cerveza = new Bebida(5.70, 700, 6, "Cerveza DUFF", "Cerveza DUFF 700ml", 600.00, bebida, 500, true, true, true);
+        Bebida cerveza = new Bebida(5.70, 700, 6, "Cerveza DUFF", "Cerveza DUFF 700ml", 600.00, this.categorias.get(2), 500, true, true, true);
+        cerveza.setVendedor(vendedores.get(1));
         items.add(cerveza);
     }
 
@@ -99,7 +117,14 @@ public class ItemMenuMemory implements ItemMenuDao {
         for (ItemMenu item : items) {
             if (item.getId() == id) {
                 item.setDescripcion(descripcion);
+                item.setNombre(itemMenu.getNombre());
                 item.setPrecio(precio);
+                item.setAptoCeliaco(itemMenu.aptoCeliaco());
+                item.setAptoVegetariano(itemMenu.aptoVegetariano());
+                item.setAptoVegano(itemMenu.aptoVegano());
+                item.setCategoria(item.getCategoria());
+                item.setCalorias(item.getCalorias());
+                item.setVendedor(item.getVendedor());
                 modificado = true;
             }
         }
@@ -107,6 +132,7 @@ public class ItemMenuMemory implements ItemMenuDao {
     }
 
     public ItemMenu agregarItemMenu(ItemMenu itemMenu) {
+        itemMenu.setId(this.items.getLast().getId()+1);
         items.add(itemMenu);
         return itemMenu;
     }

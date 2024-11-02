@@ -115,7 +115,26 @@
             CrearItemMenuDialog crearIM = new CrearItemMenuDialog(menu, true);
             crearIM.setLocationRelativeTo(null);
             
+            try {
+                ArrayList<Vendedor> vendedores = (ArrayList) vendedorDao.obtenerVendedores();
+                for (Vendedor vendedor : vendedores) {
+                    crearIM.getVendedoresBox().addItem(vendedor);
+                }
+                
+                ArrayList<Categoria> categorias = (ArrayList) itemMenuDao.getCategorias();
+
+                for (Categoria categoria : categorias) {
+                    crearIM.getCategoriaBox().addItem(categoria);
+                }
+
+
+            } catch (RuntimeException ex) {
+                JOptionPane.showMessageDialog(crearIM, ex.getMessage());
+                throw new RuntimeException(ex.getMessage());      
+            }
+            
             // Setear valores previos
+
             crearIM.getVendedoresBox().setSelectedItem(item.getVendedor());
             crearIM.getCategoriaBox().setSelectedItem(item.getCategoria());
             crearIM.getCeliacoCheck().setSelected(item.aptoCeliaco());
@@ -128,52 +147,26 @@
             
             if (item instanceof Plato plato){
                 crearIM.getPesoField().setText(plato.getPeso()+"");
-                crearIM.getCategoriaBox().setSelectedItem(plato.getCategoria());
+                crearIM.getTipoBox().setSelectedItem("Plato");
             } else if (item instanceof Bebida bebida){
+                crearIM.getTipoBox().setSelectedItem("Bebida");
                 crearIM.getGraduacionField().setText(bebida.getGraduacionAlcoholica()+"");
                 crearIM.getVolumenField().setText(bebida.getVolumenEnMl()+"");
-                crearIM.getCategoriaBox().setSelectedItem(bebida.getCalorias());
                 crearIM.getPesoField().setEditable(false);
                 crearIM.getVolumenField().setEditable(true);
                 crearIM.getGraduacionField().setEditable(true);
-            }
-                
-            
-            
-
-            try {
-                ArrayList<Vendedor> vendedores = (ArrayList) vendedorDao.obtenerVendedores();
-                for (Vendedor vendedor : vendedores) {
-                    crearIM.getVendedoresBox().addItem(vendedor);
-                }
-
-                ArrayList<Categoria> categorias = new ArrayList<Categoria>();
-                categorias.add(new Categoria(1, "Carnes", TipoItem.COMIDA));
-                categorias.add(new Categoria(2, "Pastas", TipoItem.COMIDA));
-                categorias.add(new Categoria(3, "Cervezas", TipoItem.BEBIDA));
-                categorias.add(new Categoria(4, "Vinos", TipoItem.BEBIDA));
-
-                for (Categoria categoria : categorias) {
-                    crearIM.getCategoriaBox().addItem(categoria);
-                }
-
-
-            } catch (RuntimeException ex) {
-                JOptionPane.showMessageDialog(crearIM, ex.getMessage());
-                throw new RuntimeException(ex.getMessage());      
             }
 
            crearIM.getCrearButton().addActionListener(new ActionListener(){
                @Override
                public void actionPerformed(ActionEvent e) {
-                  ItemMenu nuevoItemMenu;
                   try{
                   Categoria categoria = (Categoria) crearIM.getCategoriaBox().getSelectedItem();
                   Vendedor vendedor= (Vendedor) crearIM.getVendedoresBox().getSelectedItem();
 
-                  ItemMenu itemMenu= crearIM.getTipoBox().getSelectedItem()=="Plato"? 
+                  ItemMenu itemMenu = crearIM.getTipoBox().getSelectedItem() == "Plato"? 
                           new Plato(
-                            -1, // id
+                            item.getId(),
                             crearIM.getNombreField().getText(), // nombre
                             crearIM.getDescripcionTextPane().getText(), // descripcion (TextPane)
                             Double.parseDouble(crearIM.getPrecioField().getText()), // precio
@@ -186,9 +179,8 @@
                             Double.parseDouble(crearIM.getPesoField().getText()) // peso
                         ) 
                           : 
-
                           new Bebida(
-                            -1, // id
+                            item.getId(),
                             crearIM.getNombreField().getText(), // nombre
                             crearIM.getDescripcionTextPane().getText(), // descripcion (TextPane)
                             Double.parseDouble(crearIM.getPrecioField().getText()), // precio
@@ -202,14 +194,14 @@
                             Double.parseDouble(crearIM.getVolumenField().getText()) // volumenEnMl
                     );
 
-                  nuevoItemMenu = itemMenuDao.agregarItemMenu(itemMenu);
-                  
+                  itemMenuDao.actualizarItemMenu(itemMenu);
                   }catch(RuntimeException ex){
                       JOptionPane.showMessageDialog(crearIM,ex.getMessage());
                       throw new RuntimeException(ex.getMessage());
                   }
 
-                  JOptionPane.showMessageDialog(crearIM,"ItemMenu editado con id:" + nuevoItemMenu.getId(),"Éxito",JOptionPane.INFORMATION_MESSAGE);
+                  JOptionPane.showMessageDialog(crearIM,"ItemMenu editado con id:" + item.getId(),"Éxito",JOptionPane.INFORMATION_MESSAGE);
+                  
                   setTable();
                   crearIM.dispose();
                }
@@ -229,11 +221,19 @@
                       crearIM.getGraduacionField().setEditable(true);
                   }
                }
-
+           });
+           
+           crearIM.getCancelarButton().addActionListener(new ActionListener(){
+               @Override
+               public void actionPerformed(ActionEvent e) {
+                   crearIM.dispose();
+               }
            });
 
            crearIM.setVisible(true);
         }
+        
+        
 
         private void eliminarButtonHandler(int row) {
             int confirm = JOptionPane.showConfirmDialog(this.menu.getParent(),
@@ -273,6 +273,13 @@
                 JOptionPane.showMessageDialog(crearIM, ex.getMessage());
                 throw new RuntimeException(ex.getMessage());      
             }
+            
+            crearIM.getCancelarButton().addActionListener(new ActionListener(){
+               @Override
+               public void actionPerformed(ActionEvent e) {
+                   crearIM.dispose();
+               }
+           });
 
            crearIM.getCrearButton().addActionListener(new ActionListener(){
                @Override
