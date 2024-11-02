@@ -163,9 +163,9 @@ public class ClienteController implements Controller {
     }
 
     private void eliminarButtonHandler(int row) {
-        Object id = this.tableModel.getValueAt(row, 0);
-        clientesDao.eliminarCliente((int) id);
-        JOptionPane.showMessageDialog(this.menu.getParent(), "Eliminar en fila: " + (row+1)+ " ID: " + id.toString());
+        int id = (int) this.tableModel.getValueAt(row, 0);
+        clientesDao.eliminarCliente(id);
+        JOptionPane.showMessageDialog(this.menu.getParent(), "Eliminar en fila: " + (row+1)+ " ID: " + id);
         setTable();
     }
 

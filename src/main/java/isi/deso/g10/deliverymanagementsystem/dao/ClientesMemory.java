@@ -9,6 +9,7 @@ import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
 import java.util.ArrayList;
 import java.util.List;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ClienteDao;
+import java.util.Iterator;
 
 /**
  *
@@ -73,15 +74,17 @@ public class ClientesMemory implements ClienteDao {
     @Override
     public boolean eliminarCliente(int id) {
         boolean ret = false;
-        for(Cliente cli : clientes){
-            if(cli.getId() == id){
-                clientes.remove(cli);
+        Iterator<Cliente> iterator = clientes.iterator();
+        while (iterator.hasNext()) {
+            Cliente cli = iterator.next();
+            if (cli.getId() == id) {
+                iterator.remove();
                 ret = true;
+                break;  // Salimos del bucle si se encuentra y elimina el cliente
             }
         }
         return ret;
     }
-
     @Override
     public Cliente buscarClientePorId(int id) {
         int index = -1;
