@@ -8,6 +8,7 @@ import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ItemMenuDao;
 import isi.deso.g10.deliverymanagementsystem.model.*;
 import isi.deso.g10.deliverymanagementsystem.exception.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -77,14 +78,15 @@ public class ItemMenuMemory implements ItemMenuDao {
 
     @Override
     public boolean eliminarItemMenu(int id) {
-        boolean borrado = false;
-        for (ItemMenu item : items) {
+        Iterator<ItemMenu> iterator = items.iterator();
+        while (iterator.hasNext()) {
+            ItemMenu item = iterator.next();
             if (item.getId() == id) {
-                items.remove(item);
-                borrado = true;
+                iterator.remove();
+                return true;
             }
         }
-        return borrado;
+        return false;
     }
 
     @Override

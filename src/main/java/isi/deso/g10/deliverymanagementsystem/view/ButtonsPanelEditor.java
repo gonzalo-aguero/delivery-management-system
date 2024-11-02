@@ -31,6 +31,7 @@ public class ButtonsPanelEditor extends DefaultCellEditor {
                 int row = ((JTable) buttonsPanel.getParent()).getSelectedRow();
                 JOptionPane.showMessageDialog(buttonsPanel, "Editar en fila: " + row);
                 fireEditingStopped();
+                
             }
         });
         
