@@ -10,22 +10,22 @@ import isi.deso.g10.deliverymanagementsystem.model.Pedido;
 import java.util.List;
 
 /**
- * 
+ *
  * Filtrado por: nombreCliente, idVendedor, nombreVendedor, rangoMontoTotal
  * Ordenamiento por: nombreCliente, nombreVendedor, montoTotal. (ASC or DESC)
- * 
+ *
  * @author giuli
  */
 public interface ItemPedidoDao {
-    
+
     public enum TipoOrdenamiento {
         ASC, DESC
     }
-    
+
     List<Pedido> buscarPorIdVendedor(int idVendedor) throws ItemNoEncontradoException;
 
     List<Pedido> buscarPorNombreVendedor(String nombreVendedor) throws ItemNoEncontradoException;
-    
+
     List<Pedido> buscarPorNombreCliente(String nombreCliente) throws ItemNoEncontradoException;
 
     List<Pedido> buscarPorRangoMontoTotal(double montoMinimo, double montoMaximo) throws ItemNoEncontradoException;
@@ -35,4 +35,15 @@ public interface ItemPedidoDao {
     List<Pedido> ordenarPorNombreCliente(TipoOrdenamiento ordenamiento) throws ItemNoEncontradoException;
 
     List<Pedido> ordenarPorMontoTotal(TipoOrdenamiento ordenamiento) throws ItemNoEncontradoException;
+
+    public List<Pedido> obtenerPedidos();
+
+    public Pedido agregarPedido(Pedido pedido);
+
+    public Pedido actualizarPedido(Pedido pedido);
+
+    public boolean eliminarPedido(int id);
+
+    public Pedido buscarPedidoPorId(int id);
+
 }

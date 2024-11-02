@@ -5,7 +5,6 @@
 package isi.deso.g10.deliverymanagementsystem.dao.interfaces;
 
 import isi.deso.g10.deliverymanagementsystem.model.Cliente;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,8 +12,15 @@ import java.util.List;
  * @author giuli
  */
 public interface ClientesDao {
-        
-    public ArrayList<Cliente> getClientes();
-    
-    public Cliente addCliente(Cliente cliente);
+
+    public List<Cliente> obtenerClientes();
+
+    public Cliente agregarCliente(Cliente cliente);
+
+    public Cliente actualizarCliente(Cliente cliente);
+
+    public boolean eliminarCliente(int id);
+
+    public Cliente buscarClientePorId(int id);
+
 }

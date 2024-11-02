@@ -79,7 +79,7 @@ public class VendedorController implements Controller {
 
         table.getColumn("Acciones").setCellEditor(buttonsPanelEditor);
         
-        vendedores = vendedoresDao.getVendedores();
+        vendedores = vendedoresDao.obtenerVendedores();
         
         //Llena la tabla de vendedores
         for(Vendedor vendedor: vendedores){
@@ -128,7 +128,7 @@ public class VendedorController implements Controller {
                         coordenadas
                 );
 
-                vendedorCreado = vendedoresDao.addVendedor(vendedor);
+                vendedorCreado = vendedoresDao.agregarVendedor(vendedor);
                 JOptionPane.showMessageDialog(crearVendedor, "Vendedor creado con id: " + vendedorCreado.getId(), "Creación exitosa", JOptionPane.INFORMATION_MESSAGE);
                 crearVendedor.dispose();
             } catch (RuntimeException ex) {

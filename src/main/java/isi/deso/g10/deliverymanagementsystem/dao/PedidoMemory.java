@@ -7,6 +7,7 @@ package isi.deso.g10.deliverymanagementsystem.dao;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.PedidosDao;
 import isi.deso.g10.deliverymanagementsystem.model.Pedido;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -28,7 +29,27 @@ public class PedidoMemory implements PedidosDao {
        }
     
     @Override
-    public ArrayList<Pedido> getPedidos() {
+    public List<Pedido> obtenerPedidos() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Pedido agregarPedido(Pedido pedido) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Pedido actualizarPedido(Pedido pedido) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean eliminarPedido(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Pedido buscarPedidoPorId(int id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     

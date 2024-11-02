@@ -8,6 +8,7 @@ import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ItemMenuDao;
 import isi.deso.g10.deliverymanagementsystem.model.*;
 import isi.deso.g10.deliverymanagementsystem.exception.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -53,12 +54,12 @@ public class ItemMenuMemory implements ItemMenuDao {
     }
 
     @Override
-    public ArrayList<ItemMenu> getItemMenus() {
+    public List<ItemMenu> obtenerItemsMenu() {
         return items;
     }
 
     @Override
-    public ItemMenu buscarItemMenu(int id) {
+    public ItemMenu buscarItemMenuPorId(int id) {
         try {
             ItemMenu itemRet = null;
             for (ItemMenu item : items) {
@@ -89,7 +90,7 @@ public class ItemMenuMemory implements ItemMenuDao {
     }
 
     @Override
-    public boolean modificarItemMenu(String descripcion, double precio, int id) {
+    public boolean actualizarItemMenu(String descripcion, double precio, int id) {
         boolean modificado = false;
         for (ItemMenu item : items) {
             if (item.getId() == id) {

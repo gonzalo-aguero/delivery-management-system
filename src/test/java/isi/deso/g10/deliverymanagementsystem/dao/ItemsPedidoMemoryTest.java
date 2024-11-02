@@ -32,7 +32,7 @@ public class ItemsPedidoMemoryTest {
     private ArrayList<ItemMenu> items;
     private Pedido pedido;
 
-    public ItemsPedidoMemory itemsMemory = new ItemsPedidoMemory();
+    public ItemPedidoMemory itemsMemory = new ItemPedidoMemory();
 
     @BeforeEach
     public void setUp() {

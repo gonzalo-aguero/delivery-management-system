@@ -39,9 +39,12 @@ public class ItemPedidoMemory implements ItemPedidoDao {
     /**
      * Agrega el itemsPedido (Detalle del pedido) al array de itemsPedidos.
      * @param itemsPedido
+     * @return 
      */
-    public void agregarPedido(Pedido itemsPedido) {
+    @Override
+    public Pedido agregarPedido(Pedido itemsPedido) {
         this.pedidos.add(itemsPedido);
+        return itemsPedido;
     }
 
     @Override
@@ -144,6 +147,26 @@ public class ItemPedidoMemory implements ItemPedidoDao {
         }
 
         return resultados;
+    }
+
+    @Override
+    public List<Pedido> obtenerPedidos() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Pedido actualizarPedido(Pedido pedido) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean eliminarPedido(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Pedido buscarPedidoPorId(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     

@@ -8,6 +8,7 @@ import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
 import java.util.ArrayList;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedorDao;
+import java.util.List;
 
 /**
  *
@@ -16,6 +17,7 @@ import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedorDao;
 public class VendedorMemory implements VendedorDao{
 
     private static VendedorMemory self;
+    private ArrayList<Vendedor> vendedores;
     
     private VendedorMemory(){
         self = this;
@@ -28,8 +30,8 @@ public class VendedorMemory implements VendedorDao{
         return self;
     }
     
-    @Override
-    public ArrayList<Vendedor> getVendedores() {
+    
+    public ArrayList<Vendedor> generarVendedores() {
         ArrayList<Vendedor> vendedores = new ArrayList();
         
         Coordenada coordenada1 = new Coordenada(10, 20);
@@ -50,11 +52,33 @@ public class VendedorMemory implements VendedorDao{
         vendedores.add(vendedor4);
         vendedores.add(vendedor5);
         
+        this.vendedores = vendedores;
+        
         return vendedores;
     }
 
     @Override
-    public Vendedor addVendedor(Vendedor vendedor) {
+    public List<Vendedor> obtenerVendedores() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Vendedor agregarVendedor(Vendedor vendedor) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Vendedor actualizarVendedor(Vendedor vendedor) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean eliminarVendedor(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Vendedor buscarVendedorPorId(int id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     

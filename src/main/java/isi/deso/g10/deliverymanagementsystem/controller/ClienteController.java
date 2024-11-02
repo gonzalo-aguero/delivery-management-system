@@ -80,7 +80,7 @@ public class ClienteController implements Controller {
 
         table.getColumn("Acciones").setCellEditor(buttonsPanelEditor);
 
-        clientes = clientesDao.getClientes();
+        clientes = clientesDao.obtenerClientes();
 
         //Llena la tabla de vendedores
         for (Cliente cliente : clientes) {
@@ -130,7 +130,7 @@ public class ClienteController implements Controller {
                             coordenadas
                     );
                     
-                   clienteCreado = clientesDao.addCliente(cliente);
+                   clienteCreado = clientesDao.agregarCliente(cliente);
                 }catch(RuntimeException ex){
                     JOptionPane.showMessageDialog(crearCliente,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
                     throw new RuntimeException(ex);
