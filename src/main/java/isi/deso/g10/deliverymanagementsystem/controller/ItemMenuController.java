@@ -4,7 +4,6 @@
      */
     package isi.deso.g10.deliverymanagementsystem.controller;
 
-    import isi.deso.g10.deliverymanagementsystem.dao.CategoriaMemory;
     import isi.deso.g10.deliverymanagementsystem.dao.ItemMenuMemory;
     import isi.deso.g10.deliverymanagementsystem.dao.VendedorMemory;
     import isi.deso.g10.deliverymanagementsystem.dao.interfaces.CategoriaDao;
@@ -42,7 +41,6 @@
         //DAO
         private final ItemMenuDao itemMenuDao;
         private final VendedorDao vendedorDao;
-        private final CategoriaDao categoriaDao;
 
         private ArrayList<ItemMenu> itemsMenu;
 
@@ -51,7 +49,6 @@
         public ItemMenuController(PantallaPrincipal menu) {
             this.itemMenuDao = ItemMenuMemory.getInstance();
             this.vendedorDao = VendedorMemory.getInstance();
-            this.categoriaDao = CategoriaMemory.getInstance();
             this.menu = menu;
 
         }
@@ -106,8 +103,136 @@
         }
 
         private void editarButtonHandler(int row) {
-            int id = Integer.parseInt(this.tableModel.getValueAt(row, 0) + "");
-            JOptionPane.showMessageDialog(this.menu.getParent(), "Editar en fila: " + row + " ID: " + id);
+            int id = (int) this.tableModel.getValueAt(row, 0);
+            ItemMenu item = itemMenuDao.buscarItemMenuPorId(id);
+            editar(item);
+
+            //Actualizar tabla
+            setTable();
+        }
+        
+        private void editar(ItemMenu item) {
+            CrearItemMenuDialog crearIM = new CrearItemMenuDialog(menu, true);
+            crearIM.setLocationRelativeTo(null);
+            
+            // Setear valores previos
+            crearIM.getVendedoresBox().setSelectedItem(item.getVendedor());
+            crearIM.getCategoriaBox().setSelectedItem(item.getCategoria());
+            crearIM.getCeliacoCheck().setSelected(item.aptoCeliaco());
+            crearIM.getVeganoCheck().setSelected(item.aptoVegano());
+            crearIM.getVegetarianoCheck().setSelected(item.aptoVegetariano());
+            crearIM.getCaloriasField().setText(item.getCalorias()+"");
+            crearIM.getNombreField().setText(item.getNombre()+"");
+            crearIM.getPrecioField().setText(item.getPrecio()+"");
+            crearIM.getDescripcionTextPane().setText(item.getDescripcion()+"");
+            
+            if (item instanceof Plato plato){
+                crearIM.getPesoField().setText(plato.getPeso()+"");
+                crearIM.getCategoriaBox().setSelectedItem(plato.getCategoria());
+            } else if (item instanceof Bebida bebida){
+                crearIM.getGraduacionField().setText(bebida.getGraduacionAlcoholica()+"");
+                crearIM.getVolumenField().setText(bebida.getVolumenEnMl()+"");
+                crearIM.getCategoriaBox().setSelectedItem(bebida.getCalorias());
+                crearIM.getPesoField().setEditable(false);
+                crearIM.getVolumenField().setEditable(true);
+                crearIM.getGraduacionField().setEditable(true);
+            }
+                
+            
+            
+
+            try {
+                ArrayList<Vendedor> vendedores = (ArrayList) vendedorDao.obtenerVendedores();
+                for (Vendedor vendedor : vendedores) {
+                    crearIM.getVendedoresBox().addItem(vendedor);
+                }
+
+                ArrayList<Categoria> categorias = new ArrayList<Categoria>();
+                categorias.add(new Categoria(1, "Carnes", TipoItem.COMIDA));
+                categorias.add(new Categoria(2, "Pastas", TipoItem.COMIDA));
+                categorias.add(new Categoria(3, "Cervezas", TipoItem.BEBIDA));
+                categorias.add(new Categoria(4, "Vinos", TipoItem.BEBIDA));
+
+                for (Categoria categoria : categorias) {
+                    crearIM.getCategoriaBox().addItem(categoria);
+                }
+
+
+            } catch (RuntimeException ex) {
+                JOptionPane.showMessageDialog(crearIM, ex.getMessage());
+                throw new RuntimeException(ex.getMessage());      
+            }
+
+           crearIM.getCrearButton().addActionListener(new ActionListener(){
+               @Override
+               public void actionPerformed(ActionEvent e) {
+                  ItemMenu nuevoItemMenu;
+                  try{
+                  Categoria categoria = (Categoria) crearIM.getCategoriaBox().getSelectedItem();
+                  Vendedor vendedor= (Vendedor) crearIM.getVendedoresBox().getSelectedItem();
+
+                  ItemMenu itemMenu= crearIM.getTipoBox().getSelectedItem()=="Plato"? 
+                          new Plato(
+                            -1, // id
+                            crearIM.getNombreField().getText(), // nombre
+                            crearIM.getDescripcionTextPane().getText(), // descripcion (TextPane)
+                            Double.parseDouble(crearIM.getPrecioField().getText()), // precio
+                            categoria, // Categoria
+                            Integer.parseInt(crearIM.getCaloriasField().getText()), // calorias
+                            crearIM.getCeliacoCheck().isSelected(), // aptoCeliaco
+                            crearIM.getVegetarianoCheck().isSelected(), // aptoVegetariano
+                            crearIM.getVeganoCheck().isSelected(), // aptoVegano
+                            vendedor, // Vendedor
+                            Double.parseDouble(crearIM.getPesoField().getText()) // peso
+                        ) 
+                          : 
+
+                          new Bebida(
+                            -1, // id
+                            crearIM.getNombreField().getText(), // nombre
+                            crearIM.getDescripcionTextPane().getText(), // descripcion (TextPane)
+                            Double.parseDouble(crearIM.getPrecioField().getText()), // precio
+                            categoria, // Categoria
+                            Integer.parseInt(crearIM.getCaloriasField().getText()), // calorias
+                            crearIM.getCeliacoCheck().isSelected(), // aptoCeliaco
+                            crearIM.getVegetarianoCheck().isSelected(), // aptoVegetariano
+                            crearIM.getVeganoCheck().isSelected(), // aptoVegano
+                            vendedor, // Vendedor
+                            Double.parseDouble(crearIM.getGraduacionField().getText()), // graduacionAlcoholica
+                            Double.parseDouble(crearIM.getVolumenField().getText()) // volumenEnMl
+                    );
+
+                  nuevoItemMenu = itemMenuDao.agregarItemMenu(itemMenu);
+                  
+                  }catch(RuntimeException ex){
+                      JOptionPane.showMessageDialog(crearIM,ex.getMessage());
+                      throw new RuntimeException(ex.getMessage());
+                  }
+
+                  JOptionPane.showMessageDialog(crearIM,"ItemMenu editado con id:" + nuevoItemMenu.getId(),"Éxito",JOptionPane.INFORMATION_MESSAGE);
+                  setTable();
+                  crearIM.dispose();
+               }
+           });
+
+           crearIM.getTipoBox().addActionListener(new ActionListener(){
+               @Override
+               public void actionPerformed(ActionEvent e) {
+                  if(crearIM.getTipoBox().getSelectedItem()== "Plato"){
+                      crearIM.getPesoField().setEditable(true);
+                      crearIM.getVolumenField().setEditable(false);
+                      crearIM.getGraduacionField().setEditable(false);
+                  }
+                  else {
+                      crearIM.getPesoField().setEditable(false);
+                      crearIM.getVolumenField().setEditable(true);
+                      crearIM.getGraduacionField().setEditable(true);
+                  }
+               }
+
+           });
+
+           crearIM.setVisible(true);
         }
 
         private void eliminarButtonHandler(int row) {
@@ -146,7 +271,7 @@
 
             } catch (RuntimeException ex) {
                 JOptionPane.showMessageDialog(crearIM, ex.getMessage());
-                //throw new RuntimeException(ex.getMessage());      
+                throw new RuntimeException(ex.getMessage());      
             }
 
            crearIM.getCrearButton().addActionListener(new ActionListener(){
@@ -154,7 +279,6 @@
                public void actionPerformed(ActionEvent e) {
                   ItemMenu nuevoItemMenu;
                   try{
-                  FieldAnalyzer.todosLosCamposLlenos(crearIM);
 
                   Categoria categoria = (Categoria) crearIM.getCategoriaBox().getSelectedItem();
                   Vendedor vendedor= (Vendedor) crearIM.getVendedoresBox().getSelectedItem();
@@ -162,16 +286,16 @@
                   ItemMenu itemMenu= crearIM.getTipoBox().getSelectedItem()=="Plato"? 
                           new Plato(
                             -1, // id
-                      crearIM.getNombreField().getText(), // nombre
-                   crearIM.getDescripcionTextPane().getText(), // descripcion (TextPane)
-                      Double.parseDouble(crearIM.getPrecioField().getText()), // precio
+                            crearIM.getNombreField().getText(), // nombre
+                            crearIM.getDescripcionTextPane().getText(), // descripcion (TextPane)
+                            Double.parseDouble(crearIM.getPrecioField().getText()), // precio
                             categoria, // Categoria
-                     Integer.parseInt(crearIM.getCaloriasField().getText()), // calorias
-                   crearIM.getCeliacoCheck().isSelected(), // aptoCeliaco
-                crearIM.getVegetarianoCheck().isSelected(), // aptoVegetariano
-                   crearIM.getVeganoCheck().isSelected(), // aptoVegano
+                            Integer.parseInt(crearIM.getCaloriasField().getText()), // calorias
+                            crearIM.getCeliacoCheck().isSelected(), // aptoCeliaco
+                            crearIM.getVegetarianoCheck().isSelected(), // aptoVegetariano
+                            crearIM.getVeganoCheck().isSelected(), // aptoVegano
                             vendedor, // Vendedor
-                        Double.parseDouble(crearIM.getPesoField().getText()) // peso
+                            Double.parseDouble(crearIM.getPesoField().getText()) // peso
                         ) 
                           : 
 
@@ -181,16 +305,16 @@
                             crearIM.getDescripcionTextPane().getText(), // descripcion (TextPane)
                             Double.parseDouble(crearIM.getPrecioField().getText()), // precio
                             categoria, // Categoria
-                     Integer.parseInt(crearIM.getCaloriasField().getText()), // calorias
-                   crearIM.getCeliacoCheck().isSelected(), // aptoCeliaco
-                crearIM.getVegetarianoCheck().isSelected(), // aptoVegetariano
-                   crearIM.getVeganoCheck().isSelected(), // aptoVegano
+                            Integer.parseInt(crearIM.getCaloriasField().getText()), // calorias
+                            crearIM.getCeliacoCheck().isSelected(), // aptoCeliaco
+                            crearIM.getVegetarianoCheck().isSelected(), // aptoVegetariano
+                            crearIM.getVeganoCheck().isSelected(), // aptoVegano
                             vendedor, // Vendedor
-            Double.parseDouble(crearIM.getGraduacionField().getText()), // graduacionAlcoholica
-                   Double.parseDouble(crearIM.getVolumenField().getText()) // volumenEnMl
+                            Double.parseDouble(crearIM.getGraduacionField().getText()), // graduacionAlcoholica
+                            Double.parseDouble(crearIM.getVolumenField().getText()) // volumenEnMl
                     );
 
-                  nuevoItemMenu= itemMenuDao.agregarItemMenu(itemMenu);
+                  nuevoItemMenu = itemMenuDao.agregarItemMenu(itemMenu);
 
                   }catch(RuntimeException ex){
                       JOptionPane.showMessageDialog(crearIM,ex.getMessage());
@@ -198,6 +322,8 @@
                   }
 
                   JOptionPane.showMessageDialog(crearIM,"ItemMenu creado con id:" + nuevoItemMenu.getId(),"Éxito",JOptionPane.INFORMATION_MESSAGE);
+                  setTable();
+                  crearIM.dispose();
                }
            });
 
