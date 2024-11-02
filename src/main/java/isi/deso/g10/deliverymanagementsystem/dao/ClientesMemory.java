@@ -40,6 +40,10 @@ public class ClientesMemory implements ClientesDao {
         clientes.add(new Cliente(4, "20-45678901-2", "Cliente Cuatro", "clientecuatro@example.com", "Direccion Cuatro", new Coordenada(48.8566, 2.3522)));
         clientes.add(new Cliente(5, "20-56789012-3", "Cliente Cinco", "clientecinco@example.com", "Direccion Cinco", new Coordenada(35.6895, 139.6917)));
     }
+    
+    private int lastId(){
+        return clientes.getLast().getId();
+    }
 
     @Override
     public List<Cliente> obtenerClientes() {
@@ -48,15 +52,22 @@ public class ClientesMemory implements ClientesDao {
 
     @Override
     public Cliente agregarCliente(Cliente cliente) {
+        int id = lastId()+1;
+        cliente.setId(id);
         clientes.add(cliente);
         return cliente;
     }
 
     @Override
     public Cliente actualizarCliente(Cliente cliente) {
-          int index = clientes.indexOf(cliente);
-          clientes.add(index, cliente);
-       return cliente;
+          //TODO 
+          Cliente cli = this.buscarClientePorId(cliente.getId());;
+          cli.setNombre(cliente.getNombre());
+          cli.setCuit(cliente.getCuit());
+          cli.setEmail(cliente.getEmail());
+          cli.setDireccion(cliente.getDireccion());
+          cli.setCoordenadas(cliente.getCoordenadas()); 
+       return cli;
     }
 
     @Override

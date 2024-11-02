@@ -4,10 +4,10 @@
  */
 package isi.deso.g10.deliverymanagementsystem.controller;
 
-import isi.deso.g10.deliverymanagementsystem.dao.CategoriaMemory;
+
 import isi.deso.g10.deliverymanagementsystem.dao.ItemMenuMemory;
 import isi.deso.g10.deliverymanagementsystem.dao.VendedorMemory;
-import isi.deso.g10.deliverymanagementsystem.dao.interfaces.CategoriaDao;
+
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ItemMenuDao;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedorDao;
 import isi.deso.g10.deliverymanagementsystem.model.Bebida;
@@ -41,7 +41,6 @@ public class ItemMenuController implements Controller {
     //DAO
     private final ItemMenuDao itemMenuDao;
     private final VendedorDao vendedorDao;
-    private final CategoriaDao categoriaDao;
 
     private ArrayList<ItemMenu> itemsMenu;
 
@@ -50,7 +49,6 @@ public class ItemMenuController implements Controller {
     public ItemMenuController(PantallaPrincipal menu) {
         this.itemMenuDao = ItemMenuMemory.getInstance();
         this.vendedorDao = VendedorMemory.getInstance();
-        this.categoriaDao = CategoriaMemory.getInstance();
         this.menu = menu;
 
     }
@@ -125,12 +123,6 @@ public class ItemMenuController implements Controller {
                 crearIM.getVendedoresBox().addItem(vendedor);
             }
             crearIM.getVendedoresBox().setSelectedItem(vendedores.get(0));
-
-            ArrayList<Categoria> categorias = (ArrayList) categoriaDao.obtenerCategorias();
-            for (Categoria categoria : categorias) {
-                crearIM.getCategoriaBox().addItem(categoria);
-            }
-            crearIM.getCategoriaBox().setSelectedItem(categorias.get(0));
 
         } catch (RuntimeException ex) {
             JOptionPane.showMessageDialog(crearIM, ex.getMessage());

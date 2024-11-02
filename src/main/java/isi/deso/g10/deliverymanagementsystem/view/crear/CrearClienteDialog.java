@@ -5,6 +5,7 @@
 package isi.deso.g10.deliverymanagementsystem.view.crear;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 /**
@@ -32,7 +33,7 @@ public class CrearClienteDialog extends javax.swing.JDialog {
 
         jPanel2 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        crearClienteText = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         nombreField = new javax.swing.JTextField();
@@ -58,10 +59,10 @@ public class CrearClienteDialog extends javax.swing.JDialog {
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel3.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Crear Cliente");
+        crearClienteText.setBackground(new java.awt.Color(255, 255, 255));
+        crearClienteText.setForeground(new java.awt.Color(0, 0, 0));
+        crearClienteText.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        crearClienteText.setText("Crear Cliente");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -69,14 +70,14 @@ public class CrearClienteDialog extends javax.swing.JDialog {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(crearClienteText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap(8, Short.MAX_VALUE)
-                .addComponent(jLabel3)
+                .addComponent(crearClienteText)
                 .addContainerGap())
         );
 
@@ -313,12 +314,12 @@ public class CrearClienteDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelarButton;
     private javax.swing.JButton crearButton;
+    private javax.swing.JLabel crearClienteText;
     private javax.swing.JTextField cuitField;
     private javax.swing.JTextField direccionField;
     private javax.swing.JTextField emailField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -365,6 +366,8 @@ public class CrearClienteDialog extends javax.swing.JDialog {
         return crearButton;
     }
     
-    
+    public JLabel getCrearClienteText(){
+        return crearClienteText;
+    }
 
 }

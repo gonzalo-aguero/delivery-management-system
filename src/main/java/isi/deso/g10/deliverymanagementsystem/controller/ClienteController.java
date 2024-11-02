@@ -96,14 +96,77 @@ public class ClienteController implements Controller {
         }
     }
 
+    private String getLatitud(String coordenadas){
+        int index = coordenadas.indexOf(";");
+        return coordenadas.substring(1, index);
+    }
+    
+    private String getLongitud(String coordenadas){
+        int index = coordenadas.indexOf(";");
+        return coordenadas.substring(index+1, coordenadas.length()-1);
+    }
     private void editarButtonHandler(int row) {
+        CrearClienteDialog crearCliente= new CrearClienteDialog(null,true);
+        //modifico el texto de los botones
+        crearCliente.getCrearClienteText().setText("Modificar cliente");
+        crearCliente.getCrearButton().setText("Modificar");
+        //obtengo el cliente
         Object id = this.tableModel.getValueAt(row, 0);
-        JOptionPane.showMessageDialog(this.menu.getParent(), "Editar en fila: " + row + " ID: " + id.toString());
+        Object coordenadas = this.tableModel.getValueAt(row, 5);
+        Cliente cliente  = clientesDao.buscarClientePorId((int)id);
+        //le agrego los datos existentes a los campos
+        crearCliente.getNombreField().setText(cliente.getNombre());
+        crearCliente.getEmailField().setText(cliente.getEmail());
+        crearCliente.getCuitField().setText(cliente.getCuit());
+        crearCliente.getDireccionField().setText(cliente.getDireccion());
+        crearCliente.getLatitudField().setText(getLatitud((String)coordenadas));
+        crearCliente.getLongitudField().setText(getLongitud((String)coordenadas));
+        //muestro el dialog
+        crearCliente.setLocationRelativeTo(null);
+        crearCliente.getNombreField().requestFocusInWindow();
+        
+        
+          crearCliente.getCrearButton().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                 Cliente clienteCreado;
+                try{
+                    FieldAnalyzer.todosLosCamposLlenos(crearCliente);
+                    
+                    Coordenada coordenadas = new Coordenada(Double.parseDouble(crearCliente.getLatitudField().getText()),
+                            Double.parseDouble(crearCliente.getLongitudField().getText())
+                            );
+                    Cliente cliente = new Cliente((int)id,
+                            crearCliente.getCuitField().getText(),
+                            crearCliente.getNombreField().getText(),
+                            crearCliente.getEmailField().getText(),
+                            crearCliente.getDireccionField().getText(),
+                            coordenadas
+                    );
+                   clientesDao.actualizarCliente(cliente);
+                   setTable();
+                }catch(RuntimeException ex){
+                    JOptionPane.showMessageDialog(crearCliente,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+                    throw new RuntimeException(ex);
+                }
+                JOptionPane.showMessageDialog(crearCliente, "Cliente modificado con id: " + id.toString(), "Modificacion exitosa", JOptionPane.INFORMATION_MESSAGE);
+                crearCliente.dispose();
+            }
+        });
+        crearCliente.getCancelarButton().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                crearCliente.dispose();
+            }
+            });
+        crearCliente.setVisible(true);
     }
 
     private void eliminarButtonHandler(int row) {
         Object id = this.tableModel.getValueAt(row, 0);
-        JOptionPane.showMessageDialog(this.menu.getParent(), "Eliminar en fila: " + row + " ID: " + id.toString());
+        clientesDao.eliminarCliente((int) id);
+        JOptionPane.showMessageDialog(this.menu.getParent(), "Eliminar en fila: " + (row+1)+ " ID: " + id.toString());
+        setTable();
     }
 
     @Override
@@ -120,7 +183,7 @@ public class ClienteController implements Controller {
                     FieldAnalyzer.todosLosCamposLlenos(crearCliente);
                     
                     Coordenada coordenadas = new Coordenada(Double.parseDouble(crearCliente.getLatitudField().getText()),
-                            Double.parseDouble(crearCliente.getLatitudField().getText())
+                            Double.parseDouble(crearCliente.getLongitudField().getText())
                             );
                     Cliente cliente = new Cliente(-1,
                             crearCliente.getCuitField().getText(),
@@ -131,6 +194,7 @@ public class ClienteController implements Controller {
                     );
                     
                    clienteCreado = clientesDao.agregarCliente(cliente);
+                   setTable();
                 }catch(RuntimeException ex){
                     JOptionPane.showMessageDialog(crearCliente,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
                     throw new RuntimeException(ex);

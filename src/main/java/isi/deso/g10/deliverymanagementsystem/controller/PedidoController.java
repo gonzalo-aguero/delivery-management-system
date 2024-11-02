@@ -162,7 +162,7 @@ public class PedidoController implements Controller {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(crearPedido.getSeleccionarButton().getText() == "Seleccionar"){
-                    itemsMenuSeleccionados.add(obtenerItemMenu(crearPedido.getTablaMenu().getSelectedRow().getValue()));
+                    //itemsMenuSeleccionados.add(obtenerItemMenu(crearPedido.getTablaMenu().getSelectedRow().getValue()));
                 }
             }
         });
