@@ -4,6 +4,7 @@
  */
 package isi.deso.g10.deliverymanagementsystem.dao.interfaces;
 
+import isi.deso.g10.deliverymanagementsystem.model.Categoria;
 import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
 import java.util.ArrayList;
@@ -26,4 +27,6 @@ public interface ItemMenuDao {
     public ItemMenu buscarItemMenuPorId(int id);
     
     public ArrayList<ItemMenu> buscarVendedor(Vendedor vendedor);
+    
+    public List<Categoria> getCategorias();
 }

@@ -36,10 +36,6 @@ import isi.deso.g10.deliverymanagementsystem.view.crear.FormaDePagoDialog;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-/**
- *
- * @author giuli
- */
 public class PedidoController implements Controller {
 
     private DefaultTableModel tableModel;
