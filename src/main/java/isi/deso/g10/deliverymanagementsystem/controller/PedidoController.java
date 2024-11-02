@@ -27,6 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ClienteDao;
+import isi.deso.g10.deliverymanagementsystem.model.Cliente;
 import isi.deso.g10.deliverymanagementsystem.strategy.FormaMercadoPago;
 import isi.deso.g10.deliverymanagementsystem.strategy.FormaPagoI;
 import isi.deso.g10.deliverymanagementsystem.strategy.FormaTransferencia;
@@ -42,7 +43,7 @@ public class PedidoController implements Controller {
     //
     ArrayList<ItemMenu> itemsMenu;
     //DAO
-    private final PedidosDao pedidosDao;
+    private final PedidosDao pedidoDao;
     private final VendedorDao vendedorDao;
     private final ItemMenuMemory itemMenuDao;
     private FormaPagoI formaDePago;
@@ -53,7 +54,7 @@ public class PedidoController implements Controller {
 
     public PedidoController(PantallaPrincipal menu) {
         this.menu = menu;
-        this.pedidosDao = PedidoMemory.getInstance();
+        this.pedidoDao = PedidoMemory.getInstance();
         this.vendedorDao = VendedorMemory.getInstance();
         this.itemMenuDao = ItemMenuMemory.getInstance();
     }
@@ -92,7 +93,7 @@ public class PedidoController implements Controller {
 
         table.getColumn("Acciones").setCellEditor(buttonsPanelEditor);
 
-        pedidos = (ArrayList) pedidosDao.obtenerPedidos();
+        pedidos = (ArrayList) pedidoDao.obtenerPedidos();
 
         for (Pedido pedido : pedidos) {
             modelo.addRow(new Object[]{
@@ -110,7 +111,7 @@ public class PedidoController implements Controller {
     private void editarButtonHandler(int row) {
         //Editar pedido
         int id = (int) this.tableModel.getValueAt(row, 0);
-        Pedido pedido = pedidosDao.buscarPedidoPorId(id);
+        Pedido pedido = pedidoDao.buscarPedidoPorId(id);
         //editar(pedido);
 
         //Actualizar tabla
@@ -120,7 +121,7 @@ public class PedidoController implements Controller {
     private void eliminarButtonHandler(int row) {
         //Eliminar pedido
         int id = (int) this.tableModel.getValueAt(row, 0);
-        pedidosDao.eliminarPedido(id);
+        pedidoDao.eliminarPedido(id);
 
         //Actualizar tabla
         setTable();
@@ -207,11 +208,12 @@ public class PedidoController implements Controller {
         crearPedido.getPedirButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                formaPago(itemMenuSeleccionados);
+                formaPago(itemMenuSeleccionados,Double.parseDouble(crearPedido.getTotalField().getText()));
                 setTable();
+                crearPedido.dispose();
             }
         });
-
+        
         crearPedido.setVisible(true);
     }
 
@@ -219,7 +221,7 @@ public class PedidoController implements Controller {
         itemsMenu = itemMenuDao.buscarVendedor(vendedor);
     }
 
-    private void formaPago(ArrayList<Item> itemMenuSeleccionados) {
+    private void formaPago(ArrayList<ItemMenu> itemMenuSeleccionados, double total) {
         FormaDePagoDialog formaPagoDialog = new FormaDePagoDialog(null, true);
 
         formaPagoDialog.getPedirButton().addActionListener(new ActionListener() {
@@ -237,8 +239,24 @@ public class PedidoController implements Controller {
                     throw new RuntimeException("Elija una forma de pago");
                 }
                 
-                double subtotal = formaDePago.totalizar()
-                formaPagoDialog.getSubTotalField().setText(subtotal);
+                double subtotal = formaDePago.totalizar(total);
+                formaPagoDialog.getSubTotalField().setText(subtotal + "");
+                
+                 // Crear y guardar el pedido
+                Cliente cliente = obtenerCliente();  // cambiar
+                
+
+                Pedido pedido = new Pedido(-1, itemMenuSeleccionados, cliente, formaDePago);
+
+                     try {
+                        pedidoDao.agregarPedido(pedido);
+                        JOptionPane.showMessageDialog(null, "Pedido guardado exitosamente.");
+                    } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error al guardar el pedido: " + ex.getMessage());
+                throw new RuntimeException("Error al guardar el pedido", ex);
+            }
+
+            formaPagoDialog.dispose();
             }
         });
         
