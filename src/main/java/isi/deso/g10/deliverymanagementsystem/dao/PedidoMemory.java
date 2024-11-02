@@ -12,8 +12,21 @@ import java.util.ArrayList;
  *
  * @author giuli
  */
-public class PedidosMemory implements PedidosDao {
+public class PedidoMemory implements PedidosDao {
 
+    private static PedidoMemory self;
+    
+    private PedidoMemory(){
+        self=this;
+            }
+    
+    public static PedidoMemory getInstance(){
+        if(self==null){
+            self = new PedidoMemory();
+        }
+        return self;
+       }
+    
     @Override
     public ArrayList<Pedido> getPedidos() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

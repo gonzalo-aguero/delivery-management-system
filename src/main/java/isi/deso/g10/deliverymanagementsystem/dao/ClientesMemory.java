@@ -16,6 +16,19 @@ import java.util.List;
  */
 public class ClientesMemory implements ClientesDao {
 
+    private static ClientesMemory self;
+    
+    private ClientesMemory(){
+       self=this;
+    };
+    
+    public static ClientesMemory getInstance(){
+        if(self==null){
+            self = new ClientesMemory();
+        }
+        return self;
+    }
+    
     @Override
     public ArrayList<Cliente> getClientes() {
         ArrayList<Cliente> clientes = new ArrayList<>();
@@ -29,5 +42,12 @@ public class ClientesMemory implements ClientesDao {
 
         return clientes;
     }
+
+    @Override
+    public Cliente addCliente(Cliente cliente) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    
     
 }

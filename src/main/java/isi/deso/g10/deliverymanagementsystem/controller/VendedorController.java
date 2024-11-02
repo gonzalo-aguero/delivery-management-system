@@ -4,13 +4,17 @@
  */
 package isi.deso.g10.deliverymanagementsystem.controller;
 
-import isi.deso.g10.deliverymanagementsystem.dao.VendedoresMemory;
-import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedoresDao;
+import isi.deso.g10.deliverymanagementsystem.dao.VendedorMemory;
+import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
+import isi.deso.g10.deliverymanagementsystem.utils.FieldAnalyzer;
 import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanel;
 import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanelEditor;
 import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanelRenderer;
 import isi.deso.g10.deliverymanagementsystem.view.PantallaPrincipal;
+import isi.deso.g10.deliverymanagementsystem.view.crear.CrearVendedorDialog;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +23,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedorDao;
 
 /**
  *
@@ -30,13 +35,13 @@ public class VendedorController implements Controller {
     DefaultTableModel tableModel;
     
     //DAOS
-    VendedoresDao vendedoresDao;
+    VendedorDao vendedoresDao;
     
     List<Vendedor> vendedores;
     
     public VendedorController(PantallaPrincipal menu) {
         this.menu = menu;
-        vendedoresDao = new VendedoresMemory();
+        vendedoresDao = VendedorMemory.getInstance();
     }
 
     @Override
@@ -98,5 +103,48 @@ public class VendedorController implements Controller {
         Object id = this.tableModel.getValueAt(row, 0);
         JOptionPane.showMessageDialog(this.menu.getParent(), "Eliminar en fila: " + row + " ID: " + id.toString());
     }
+
+    @Override
+    public void crear() {
+        CrearVendedorDialog crearVendedor = new CrearVendedorDialog(menu, true);
+        crearVendedor.setLocationRelativeTo(null);
+
+        crearVendedor.getCrearButton().addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Vendedor vendedorCreado;
+            try {
+                FieldAnalyzer.todosLosCamposLlenos(crearVendedor);
+
+                Coordenada coordenadas = new Coordenada(
+                        Double.parseDouble(crearVendedor.getLatitudField().getText()),
+                        Double.parseDouble(crearVendedor.getLongitudField().getText())
+                );
+
+                Vendedor vendedor = new Vendedor(
+                        -1,
+                        crearVendedor.getNombreField().getText(),
+                        crearVendedor.getDireccionField().getText(),
+                        coordenadas
+                );
+
+                vendedorCreado = vendedoresDao.addVendedor(vendedor);
+                JOptionPane.showMessageDialog(crearVendedor, "Vendedor creado con id: " + vendedorCreado.getId(), "Creación exitosa", JOptionPane.INFORMATION_MESSAGE);
+                crearVendedor.dispose();
+            } catch (RuntimeException ex) {
+                JOptionPane.showMessageDialog(crearVendedor, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    });
+
+    crearVendedor.getCancelarButton().addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            crearVendedor.dispose();
+        }
+    });
+
+    crearVendedor.setVisible(true);
+}
     
 }

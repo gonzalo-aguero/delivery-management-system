@@ -16,4 +16,6 @@ public interface Controller {
     //Setea la tabla propia de cada modelo
     public void setTable();
     
+    public void crear();
+    
 }

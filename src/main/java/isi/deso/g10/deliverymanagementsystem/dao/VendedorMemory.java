@@ -4,17 +4,30 @@
  */
 package isi.deso.g10.deliverymanagementsystem.dao;
 
-import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedoresDao;
 import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
 import java.util.ArrayList;
+import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedorDao;
 
 /**
  *
  * @author giuli
  */
-public class VendedoresMemory implements VendedoresDao{
+public class VendedorMemory implements VendedorDao{
 
+    private static VendedorMemory self;
+    
+    private VendedorMemory(){
+        self = this;
+        }
+    
+    public static VendedorMemory getInstance(){
+        if(self==null){
+            self= new VendedorMemory();
+        }
+        return self;
+    }
+    
     @Override
     public ArrayList<Vendedor> getVendedores() {
         ArrayList<Vendedor> vendedores = new ArrayList();
@@ -38,6 +51,11 @@ public class VendedoresMemory implements VendedoresDao{
         vendedores.add(vendedor5);
         
         return vendedores;
+    }
+
+    @Override
+    public Vendedor addVendedor(Vendedor vendedor) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
 }

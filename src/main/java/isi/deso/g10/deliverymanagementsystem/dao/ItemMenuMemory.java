@@ -17,12 +17,22 @@ import java.util.Random;
 public class ItemMenuMemory implements ItemMenuDao {
 
     private ArrayList<ItemMenu> items;
-
-    public ItemMenuMemory() {
+    private static ItemMenuMemory self;
+    
+    
+    private ItemMenuMemory() {
         this.items = new ArrayList<>();
         this.generarItems();
+        self = this;
     }
-
+        
+    public static ItemMenuMemory getInstance(){
+        if(self == null){
+            self = new ItemMenuMemory();
+        }
+        return self;
+    }
+    
     private void generarItems() {
         Categoria minutas = new Categoria(1, "minuta", Categoria.TipoItem.COMIDA);
         Categoria bebida = new Categoria(1, "bebida", Categoria.TipoItem.BEBIDA);
@@ -108,5 +118,10 @@ public class ItemMenuMemory implements ItemMenuDao {
             }
             return new Plato(peso, intRan, nombre, descripcion, precio, cat, calorias, aptoCeliaco, aptoVegetariano, aptoVegano);
         }
+    }
+
+    @Override
+    public ItemMenu save(ItemMenu itemMenu) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

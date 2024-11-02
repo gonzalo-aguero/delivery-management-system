@@ -7,16 +7,20 @@ package isi.deso.g10.deliverymanagementsystem.controller;
 import isi.deso.g10.deliverymanagementsystem.dao.ClientesMemory;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ClientesDao;
 import isi.deso.g10.deliverymanagementsystem.model.Cliente;
+import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
+import isi.deso.g10.deliverymanagementsystem.utils.FieldAnalyzer;
 import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanel;
 import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanelEditor;
 import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanelRenderer;
 import isi.deso.g10.deliverymanagementsystem.view.PantallaPrincipal;
+import isi.deso.g10.deliverymanagementsystem.view.crear.CrearClienteDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.function.Consumer;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -38,7 +42,7 @@ public class ClienteController implements Controller {
 
     public ClienteController(PantallaPrincipal menu) {
         this.menu = menu;
-        clientesDao = new ClientesMemory();
+        clientesDao = ClientesMemory.getInstance();
     }
 
     @Override
@@ -100,6 +104,50 @@ public class ClienteController implements Controller {
     private void eliminarButtonHandler(int row) {
         Object id = this.tableModel.getValueAt(row, 0);
         JOptionPane.showMessageDialog(this.menu.getParent(), "Eliminar en fila: " + row + " ID: " + id.toString());
+    }
+
+    @Override
+    public void crear() {
+        CrearClienteDialog crearCliente= new CrearClienteDialog(null,true);
+        crearCliente.setLocationRelativeTo(null);
+        crearCliente.getNombreField().requestFocusInWindow();
+ 
+        crearCliente.getCrearButton().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                 Cliente clienteCreado;
+                try{
+                    FieldAnalyzer.todosLosCamposLlenos(crearCliente);
+                    
+                    Coordenada coordenadas = new Coordenada(Double.parseDouble(crearCliente.getLatitudField().getText()),
+                            Double.parseDouble(crearCliente.getLatitudField().getText())
+                            );
+                    Cliente cliente = new Cliente(-1,
+                            crearCliente.getCuitField().getText(),
+                            crearCliente.getNombreField().getText(),
+                            crearCliente.getEmailField().getText(),
+                            crearCliente.getDireccionField().getText(),
+                            coordenadas
+                    );
+                    
+                   clienteCreado = clientesDao.addCliente(cliente);
+                }catch(RuntimeException ex){
+                    JOptionPane.showMessageDialog(crearCliente,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+                    throw new RuntimeException(ex);
+                }
+                JOptionPane.showMessageDialog(crearCliente, "Cliente creado con id: " + clienteCreado.getId(), "Creación exitosa", JOptionPane.INFORMATION_MESSAGE);
+                crearCliente.dispose();
+            }
+        });
+        crearCliente.getCancelarButton().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                crearCliente.dispose();
+            }
+            });
+            
+        
+        crearCliente.setVisible(true);
     }
 
 }

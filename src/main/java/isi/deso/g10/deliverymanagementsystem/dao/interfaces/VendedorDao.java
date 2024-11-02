@@ -11,7 +11,9 @@ import java.util.ArrayList;
  *
  * @author giuli
  */
-public interface VendedoresDao {
+public interface VendedorDao {
 
     public ArrayList<Vendedor> getVendedores();
+
+    public Vendedor addVendedor(Vendedor vendedor);
 }

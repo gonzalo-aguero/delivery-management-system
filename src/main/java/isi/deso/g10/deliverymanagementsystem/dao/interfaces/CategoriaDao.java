@@ -4,17 +4,14 @@
  */
 package isi.deso.g10.deliverymanagementsystem.dao.interfaces;
 
-import isi.deso.g10.deliverymanagementsystem.model.Cliente;
+import isi.deso.g10.deliverymanagementsystem.model.Categoria;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
  * @author giuli
  */
-public interface ClientesDao {
-        
-    public ArrayList<Cliente> getClientes();
+public interface CategoriaDao {
     
-    public Cliente addCliente(Cliente cliente);
+    ArrayList<Categoria> getCategorias();
 }

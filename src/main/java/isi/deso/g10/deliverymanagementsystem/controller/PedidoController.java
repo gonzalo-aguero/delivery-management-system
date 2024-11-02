@@ -4,7 +4,7 @@
  */
 package isi.deso.g10.deliverymanagementsystem.controller;
 
-import isi.deso.g10.deliverymanagementsystem.dao.PedidosMemory;
+import isi.deso.g10.deliverymanagementsystem.dao.PedidoMemory;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ClientesDao;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.PedidosDao;
 import isi.deso.g10.deliverymanagementsystem.model.Pedido;
@@ -36,7 +36,7 @@ public class PedidoController implements Controller {
 
     public PedidoController(PantallaPrincipal menu) {
         this.menu = menu;
-        this.pedidosDao = new PedidosMemory();
+        this.pedidosDao = PedidoMemory.getInstance();
     }
     
     
@@ -97,5 +97,10 @@ public class PedidoController implements Controller {
     private void eliminarButtonHandler(int row) {
         Object id = this.tableModel.getValueAt(row, 0);
         JOptionPane.showMessageDialog(this.menu.getParent(), "Eliminar en fila: " + row + " ID: " + id.toString());
+    }
+
+    @Override
+    public void crear() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

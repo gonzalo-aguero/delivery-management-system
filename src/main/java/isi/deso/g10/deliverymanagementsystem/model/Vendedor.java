@@ -189,4 +189,10 @@ public class Vendedor {
         }
         return bebidasSinAlcohol;
     }
+    
+    //Esto permite agregarlo a un combobox y mantener la referencia
+    @Override
+    public String toString() {
+        return nombre; // Esto se mostrará en el JComboBox
+    }
 }

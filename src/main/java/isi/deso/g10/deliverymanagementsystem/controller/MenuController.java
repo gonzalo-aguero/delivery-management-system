@@ -4,7 +4,6 @@
  */
 package isi.deso.g10.deliverymanagementsystem.controller;
 
-import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedoresDao;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
 import isi.deso.g10.deliverymanagementsystem.view.PantallaPrincipal;
 import java.awt.event.ActionEvent;
@@ -12,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.util.HashSet;
 import java.util.Set;
 import javax.swing.table.DefaultTableModel;
+import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedorDao;
 
 /**
  *
@@ -75,6 +75,12 @@ public class MenuController implements Controller{
                 setPedidos();
             } 
         });
+        menu.getCrearButton().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               crear();
+            } 
+        });
     }
     
     
@@ -116,6 +122,11 @@ public class MenuController implements Controller{
     @Override
     public void setTable() {
         subController.setTable();
+    }
+
+    @Override
+    public void crear() {
+        subController.crear();
     }
     
    

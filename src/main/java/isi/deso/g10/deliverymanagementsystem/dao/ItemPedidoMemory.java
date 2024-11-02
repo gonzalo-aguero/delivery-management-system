@@ -19,10 +19,21 @@ public class ItemPedidoMemory implements ItemPedidoDao {
  de cada "ItemPedido", es decir, el detalle de pedido de todos los
  pedidos y vendedores juntos.
      */
+    
+    private static ItemPedidoMemory self;
     private ArrayList<Pedido> pedidos;
+    
 
-    public ItemPedidoMemory() {
+    private ItemPedidoMemory() {
         this.pedidos = new ArrayList<>();
+        self = this;
+    }
+    
+    public ItemPedidoMemory getInstance(){
+        if(self == null){
+            self = new ItemPedidoMemory();
+        }
+        return self;
     }
 
     /**

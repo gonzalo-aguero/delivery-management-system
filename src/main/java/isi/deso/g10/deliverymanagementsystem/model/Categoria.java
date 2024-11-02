@@ -50,6 +50,9 @@ public class Categoria {
         this.tipoItem = tipoItem;
     }
     
-    
+    @Override
+    public String toString(){
+        return descripcion;
+    }
     
 }
