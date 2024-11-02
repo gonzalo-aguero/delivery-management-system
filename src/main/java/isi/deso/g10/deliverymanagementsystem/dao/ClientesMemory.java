@@ -19,7 +19,8 @@ public class ClientesMemory implements ClientesDao {
     private static ClientesMemory self;
     private ArrayList<Cliente> clientes;
     
-    private ClientesMemory(){
+    public ClientesMemory(){
+        generarClientes();
        self=this;
     };
     
@@ -30,18 +31,14 @@ public class ClientesMemory implements ClientesDao {
         return self;
     }
     
-    public ArrayList<Cliente> generarClientes() {
-        ArrayList<Cliente> clientes = new ArrayList<>();
-
+    private void generarClientes() {
+        clientes = new ArrayList<>(); 
         // Crear 5 instancias de Cliente
         clientes.add(new Cliente(1, "20-12345678-9", "Cliente Uno", "clienteuno@example.com", "Direccion Uno", new Coordenada(40.7128, -74.0060)));
         clientes.add(new Cliente(2, "20-23456789-0", "Cliente Dos", "clientedos@example.com", "Direccion Dos", new Coordenada(34.0522, -118.2437)));
         clientes.add(new Cliente(3, "20-34567890-1", "Cliente Tres", "clientetres@example.com", "Direccion Tres", new Coordenada(51.5074, -0.1278)));
         clientes.add(new Cliente(4, "20-45678901-2", "Cliente Cuatro", "clientecuatro@example.com", "Direccion Cuatro", new Coordenada(48.8566, 2.3522)));
         clientes.add(new Cliente(5, "20-56789012-3", "Cliente Cinco", "clientecinco@example.com", "Direccion Cinco", new Coordenada(35.6895, 139.6917)));
-
-        this.clientes = clientes;
-        return clientes;
     }
 
     @Override
@@ -51,24 +48,37 @@ public class ClientesMemory implements ClientesDao {
 
     @Override
     public Cliente agregarCliente(Cliente cliente) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        clientes.add(cliente);
+        return cliente;
     }
 
     @Override
     public Cliente actualizarCliente(Cliente cliente) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+          int index = clientes.indexOf(cliente);
+          clientes.add(index, cliente);
+       return cliente;
     }
 
     @Override
     public boolean eliminarCliente(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        boolean ret = false;
+        for(Cliente cli : clientes){
+            if(cli.getId() == id){
+                clientes.remove(cli);
+                ret = true;
+            }
+        }
+        return ret;
     }
 
     @Override
     public Cliente buscarClientePorId(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        int index = -1;
+         for(Cliente cli : clientes){
+             if(cli.getId()==id){
+                 index = clientes.indexOf(cli);
+             }
+         }
+         return clientes.get(index);
     }
-    
-    
-    
 }
