@@ -172,7 +172,12 @@ public class CrearItemMenuDialog extends javax.swing.JDialog {
 
         crearButton.setBackground(new java.awt.Color(66, 176, 255));
         crearButton.setForeground(new java.awt.Color(255, 255, 255));
-        crearButton.setText("Crear");
+        crearButton.setText("Guardar");
+        crearButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                crearButtonActionPerformed(evt);
+            }
+        });
 
         cancelarButton.setForeground(new java.awt.Color(66, 176, 255));
         cancelarButton.setText("Cancelar");
@@ -363,6 +368,10 @@ public class CrearItemMenuDialog extends javax.swing.JDialog {
     private void categoriaBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoriaBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_categoriaBoxActionPerformed
+
+    private void crearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_crearButtonActionPerformed
 
     /**
      * @param args the command line arguments

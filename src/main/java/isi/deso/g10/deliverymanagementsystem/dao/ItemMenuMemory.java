@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 public class ItemMenuMemory implements ItemMenuDao {
 
     private ArrayList<ItemMenu> items;
-    private static VendedorDao vendedorDao;
     private static ItemMenuMemory self;
     private ArrayList<Categoria> categorias;
     private final VendedorDao vendedorDao;

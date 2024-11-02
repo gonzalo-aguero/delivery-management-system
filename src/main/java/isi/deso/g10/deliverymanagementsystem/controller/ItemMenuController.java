@@ -257,12 +257,8 @@
                 for (Vendedor vendedor : vendedores) {
                     crearIM.getVendedoresBox().addItem(vendedor);
                 }
-
-                ArrayList<Categoria> categorias = new ArrayList<Categoria>();
-                categorias.add(new Categoria(1, "Carnes", TipoItem.COMIDA));
-                categorias.add(new Categoria(2, "Pastas", TipoItem.COMIDA));
-                categorias.add(new Categoria(3, "Cervezas", TipoItem.BEBIDA));
-                categorias.add(new Categoria(4, "Vinos", TipoItem.BEBIDA));
+                
+                ArrayList<Categoria> categorias = (ArrayList) itemMenuDao.getCategorias();
 
                 for (Categoria categoria : categorias) {
                     crearIM.getCategoriaBox().addItem(categoria);
