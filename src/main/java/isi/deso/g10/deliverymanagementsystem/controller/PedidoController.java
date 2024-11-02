@@ -74,7 +74,7 @@ public class PedidoController implements Controller {
 
         table.getColumn("Acciones").setCellEditor(buttonsPanelEditor);
        
-       pedidos = pedidosDao.getPedidos();
+       pedidos = (ArrayList) pedidosDao.obtenerPedidos();
        
        for(Pedido pedido: pedidos){
            modelo.addRow(new Object[]{

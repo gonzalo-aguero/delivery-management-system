@@ -5,7 +5,7 @@
 package isi.deso.g10.deliverymanagementsystem.dao.interfaces;
 
 import isi.deso.g10.deliverymanagementsystem.model.Categoria;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -13,5 +13,14 @@ import java.util.ArrayList;
  */
 public interface CategoriaDao {
     
-    ArrayList<Categoria> getCategorias();
+    public List<Categoria> obtenerCategorias();
+    
+    public Categoria agregarCategoria(Categoria categoria);
+    
+    public Categoria actualizarCategoria(Categoria categoria);
+    
+    public boolean eliminarCategoria(int id);
+    
+    public Categoria buscarCategoriaPorId(int id);
+    
 }

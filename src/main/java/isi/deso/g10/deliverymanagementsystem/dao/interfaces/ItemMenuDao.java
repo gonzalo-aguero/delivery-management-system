@@ -7,6 +7,7 @@ package isi.deso.g10.deliverymanagementsystem.dao.interfaces;
 import isi.deso.g10.deliverymanagementsystem.model.Categoria;
 import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -14,16 +15,14 @@ import java.util.ArrayList;
  */
 public interface ItemMenuDao {
 
-    public ArrayList<ItemMenu> getItemMenus();
+    public List<ItemMenu> obtenerItemsMenu();
 
-    public ItemMenu buscarItemMenu(int id);
+    public ItemMenu agregarItemMenu(ItemMenu itemMenu);
+
+    public boolean actualizarItemMenu(ItemMenu itemMenu);
 
     public boolean eliminarItemMenu(int id);
 
-    public boolean modificarItemMenu(String descripcion, double precio, int id);
-
-    public ItemMenu crearNuevoItemMenu(String tipo, Categoria cat, double peso, double graduacionAlcoholica, double volumenEnMl, String nombre, String descripcion, double precio, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano);
-
-    public ItemMenu save(ItemMenu itemMenu);
+    public ItemMenu buscarItemMenuPorId(int id);
 
 }

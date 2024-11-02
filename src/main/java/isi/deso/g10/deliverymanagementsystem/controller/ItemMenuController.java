@@ -37,14 +37,14 @@ import javax.swing.table.DefaultTableModel;
 public class ItemMenuController implements Controller {
 
     private DefaultTableModel tableModel;
-    
+
     //DAO
     private final ItemMenuDao itemMenuDao;
     private final VendedorDao vendedorDao;
     private final CategoriaDao categoriaDao;
-    
+
     private ArrayList<ItemMenu> itemsMenu;
-    
+
     private final PantallaPrincipal menu;
 
     public ItemMenuController(PantallaPrincipal menu) {
@@ -52,11 +52,9 @@ public class ItemMenuController implements Controller {
         this.vendedorDao = VendedorMemory.getInstance();
         this.categoriaDao = CategoriaMemory.getInstance();
         this.menu = menu;
-        
+
     }
-    
-    
-    
+
     @Override
     public void addFrameListeners() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
@@ -72,8 +70,7 @@ public class ItemMenuController implements Controller {
         modelo.addColumn("Calorias");
         modelo.addColumn("Apto para");
         modelo.addColumn("Acciones");
-        
-        
+
         JTable table = menu.getTabla();
         table.setModel(modelo);
         this.tableModel = modelo;
@@ -92,123 +89,120 @@ public class ItemMenuController implements Controller {
         ButtonsPanelEditor buttonsPanelEditor = new ButtonsPanelEditor(buttonsPanel, editAction, deleteAction);
 
         table.getColumn("Acciones").setCellEditor(buttonsPanelEditor);
-        
-        itemsMenu = itemMenuDao.getItemMenus();
-        
-        for(ItemMenu item: itemsMenu){
+
+        itemsMenu = (ArrayList) itemMenuDao.obtenerItemsMenu();
+
+        for (ItemMenu item : itemsMenu) {
             modelo.addRow(new Object[]{
-            item.getId(),
-            item.getNombre(),
-            item.getPrecio(),
-            item.getCategoria().getTipoItem(),
-            item.getCalorias(),
-            (item.isAptoCeliaco()? "celiaco" : "") + (item.isAptoVegano()? " vegano" : "") + (item.isAptoVegetariano()? " vegetariano" : "")
+                item.getId(),
+                item.getNombre(),
+                item.getPrecio(),
+                item.getCategoria().getTipoItem(),
+                item.getCalorias(),
+                (item.isAptoCeliaco() ? "celiaco" : "") + (item.isAptoVegano() ? " vegano" : "") + (item.isAptoVegetariano() ? " vegetariano" : "")
             });
         }
     }
-    
+
     private void editarButtonHandler(int row) {
         int id = Integer.parseInt(this.tableModel.getValueAt(row, 0) + "");
         JOptionPane.showMessageDialog(this.menu.getParent(), "Editar en fila: " + row + " ID: " + id);
     }
 
     private void eliminarButtonHandler(int row) {
-        int id = Integer.parseInt(this.tableModel.getValueAt(row, 0)+ "");
+        int id = Integer.parseInt(this.tableModel.getValueAt(row, 0) + "");
         JOptionPane.showMessageDialog(this.menu.getParent(), "Eliminar en fila: " + row + " ID: " + id);
     }
 
     @Override
     public void crear() {
-       CrearItemMenuDialog crearIM= new CrearItemMenuDialog(menu,true);
-       crearIM.setLocationRelativeTo(null);
-       
-       try{
-       ArrayList<Vendedor> vendedores= vendedorDao.getVendedores();
-            for(Vendedor vendedor: vendedores){
+        CrearItemMenuDialog crearIM = new CrearItemMenuDialog(menu, true);
+        crearIM.setLocationRelativeTo(null);
+
+        try {
+            ArrayList<Vendedor> vendedores = (ArrayList) vendedorDao.obtenerVendedores();
+            for (Vendedor vendedor : vendedores) {
                 crearIM.getVendedoresBox().addItem(vendedor);
             }
-       crearIM.getVendedoresBox().setSelectedItem(vendedores.get(0));
-       
-       ArrayList<Categoria> categorias= categoriaDao.getCategorias();
-            for(Categoria categoria: categorias){
+            crearIM.getVendedoresBox().setSelectedItem(vendedores.get(0));
+
+            ArrayList<Categoria> categorias = (ArrayList) categoriaDao.obtenerCategorias();
+            for (Categoria categoria : categorias) {
                 crearIM.getCategoriaBox().addItem(categoria);
             }
-       crearIM.getCategoriaBox().setSelectedItem(categorias.get(0));
-       
-       }catch(RuntimeException ex){
-                   JOptionPane.showMessageDialog(crearIM,ex.getMessage());
-                   //throw new RuntimeException(ex.getMessage());      
+            crearIM.getCategoriaBox().setSelectedItem(categorias.get(0));
+
+        } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(crearIM, ex.getMessage());
+            //throw new RuntimeException(ex.getMessage());      
         }
-       
-       crearIM.getCrearButton().addActionListener(new ActionListener(){
-           @Override
-           public void actionPerformed(ActionEvent e) {
-              ItemMenu nuevoItemMenu;
-              try{
-              FieldAnalyzer.todosLosCamposLlenos(crearIM);
-              
-              Categoria categoria = (Categoria) crearIM.getCategoriaBox().getSelectedItem();
-              Vendedor vendedor= (Vendedor) crearIM.getVendedoresBox().getSelectedItem();
-              
-              ItemMenu itemMenu= crearIM.getTipoBox().getSelectedItem()=="Plato"? 
-                      new Plato(
-                        -1, // id
-                  crearIM.getNombreField().getText(), // nombre
-               crearIM.getDescripcionTextPane().getText(), // descripcion (TextPane)
-                  Double.parseDouble(crearIM.getPrecioField().getText()), // precio
-                        categoria, // Categoria
-                 Integer.parseInt(crearIM.getCaloriasField().getText()), // calorias
-               crearIM.getCeliacoCheck().isSelected(), // aptoCeliaco
-            crearIM.getVegetarianoCheck().isSelected(), // aptoVegetariano
-               crearIM.getVeganoCheck().isSelected(), // aptoVegano
-                        vendedor, // Vendedor
-                    Double.parseDouble(crearIM.getPesoField().getText()) // peso
-                    ) 
-                      : 
-                      
-                      new Bebida(
-                        -1, // id
-                        crearIM.getNombreField().getText(), // nombre
-                        crearIM.getDescripcionTextPane().getText(), // descripcion (TextPane)
-                        Double.parseDouble(crearIM.getPrecioField().getText()), // precio
-                        categoria, // Categoria
-                 Integer.parseInt(crearIM.getCaloriasField().getText()), // calorias
-               crearIM.getCeliacoCheck().isSelected(), // aptoCeliaco
-            crearIM.getVegetarianoCheck().isSelected(), // aptoVegetariano
-               crearIM.getVeganoCheck().isSelected(), // aptoVegano
-                        vendedor, // Vendedor
-        Double.parseDouble(crearIM.getGraduacionField().getText()), // graduacionAlcoholica
-               Double.parseDouble(crearIM.getVolumenField().getText()) // volumenEnMl
-                );
-              
-              nuevoItemMenu= itemMenuDao.save(itemMenu);
-              
-              }catch(RuntimeException ex){
-                  JOptionPane.showMessageDialog(crearIM,ex.getMessage());
-                  throw new RuntimeException(ex.getMessage());
-              }
-              
-              JOptionPane.showMessageDialog(crearIM,"ItemMenu creado con id:" + nuevoItemMenu.getId(),"Éxito",JOptionPane.INFORMATION_MESSAGE);
-           }
-       });
-       crearIM.getTipoBox().addActionListener(new ActionListener(){
-           @Override
-           public void actionPerformed(ActionEvent e) {
-              if(crearIM.getTipoBox().getSelectedItem()== "Plato"){
-                  crearIM.getPesoField().setEditable(true);
-                  crearIM.getVolumenField().setEditable(false);
-                  crearIM.getGraduacionField().setEditable(false);
-              }
-              else {
-                  crearIM.getPesoField().setEditable(false);
-                  crearIM.getVolumenField().setEditable(true);
-                  crearIM.getGraduacionField().setEditable(true);
-              }
-           }
-       
-       });
-       
-       crearIM.setVisible(true);
+
+        crearIM.getCrearButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ItemMenu nuevoItemMenu;
+                try {
+                    FieldAnalyzer.todosLosCamposLlenos(crearIM);
+
+                    Categoria categoria = (Categoria) crearIM.getCategoriaBox().getSelectedItem();
+                    Vendedor vendedor = (Vendedor) crearIM.getVendedoresBox().getSelectedItem();
+
+                    ItemMenu itemMenu = crearIM.getTipoBox().getSelectedItem() == "Plato"
+                            ? new Plato(
+                                    -1, // id
+                                    crearIM.getNombreField().getText(), // nombre
+                                    crearIM.getDescripcionTextPane().getText(), // descripcion (TextPane)
+                                    Double.parseDouble(crearIM.getPrecioField().getText()), // precio
+                                    categoria, // Categoria
+                                    Integer.parseInt(crearIM.getCaloriasField().getText()), // calorias
+                                    crearIM.getCeliacoCheck().isSelected(), // aptoCeliaco
+                                    crearIM.getVegetarianoCheck().isSelected(), // aptoVegetariano
+                                    crearIM.getVeganoCheck().isSelected(), // aptoVegano
+                                    vendedor, // Vendedor
+                                    Double.parseDouble(crearIM.getPesoField().getText()) // peso
+                            )
+                            : new Bebida(
+                                    -1, // id
+                                    crearIM.getNombreField().getText(), // nombre
+                                    crearIM.getDescripcionTextPane().getText(), // descripcion (TextPane)
+                                    Double.parseDouble(crearIM.getPrecioField().getText()), // precio
+                                    categoria, // Categoria
+                                    Integer.parseInt(crearIM.getCaloriasField().getText()), // calorias
+                                    crearIM.getCeliacoCheck().isSelected(), // aptoCeliaco
+                                    crearIM.getVegetarianoCheck().isSelected(), // aptoVegetariano
+                                    crearIM.getVeganoCheck().isSelected(), // aptoVegano
+                                    vendedor, // Vendedor
+                                    Double.parseDouble(crearIM.getGraduacionField().getText()), // graduacionAlcoholica
+                                    Double.parseDouble(crearIM.getVolumenField().getText()) // volumenEnMl
+                            );
+
+                    nuevoItemMenu = itemMenuDao.agregarItemMenu(itemMenu);
+
+                } catch (RuntimeException ex) {
+                    JOptionPane.showMessageDialog(crearIM, ex.getMessage());
+                    throw new RuntimeException(ex.getMessage());
+                }
+
+                JOptionPane.showMessageDialog(crearIM, "ItemMenu creado con id:" + nuevoItemMenu.getId(), "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        crearIM.getTipoBox().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (crearIM.getTipoBox().getSelectedItem() == "Plato") {
+                    crearIM.getPesoField().setEditable(true);
+                    crearIM.getVolumenField().setEditable(false);
+                    crearIM.getGraduacionField().setEditable(false);
+                } else {
+                    crearIM.getPesoField().setEditable(false);
+                    crearIM.getVolumenField().setEditable(true);
+                    crearIM.getGraduacionField().setEditable(true);
+                }
+            }
+
+        });
+
+        crearIM.setVisible(true);
     }
-    
+
 }

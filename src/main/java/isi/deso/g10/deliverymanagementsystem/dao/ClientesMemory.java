@@ -17,6 +17,7 @@ import java.util.List;
 public class ClientesMemory implements ClientesDao {
 
     private static ClientesMemory self;
+    private ArrayList<Cliente> clientes;
     
     private ClientesMemory(){
        self=this;
@@ -29,8 +30,7 @@ public class ClientesMemory implements ClientesDao {
         return self;
     }
     
-    @Override
-    public ArrayList<Cliente> getClientes() {
+    public ArrayList<Cliente> generarClientes() {
         ArrayList<Cliente> clientes = new ArrayList<>();
 
         // Crear 5 instancias de Cliente
@@ -40,11 +40,32 @@ public class ClientesMemory implements ClientesDao {
         clientes.add(new Cliente(4, "20-45678901-2", "Cliente Cuatro", "clientecuatro@example.com", "Direccion Cuatro", new Coordenada(48.8566, 2.3522)));
         clientes.add(new Cliente(5, "20-56789012-3", "Cliente Cinco", "clientecinco@example.com", "Direccion Cinco", new Coordenada(35.6895, 139.6917)));
 
+        this.clientes = clientes;
         return clientes;
     }
 
     @Override
-    public Cliente addCliente(Cliente cliente) {
+    public List<Cliente> obtenerClientes() {
+        return clientes;
+    }
+
+    @Override
+    public Cliente agregarCliente(Cliente cliente) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Cliente actualizarCliente(Cliente cliente) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean eliminarCliente(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Cliente buscarClientePorId(int id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     

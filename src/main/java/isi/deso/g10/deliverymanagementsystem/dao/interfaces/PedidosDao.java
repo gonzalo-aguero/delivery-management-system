@@ -5,14 +5,22 @@
 package isi.deso.g10.deliverymanagementsystem.dao.interfaces;
 
 import isi.deso.g10.deliverymanagementsystem.model.Pedido;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author giuli
  */
 public interface PedidosDao {
+    
+    public List<Pedido> obtenerPedidos();
 
-    public ArrayList<Pedido> getPedidos();
+    public Pedido agregarPedido(Pedido pedido);
+
+    public Pedido actualizarPedido(Pedido pedido);
+
+    public boolean eliminarPedido(int id);
+
+    public Pedido buscarPedidoPorId(int id);
     
 }

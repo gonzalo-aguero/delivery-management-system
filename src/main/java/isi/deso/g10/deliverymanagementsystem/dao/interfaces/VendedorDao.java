@@ -5,7 +5,7 @@
 package isi.deso.g10.deliverymanagementsystem.dao.interfaces;
 
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -13,7 +13,14 @@ import java.util.ArrayList;
  */
 public interface VendedorDao {
 
-    public ArrayList<Vendedor> getVendedores();
+    List<Vendedor> obtenerVendedores();
 
-    public Vendedor addVendedor(Vendedor vendedor);
+    Vendedor agregarVendedor(Vendedor vendedor);
+
+    Vendedor actualizarVendedor(Vendedor vendedor);
+
+    boolean eliminarVendedor(int id);
+
+    Vendedor buscarVendedorPorId(int id);
+
 }
