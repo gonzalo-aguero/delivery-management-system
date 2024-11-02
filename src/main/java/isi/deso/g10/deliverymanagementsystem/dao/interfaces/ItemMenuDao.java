@@ -29,4 +29,6 @@ public interface ItemMenuDao {
     public ArrayList<ItemMenu> buscarVendedor(Vendedor vendedor);
     
     public List<Categoria> getCategorias();
+    
+    public List<ItemMenu> buscarItemsPorNombre(String cadena);
 }

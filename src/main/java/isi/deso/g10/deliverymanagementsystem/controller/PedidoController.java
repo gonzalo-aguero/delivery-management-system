@@ -63,6 +63,11 @@ public class PedidoController implements Controller {
     public void addFrameListeners() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+    
+    @Override
+    public void setTableFiltradaPorNombre(String cadena){
+        throw new UnsupportedOperationException("No se puede buscar por pedido.");
+    }
 
     @Override
     public void setTable() {

@@ -50,8 +50,8 @@
             this.itemMenuDao = ItemMenuMemory.getInstance();
             this.vendedorDao = VendedorMemory.getInstance();
             this.menu = menu;
-
         }
+        
 
         @Override
         public void addFrameListeners() {
@@ -89,6 +89,49 @@
             table.getColumn("Acciones").setCellEditor(buttonsPanelEditor);
 
             itemsMenu = (ArrayList) itemMenuDao.obtenerItemsMenu();
+
+            for (ItemMenu item : itemsMenu) {
+                modelo.addRow(new Object[]{
+                    item.getId(),
+                    item.getNombre(),
+                    item.getPrecio(),
+                    item.getCategoria().getTipoItem(),
+                    item.getCalorias(),
+                    (item.isAptoCeliaco() ? "celiaco" : "") + (item.isAptoVegano() ? " vegano" : "") + (item.isAptoVegetariano() ? " vegetariano" : "")
+                });
+            }
+        }
+        
+        public void setTableFiltradaPorNombre(String cadena){
+            DefaultTableModel modelo = new DefaultTableModel();
+            modelo.addColumn("ID");
+            modelo.addColumn("Nombre");
+            modelo.addColumn("Precio");
+            modelo.addColumn("Categoria");
+            modelo.addColumn("Calorias");
+            modelo.addColumn("Apto para");
+            modelo.addColumn("Acciones");
+
+            JTable table = menu.getTabla();
+            table.setModel(modelo);
+            this.tableModel = modelo;
+
+            // CONFIGURACION BOTONES EDITAR Y ELIMINAR
+            table.getColumn("Acciones").setCellRenderer(new ButtonsPanelRenderer());
+
+            // Creamos y configuramos los botones para cada elemento
+            ButtonsPanel buttonsPanel = new ButtonsPanel();
+
+            // Define acciones personalizadas para cada botón
+            Consumer<Integer> editAction = (row) -> editarButtonHandler(row);
+            Consumer<Integer> deleteAction = (row) -> eliminarButtonHandler(row);
+
+            // Crea el editor de la celda pasando las acciones como parámetros
+            ButtonsPanelEditor buttonsPanelEditor = new ButtonsPanelEditor(buttonsPanel, editAction, deleteAction);
+
+            table.getColumn("Acciones").setCellEditor(buttonsPanelEditor);
+
+            itemsMenu = (ArrayList) itemMenuDao.buscarItemsPorNombre(cadena);
 
             for (ItemMenu item : itemsMenu) {
                 modelo.addRow(new Object[]{

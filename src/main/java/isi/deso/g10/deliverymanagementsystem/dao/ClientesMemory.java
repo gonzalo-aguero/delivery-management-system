@@ -50,6 +50,23 @@ public class ClientesMemory implements ClienteDao {
     public List<Cliente> obtenerClientes() {
         return clientes;
     }
+    
+    @Override
+    public List<Cliente> obtenerClientesPorNombre(String cadena) {
+        List<Cliente> resultados = new ArrayList<>();
+        
+        if (cadena == null || cadena.isEmpty()) {
+            return resultados;
+        }
+
+        for (Cliente cliente : clientes) {
+            if (cliente.getNombre().toLowerCase().contains(cadena.toLowerCase())) {
+                resultados.add(cliente);
+            }
+        }
+        
+        return resultados;
+    }
 
     @Override
     public Cliente agregarCliente(Cliente cliente) {

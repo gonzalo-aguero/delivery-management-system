@@ -32,6 +32,23 @@ public class VendedorMemory implements VendedorDao {
         }
         return self;
     }
+    
+    @Override
+    public List<Vendedor> buscarVendedorPorNombre(String cadena) {
+        List<Vendedor> resultados = new ArrayList<>();
+        
+        if (cadena == null || cadena.isEmpty()) {
+            return resultados;
+        }
+
+        for (Vendedor vendedor : vendedores) {
+            if (vendedor.getNombre().toLowerCase().contains(cadena.toLowerCase())) {
+                resultados.add(vendedor);
+            }
+        }
+        
+        return resultados;
+    }
 
     public ArrayList<Vendedor> generarVendedores() {
         ArrayList<Vendedor> vendedores = new ArrayList();

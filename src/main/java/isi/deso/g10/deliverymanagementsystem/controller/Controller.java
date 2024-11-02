@@ -16,6 +16,8 @@ public interface Controller {
     //Setea la tabla propia de cada modelo
     public void setTable();
     
+    public void setTableFiltradaPorNombre(String cadena);
+    
     public void crear();
     
 }

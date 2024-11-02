@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.swing.table.DefaultTableModel;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedorDao;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 /**
  *
@@ -49,6 +51,8 @@ public class MenuController implements Controller{
         
     }
     
+    
+    
     @Override
     public void addFrameListeners() {
         menu.getVendedoresButton().addActionListener(new ActionListener() {
@@ -80,6 +84,17 @@ public class MenuController implements Controller{
             public void actionPerformed(ActionEvent e) {
                crear();
             } 
+        });
+        
+        menu.getBuscarTextField().addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String busqueda = menu.getBuscarTextField().getText();
+                if(busqueda.isEmpty()){
+                    subController.setTable();
+                } else
+                subController.setTableFiltradaPorNombre(busqueda);
+            }
         });
     }
     
@@ -129,7 +144,10 @@ public class MenuController implements Controller{
         subController.crear();
     }
     
-   
+   @Override
+   public void setTableFiltradaPorNombre(String cadena){
+       subController.setTableFiltradaPorNombre(cadena);
+   }
     
     
 }

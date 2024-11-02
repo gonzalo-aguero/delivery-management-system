@@ -49,6 +49,52 @@ public class ClienteController implements Controller {
     public void addFrameListeners() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+    
+    @Override
+    public void setTableFiltradaPorNombre(String cadena){
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID");
+        modelo.addColumn("Cuit");
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Email");
+        modelo.addColumn("Dirección");
+        modelo.addColumn("Coordenadas");
+        modelo.addColumn("Acciones");
+
+        JTable table = menu.getTabla();
+        table.setModel(modelo);
+        this.tableModel = modelo;
+
+        // CONFIGURACION BOTONES EDITAR Y ELIMINAR
+        table.getColumn("Acciones").setCellRenderer(new ButtonsPanelRenderer());
+
+        // Creamos y configuramos los botones para cada elemento
+        ButtonsPanel buttonsPanel = new ButtonsPanel();
+
+        // Define acciones personalizadas para cada botón
+        Consumer<Integer> editAction = (row) -> editarButtonHandler(row);
+        Consumer<Integer> deleteAction = (row) -> eliminarButtonHandler(row);
+
+        // Crea el editor de la celda pasando las acciones como parámetros
+        ButtonsPanelEditor buttonsPanelEditor = new ButtonsPanelEditor(buttonsPanel, editAction, deleteAction);
+
+        table.getColumn("Acciones").setCellEditor(buttonsPanelEditor);
+
+        clientes = clientesDao.obtenerClientesPorNombre(cadena);
+
+        //Llena la tabla de vendedores
+        for (Cliente cliente : clientes) {
+
+            // Agregamos la fila a la tabla
+            modelo.addRow(new Object[]{cliente.getId(),
+                cliente.getCuit(),
+                cliente.getNombre(),
+                cliente.getEmail(),
+                cliente.getDireccion(),
+                "[" + cliente.getCoordenadas().getLatitud() + ";" + cliente.getCoordenadas().getLongitud() + "]"
+            });
+        }
+    }
 
     @Override
     public void setTable() {

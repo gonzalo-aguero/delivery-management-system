@@ -12,6 +12,8 @@ import java.util.List;
  * @author giuli
  */
 public interface ClienteDao {
+    
+    public List<Cliente> obtenerClientesPorNombre(String cadena);
 
     public List<Cliente> obtenerClientes();
 

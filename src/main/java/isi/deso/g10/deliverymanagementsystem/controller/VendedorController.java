@@ -49,6 +49,48 @@ public class VendedorController implements Controller {
         //Aca debería haber listeners del frame de creacion, edición y eliminación, creo que la busqueda se podría hacer en el MenuController tranquilamente
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+    
+    @Override
+    public void setTableFiltradaPorNombre(String cadena){
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID");
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Dirección");
+        modelo.addColumn("Coordenadas");
+        modelo.addColumn("Acciones");
+
+        JTable table = menu.getTabla();
+        table.setModel(modelo);
+        this.tableModel = modelo;
+
+        // CONFIGURACION BOTONES EDITAR Y ELIMINAR
+        table.getColumn("Acciones").setCellRenderer(new ButtonsPanelRenderer());
+
+        // Creamos y configuramos los botones para cada elemento
+        ButtonsPanel buttonsPanel = new ButtonsPanel();
+
+        // Define acciones personalizadas para cada botón
+        Consumer<Integer> editAction = (row) -> editarButtonHandler(row);
+        Consumer<Integer> deleteAction = (row) -> eliminarButtonHandler(row);
+
+        // Crea el editor de la celda pasando las acciones como parámetros
+        ButtonsPanelEditor buttonsPanelEditor = new ButtonsPanelEditor(buttonsPanel, editAction, deleteAction);
+
+        table.getColumn("Acciones").setCellEditor(buttonsPanelEditor);
+
+        vendedores = vendedoresDao.buscarVendedorPorNombre(cadena);
+
+        //Llena la tabla de vendedores
+        for (Vendedor vendedor : vendedores) {
+            modelo.addRow(new Object[]{
+                vendedor.getId(),
+                vendedor.getNombre(),
+                vendedor.getDireccion(),
+                "[" + vendedor.getCoordenadas().getLatitud() + ";" + vendedor.getCoordenadas().getLongitud() + "]",
+                new ButtonsPanel()
+            });
+        }
+    }
 
     @Override
     public void setTable() {

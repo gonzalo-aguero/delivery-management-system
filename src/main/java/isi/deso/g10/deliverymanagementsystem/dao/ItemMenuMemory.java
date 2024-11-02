@@ -97,6 +97,23 @@ public class ItemMenuMemory implements ItemMenuDao {
             return null;
         }
     }
+    
+    @Override
+    public List<ItemMenu> buscarItemsPorNombre(String cadena) {
+        List<ItemMenu> resultados = new ArrayList<>();
+        
+        if (cadena == null || cadena.isEmpty()) {
+            return resultados;
+        }
+
+        for (ItemMenu item : items) {
+            if (item.getNombre().toLowerCase().contains(cadena.toLowerCase())) {
+                resultados.add(item);
+            }
+        }
+        
+        return resultados;
+    }
 
     @Override
     public boolean eliminarItemMenu(int id) {

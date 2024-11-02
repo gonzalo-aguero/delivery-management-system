@@ -12,6 +12,8 @@ import java.util.List;
  * @author giuli
  */
 public interface VendedorDao {
+    
+    public List<Vendedor> buscarVendedorPorNombre(String cadena);
 
     List<Vendedor> obtenerVendedores();
 
