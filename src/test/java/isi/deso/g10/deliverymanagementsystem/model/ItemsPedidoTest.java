@@ -40,7 +40,7 @@ public class ItemsPedidoTest {
         items.add(new BebidaBuilder().setPrecio(35).build());
         
         // Crear un pedido
-        pedido = new Pedido(items, new Cliente(1,"23","mig","mig.com","Iriondo 860", new Coordenada(11,11)));
+        pedido = new Pedido(10 ,items, new Cliente(1,"23","mig","mig.com","Iriondo 860", new Coordenada(11,11)));
     }
     
     @AfterEach

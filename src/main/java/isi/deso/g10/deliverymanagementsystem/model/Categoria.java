@@ -18,10 +18,41 @@ public class Categoria {
         this.descripcion = descripcion;
         this.tipoItem = tipoItem;
     }
-    
-    
-    
+
     private int id;
     private String descripcion;
     private TipoItem tipoItem;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public TipoItem getTipoItem() {
+        return tipoItem;
+    }
+
+    
+    
+    
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public void setTipoItem(TipoItem tipoItem) {
+        this.tipoItem = tipoItem;
+    }
+    
+    @Override
+    public String toString(){
+        return descripcion;
+    }
+    
 }

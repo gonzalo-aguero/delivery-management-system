@@ -7,7 +7,6 @@ package isi.deso.g10.deliverymanagementsystem.builder;
 import isi.deso.g10.deliverymanagementsystem.model.Bebida;
 import isi.deso.g10.deliverymanagementsystem.model.Categoria;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
-
 /**
  * 
  * @author gonzalo90fa

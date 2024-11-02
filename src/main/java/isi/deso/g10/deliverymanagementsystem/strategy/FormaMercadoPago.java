@@ -4,16 +4,28 @@
  */
 package isi.deso.g10.deliverymanagementsystem.strategy;
 
-
-
 /**
  *
  * @author giuli
  */
-public class FormaMercadoPago extends FormaDePago {
-    
-    public FormaMercadoPago(){
-        super.recargo= 2;
+public class FormaMercadoPago implements FormaPagoI{
+
+    private String alias;
+    private double montoFinal;
+    private final double RECARGO_MP = 0.04;
+
+    public FormaMercadoPago(String alias) {
+        this.alias = alias;
+    }
+
+    @Override
+    public double totalizar(double montoInicial){
+        montoFinal = montoInicial + montoInicial * RECARGO_MP;
+        return montoFinal;
     }
     
+    @Override
+    public String toString(){
+     return "Mercado Pago";
+    }
 }

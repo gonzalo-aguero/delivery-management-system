@@ -71,7 +71,6 @@ public class Vendedor {
     }
 
     public double distancia(Cliente cliente) {
-        //le puse final porque el radio de la tierra es cte
         final double R = 6378;
 
         //Latitudes
@@ -189,5 +188,11 @@ public class Vendedor {
             }
         }
         return bebidasSinAlcohol;
+    }
+    
+    //Esto permite agregarlo a un combobox y mantener la referencia
+    @Override
+    public String toString() {
+        return nombre; // Esto se mostrará en el JComboBox
     }
 }

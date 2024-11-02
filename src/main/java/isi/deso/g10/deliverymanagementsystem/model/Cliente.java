@@ -4,11 +4,17 @@
  */
 package isi.deso.g10.deliverymanagementsystem.model;
 
+import java.util.Date;
+
+import isi.deso.g10.deliverymanagementsystem.model.Pedido.EstadoPedido;
+import isi.deso.g10.deliverymanagementsystem.observer.PedidoObserver;
+import isi.deso.g10.deliverymanagementsystem.strategy.FormaMercadoPago;
+
 /**
  *
  * @author giuli
  */
-public class Cliente {
+public class Cliente implements PedidoObserver{
 
     private int id;
     private String cuit;
@@ -25,7 +31,7 @@ public class Cliente {
         this.direccion = direccion;
         this.coordenadas = coordenadas;
     }
-    
+
     public int getId() {
         return id;
     }
@@ -72,8 +78,39 @@ public class Cliente {
 
     public void setCoordenadas(Coordenada coordenadas) {
         this.coordenadas = coordenadas;
-    }    
+    }
 
-    
-    
+    @Override
+    public void update(Pedido pedido) {
+        System.out.println("El pedido " + pedido.getId() + " ha cambiado de estado a " + pedido.getEstado());    
+        if(pedido.getEstado().equals(EstadoPedido.EN_ENVIO)) {
+            pedido.setDatosPago(generarPago(pedido));
+        }
+    }
+    private Pago generarPago(Pedido pedido) {
+       System.out.println("Generando pago para el pedido " + pedido.getId() + "...");
+        if(pedido.getFormapago().getClass() == FormaMercadoPago.class) {
+            Pago pago = new Pago(
+                    pedido.getId(),
+                    new Date(),
+                    this.nombre,
+                    this.cuit,
+                    pedido.costoFinal(),
+                    "Mercado Pago"
+            );
+            pago.printPagoInfo();
+            return pago;
+        }else{
+            Pago pago = new Pago(
+                    pedido.getId(),
+                    new Date(),
+                    this.nombre,
+                    this.cuit,
+                    pedido.costoFinal(),
+                    "Transferencia"
+            );
+            pago.printPagoInfo();
+            return pago;
+        }
+    }
 }
