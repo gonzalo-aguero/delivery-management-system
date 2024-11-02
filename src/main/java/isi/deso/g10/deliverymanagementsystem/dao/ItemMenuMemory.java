@@ -121,7 +121,11 @@ public class ItemMenuMemory implements ItemMenuDao {
     }
 
     @Override
-    public ItemMenu save(ItemMenu itemMenu) {
+    public ItemMenu addItemMenu(ItemMenu itemMenu) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public ArrayList<ItemMenu> buscarVendedor(Vendedor vendedor) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

@@ -16,4 +16,6 @@ public interface VendedorDao {
     public ArrayList<Vendedor> getVendedores();
 
     public Vendedor addVendedor(Vendedor vendedor);
+    
+    
 }

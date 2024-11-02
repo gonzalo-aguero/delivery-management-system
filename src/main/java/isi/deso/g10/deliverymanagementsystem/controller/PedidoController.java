@@ -4,14 +4,23 @@
  */
 package isi.deso.g10.deliverymanagementsystem.controller;
 
+import isi.deso.g10.deliverymanagementsystem.dao.ItemMenuMemory;
 import isi.deso.g10.deliverymanagementsystem.dao.PedidoMemory;
+import isi.deso.g10.deliverymanagementsystem.dao.VendedorMemory;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ClientesDao;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.PedidosDao;
+import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedorDao;
+import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
 import isi.deso.g10.deliverymanagementsystem.model.Pedido;
+import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
 import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanel;
 import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanelEditor;
 import isi.deso.g10.deliverymanagementsystem.view.ButtonsPanelRenderer;
 import isi.deso.g10.deliverymanagementsystem.view.PantallaPrincipal;
+import isi.deso.g10.deliverymanagementsystem.view.crear.CrearPedidoDialog;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -26,17 +35,23 @@ import javax.swing.table.DefaultTableModel;
 public class PedidoController implements Controller {
 
     private DefaultTableModel tableModel;
-    
+    //
+    ArrayList<ItemMenu> itemsMenu;
     //DAO
     private final PedidosDao pedidosDao;
+    private final VendedorDao vendedorDao;
+    private final ItemMenuMemory itemMenuDao;
     
     private ArrayList<Pedido> pedidos;
     
     private final PantallaPrincipal menu;
+    
 
     public PedidoController(PantallaPrincipal menu) {
         this.menu = menu;
         this.pedidosDao = PedidoMemory.getInstance();
+        this.vendedorDao = VendedorMemory.getInstance();
+        this.itemMenuDao= ItemMenuMemory.getInstance();
     }
     
     
@@ -101,6 +116,71 @@ public class PedidoController implements Controller {
 
     @Override
     public void crear() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        CrearPedidoDialog crearPedido = new CrearPedidoDialog(menu,true);
+        
+        ArrayList<Vendedor> vendedores= vendedorDao.getVendedores();
+        
+        ArrayList<ItemMenu> itemMenusSeleccionados = new ArrayList();
+        
+        DefaultTableModel menuModel = (DefaultTableModel) crearPedido.getTablaMenu().getModel();
+        DefaultTableModel pedidoModel = (DefaultTableModel) crearPedido.getTablaPedido().getModel();
+        
+        for(Vendedor vendedor: vendedores){
+            crearPedido.getVendedorBox().addItem(vendedor);
+        }
+        
+        //Agrega los item menu a la tabla
+        crearPedido.getVendedorBox().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarVendedor((Vendedor) crearPedido.getVendedorBox().getSelectedItem());
+                
+                menuModel.setRowCount(0);
+                for(ItemMenu itemMenu : itemsMenu){
+                      menuModel.addRow(new Object[]{itemMenu.getId(),itemMenu.getDescripcion()});
+                }
+            }
+        });
+        
+        // Listener para la selección en tablaMenu
+        crearPedido.getTablaMenu().getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && crearPedido.getTablaMenu().getSelectedRow() != -1) {
+            crearPedido.getSeleccionarButton().setText("Seleccionar");
+            crearPedido.getSeleccionarButton().setBackground(Color.decode("#42B0FF"));
+        }
+        });
+
+        // Listener para la selección en tablaPedido
+        crearPedido.getTablaPedido().getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && crearPedido.getTablaPedido().getSelectedRow() != -1) {
+                crearPedido.getSeleccionarButton().setText("Eliminar");
+                crearPedido.getSeleccionarButton().setBackground(Color.decode("#CD281E"));
+            }
+        });
+        
+        crearPedido.getSeleccionarButton().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(crearPedido.getSeleccionarButton().getText() == "Seleccionar"){
+                    itemsMenuSeleccionados.add(obtenerItemMenu(crearPedido.getTablaMenu().getSelectedRow().getValue()));
+                }
+            }
+        });
+        
+    }
+    
+    private void buscarVendedor(Vendedor vendedor){
+       itemsMenu= itemMenuDao.buscarVendedor(vendedor);
+    }
+    
+    private void updateTablaPedido(ArrayList<ItemMenu> itemMenuSeleccionado){
+        
+    }
+    
+    private ItemMenu obtenerItemMenu(String descripcion){
+        return itemsMenu.stream().filter(e -> e.getDescripcion() == descripcion).findFirst().orElse(null);
+    }
+    private ItemMenu obtenerItemPedido(String descripcion){
+        return itemsMenu.stream().filter(e -> e.getDescripcion() == descripcion).findFirst().orElse(null);
     }
 }

@@ -24,6 +24,6 @@ public interface ItemMenuDao {
 
     public ItemMenu crearNuevoItemMenu(String tipo, Categoria cat, double peso, double graduacionAlcoholica, double volumenEnMl, String nombre, String descripcion, double precio, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano);
 
-    public ItemMenu save(ItemMenu itemMenu);
+    public ItemMenu addItemMenu(ItemMenu itemMenu);
 
 }

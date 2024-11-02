@@ -4,6 +4,11 @@
  */
 package isi.deso.g10.deliverymanagementsystem.view.crear;
 
+import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
+
 /**
  *
  * @author giuli
@@ -29,7 +34,7 @@ public class CrearPedidoDialog extends javax.swing.JDialog {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        vendedorBox = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaMenu = new javax.swing.JTable();
@@ -37,6 +42,7 @@ public class CrearPedidoDialog extends javax.swing.JDialog {
         tablaPedido = new javax.swing.JTable();
         seleccionarButton = new javax.swing.JButton();
         pedirButton = new javax.swing.JButton();
+        cancelarButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -46,14 +52,15 @@ public class CrearPedidoDialog extends javax.swing.JDialog {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        jComboBox1.setBackground(new java.awt.Color(255, 255, 255));
-        jComboBox1.setForeground(new java.awt.Color(0, 0, 0));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        vendedorBox.setBackground(new java.awt.Color(255, 255, 255));
+        vendedorBox.setForeground(new java.awt.Color(0, 0, 0));
+        vendedorBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                vendedorBoxActionPerformed(evt);
             }
         });
 
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Vendedor:");
 
         tablaMenu.setBackground(new java.awt.Color(255, 255, 255));
@@ -100,9 +107,17 @@ public class CrearPedidoDialog extends javax.swing.JDialog {
                 {null, null}
             },
             new String [] {
-                "Item Menu", "Cantidad"
+                "Id", "Item Menu"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(tablaPedido);
         if (tablaPedido.getColumnModel().getColumnCount() > 0) {
             tablaPedido.getColumnModel().getColumn(0).setResizable(false);
@@ -127,6 +142,15 @@ public class CrearPedidoDialog extends javax.swing.JDialog {
             }
         });
 
+        cancelarButton.setBackground(new java.awt.Color(255, 255, 255));
+        cancelarButton.setForeground(new java.awt.Color(66, 176, 255));
+        cancelarButton.setText("Cancelar");
+        cancelarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelarButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -138,15 +162,17 @@ public class CrearPedidoDialog extends javax.swing.JDialog {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                        .addComponent(vendedorBox, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(seleccionarButton)
                         .addGap(61, 61, 61))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(pedirButton, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28)))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(cancelarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pedirButton, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE))
+                        .addGap(29, 29, 29)))
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -157,7 +183,7 @@ public class CrearPedidoDialog extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(vendedorBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -166,14 +192,13 @@ public class CrearPedidoDialog extends javax.swing.JDialog {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(seleccionarButton)
-                                .addGap(156, 156, 156)))
+                                .addGap(106, 106, 106)
+                                .addComponent(pedirButton)
+                                .addGap(4, 4, 4)
+                                .addComponent(cancelarButton)))
                         .addGap(0, 6, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(pedirButton))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addContainerGap())))
         );
 
@@ -231,9 +256,9 @@ public class CrearPedidoDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void vendedorBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vendedorBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_vendedorBoxActionPerformed
 
     private void seleccionarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionarButtonActionPerformed
         // TODO add your handling code here:
@@ -242,6 +267,10 @@ public class CrearPedidoDialog extends javax.swing.JDialog {
     private void pedirButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pedirButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_pedirButtonActionPerformed
+
+    private void cancelarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cancelarButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -286,7 +315,7 @@ public class CrearPedidoDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton cancelarButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -298,5 +327,33 @@ public class CrearPedidoDialog extends javax.swing.JDialog {
     private javax.swing.JButton seleccionarButton;
     private javax.swing.JTable tablaMenu;
     private javax.swing.JTable tablaPedido;
+    private javax.swing.JComboBox<Vendedor> vendedorBox;
     // End of variables declaration//GEN-END:variables
-}
+
+    public JButton getCancelarButton() {
+        return cancelarButton;
+    }
+
+    public JButton getPedirButton() {
+        return pedirButton;
+    }
+
+    public JButton getSeleccionarButton() {
+        return seleccionarButton;
+    }
+
+    public JTable getTablaMenu() {
+        return tablaMenu;
+    }
+
+    public JTable getTablaPedido() {
+        return tablaPedido;
+    }
+
+    public JComboBox<Vendedor> getVendedorBox() {
+        return vendedorBox;
+    }
+    
+
+
+    }
