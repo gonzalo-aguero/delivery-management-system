@@ -6,12 +6,14 @@ package isi.deso.g10.deliverymanagementsystem.dao;
 
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ItemMenuDao;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedorDao;
+import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedorDao;
 import isi.deso.g10.deliverymanagementsystem.model.*;
 import isi.deso.g10.deliverymanagementsystem.exception.*;
 import isi.deso.g10.deliverymanagementsystem.model.Categoria.TipoItem;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -20,6 +22,7 @@ import java.util.List;
 public class ItemMenuMemory implements ItemMenuDao {
 
     private ArrayList<ItemMenu> items;
+    private static VendedorDao vendedorDao;
     private static ItemMenuMemory self;
     private ArrayList<Categoria> categorias;
     private final VendedorDao vendedorDao;
@@ -68,6 +71,8 @@ public class ItemMenuMemory implements ItemMenuDao {
         Bebida cerveza = new Bebida(5.70, 700, 6, "Cerveza DUFF", "Cerveza DUFF 700ml", 600.00, this.categorias.get(2), 500, true, true, true);
         cerveza.setVendedor(vendedores.get(1));
         items.add(cerveza);
+        
+        
     }
 
     @Override
@@ -138,6 +143,8 @@ public class ItemMenuMemory implements ItemMenuDao {
     }
 
     public ArrayList<ItemMenu> buscarVendedor(Vendedor vendedor) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    return items.stream()
+                .filter(e -> e.getVendedor().equals(vendedor))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

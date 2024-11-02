@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author giuli
  */
-public interface ClientesDao {
+public interface ClienteDao {
 
     public List<Cliente> obtenerClientes();
 
