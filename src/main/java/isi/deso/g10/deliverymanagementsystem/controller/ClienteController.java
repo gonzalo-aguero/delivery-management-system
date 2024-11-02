@@ -5,7 +5,6 @@
 package isi.deso.g10.deliverymanagementsystem.controller;
 
 import isi.deso.g10.deliverymanagementsystem.dao.ClientesMemory;
-import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ClientesDao;
 import isi.deso.g10.deliverymanagementsystem.model.Cliente;
 import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
 import isi.deso.g10.deliverymanagementsystem.utils.FieldAnalyzer;
@@ -24,6 +23,7 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ClienteDao;
 
 /**
  *
@@ -34,7 +34,7 @@ public class ClienteController implements Controller {
     private DefaultTableModel tableModel;
 
     //DAO
-    private final ClientesDao clientesDao;
+    private final ClienteDao clientesDao;
 
     private List<Cliente> clientes;
 

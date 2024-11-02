@@ -23,4 +23,9 @@ public class FormaTransferencia implements FormaPagoI {
         montoFinal = montoInicial + montoInicial * RECARGO_TRANSFERENCIA;
         return montoFinal;
     }
+
+    @Override
+    public String toString(){
+     return "Transferencia";
+    }
 }
