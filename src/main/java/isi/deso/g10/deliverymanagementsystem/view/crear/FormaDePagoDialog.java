@@ -34,6 +34,7 @@ public class FormaDePagoDialog extends javax.swing.JDialog {
 
         jPanel1 = new javax.swing.JPanel();
         pedirButton = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
         formaBox = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         subTotalField = new javax.swing.JTextField();
@@ -49,6 +50,9 @@ public class FormaDePagoDialog extends javax.swing.JDialog {
         pedirButton.setBackground(new java.awt.Color(66, 176, 255));
         pedirButton.setForeground(new java.awt.Color(255, 255, 255));
         pedirButton.setText("Pedir");
+
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("Método de Pago:");
 
         formaBox.setBackground(new java.awt.Color(255, 255, 255));
         formaBox.setForeground(new java.awt.Color(0, 0, 0));
@@ -83,7 +87,10 @@ public class FormaDePagoDialog extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(formaBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(formaBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(12, 12, 12)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -112,7 +119,9 @@ public class FormaDePagoDialog extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(formaBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(formaBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
                 .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -193,6 +202,7 @@ public class FormaDePagoDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton pedirButton;
     private javax.swing.JTextField subTotalField;
@@ -208,6 +218,14 @@ public class FormaDePagoDialog extends javax.swing.JDialog {
 
     public JTextField getSubTotalField() {
         return subTotalField;
+    }
+
+    public JTextField getCbuField() {
+        return cbuField;
+    }
+
+    public JTextField getCuitField() {
+        return cuitField;
     }
     
 
