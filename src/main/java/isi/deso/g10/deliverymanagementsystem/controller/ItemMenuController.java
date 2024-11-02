@@ -178,7 +178,7 @@ public class ItemMenuController implements Controller {
                Double.parseDouble(crearIM.getVolumenField().getText()) // volumenEnMl
                 );
               
-              nuevoItemMenu= itemMenuDao.addItemMenu(itemMenu);
+              nuevoItemMenu= itemMenuDao.agregarItemMenu(itemMenu);
               
               }catch(RuntimeException ex){
                   JOptionPane.showMessageDialog(crearIM,ex.getMessage());

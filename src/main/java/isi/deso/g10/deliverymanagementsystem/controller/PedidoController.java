@@ -118,7 +118,7 @@ public class PedidoController implements Controller {
     public void crear() {
         CrearPedidoDialog crearPedido = new CrearPedidoDialog(menu,true);
         
-        ArrayList<Vendedor> vendedores= vendedorDao.getVendedores();
+        ArrayList<Vendedor> vendedores= (ArrayList) vendedorDao.obtenerVendedores();
         
         ArrayList<ItemMenu> itemMenusSeleccionados = new ArrayList();
         

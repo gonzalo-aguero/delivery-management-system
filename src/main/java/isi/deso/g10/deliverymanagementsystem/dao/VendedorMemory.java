@@ -14,26 +14,26 @@ import java.util.List;
  *
  * @author giuli
  */
-public class VendedorMemory implements VendedorDao{
+public class VendedorMemory implements VendedorDao {
 
     private static VendedorMemory self;
     private ArrayList<Vendedor> vendedores;
-    
-    private VendedorMemory(){
+
+    private VendedorMemory() {
+        this.vendedores = new ArrayList<>();
         self = this;
-        }
-    
-    public static VendedorMemory getInstance(){
-        if(self==null){
-            self= new VendedorMemory();
+    }
+
+    public static VendedorMemory getInstance() {
+        if (self == null) {
+            self = new VendedorMemory();
         }
         return self;
     }
-    
-    
+
     public ArrayList<Vendedor> generarVendedores() {
         ArrayList<Vendedor> vendedores = new ArrayList();
-        
+
         Coordenada coordenada1 = new Coordenada(10, 20);
         Coordenada coordenada2 = new Coordenada(15, 25);
         Coordenada coordenada3 = new Coordenada(20, 30);
@@ -51,35 +51,53 @@ public class VendedorMemory implements VendedorDao{
         vendedores.add(vendedor3);
         vendedores.add(vendedor4);
         vendedores.add(vendedor5);
-        
+
         this.vendedores = vendedores;
-        
+
         return vendedores;
     }
 
     @Override
     public List<Vendedor> obtenerVendedores() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return vendedores;
     }
 
     @Override
     public Vendedor agregarVendedor(Vendedor vendedor) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        vendedores.add(vendedor); // Agrega el vendedor a la lista
+        return vendedor; // Retorna el vendedor agregado
     }
 
     @Override
     public Vendedor actualizarVendedor(Vendedor vendedor) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        for (Vendedor v : vendedores) {
+            if (v.getId() == vendedor.getId()) { // Compara IDs
+                int index = vendedores.indexOf(v); // Obtiene el índice del vendedor
+                vendedores.set(index, vendedor); // Actualiza el vendedor en la lista
+                return vendedor; // Retorna el vendedor actualizado
+            }
+        }
+        return null; // Retorna null si no se encontró el vendedor para actualizar
     }
 
     @Override
     public boolean eliminarVendedor(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        for (Vendedor v : vendedores) {
+            if (v.getId() == id) { // Compara IDs
+                vendedores.remove(v); // Elimina el vendedor encontrado
+                return true; // Retorna true si el vendedor fue eliminado
+            }
+        }
+        return false; // Retorna false si no se encontró el vendedor
     }
 
     @Override
     public Vendedor buscarVendedorPorId(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        for (Vendedor v : vendedores) {
+            if (v.getId() == id) { // Compara IDs
+                return v; // Retorna el vendedor encontrado
+            }
+        }
+        return null; // Retorna null si no se encuentra el vendedor
     }
-    
 }

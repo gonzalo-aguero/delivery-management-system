@@ -9,7 +9,6 @@ import isi.deso.g10.deliverymanagementsystem.model.*;
 import isi.deso.g10.deliverymanagementsystem.exception.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  *
@@ -19,21 +18,20 @@ public class ItemMenuMemory implements ItemMenuDao {
 
     private ArrayList<ItemMenu> items;
     private static ItemMenuMemory self;
-    
-    
+
     private ItemMenuMemory() {
         this.items = new ArrayList<>();
         this.generarItems();
         self = this;
     }
-        
-    public static ItemMenuMemory getInstance(){
-        if(self == null){
+
+    public static ItemMenuMemory getInstance() {
+        if (self == null) {
             self = new ItemMenuMemory();
         }
         return self;
     }
-    
+
     private void generarItems() {
         Categoria minutas = new Categoria(1, "minuta", Categoria.TipoItem.COMIDA);
         Categoria bebida = new Categoria(1, "bebida", Categoria.TipoItem.BEBIDA);
@@ -90,7 +88,11 @@ public class ItemMenuMemory implements ItemMenuDao {
     }
 
     @Override
-    public boolean actualizarItemMenu(String descripcion, double precio, int id) {
+    public boolean actualizarItemMenu(ItemMenu itemMenu) {
+        String descripcion = itemMenu.getDescripcion();
+        double precio = itemMenu.getPrecio();
+        int id = itemMenu.getId();
+        
         boolean modificado = false;
         for (ItemMenu item : items) {
             if (item.getId() == id) {
@@ -102,28 +104,9 @@ public class ItemMenuMemory implements ItemMenuDao {
         return modificado;
     }
 
-    @Override
-    public ItemMenu crearNuevoItemMenu(String tipo, Categoria cat, double peso, double graduacionAlcoholica, double volumenEnMl, String nombre, String descripcion, double precio, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano) {
-        if (tipo.equals("Bebida")) {
-            Random random = new Random(System.currentTimeMillis());
-            int intRan = random.nextInt();
-            if (intRan < 0) {
-                intRan = intRan * (-1);
-            }
-            return new Bebida(graduacionAlcoholica, volumenEnMl, intRan, nombre, descripcion, precio, cat, calorias, aptoCeliaco, aptoVegetariano, aptoVegano);
-        } else {
-            Random random = new Random(System.currentTimeMillis());
-            int intRan = random.nextInt();
-            if (intRan < 0) {
-                intRan = intRan * (-1);
-            }
-            return new Plato(peso, intRan, nombre, descripcion, precio, cat, calorias, aptoCeliaco, aptoVegetariano, aptoVegano);
-        }
-    }
-
-    @Override
-    public ItemMenu addItemMenu(ItemMenu itemMenu) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public ItemMenu agregarItemMenu(ItemMenu itemMenu) {
+        items.add(itemMenu);
+        return itemMenu;
     }
 
     public ArrayList<ItemMenu> buscarVendedor(Vendedor vendedor) {

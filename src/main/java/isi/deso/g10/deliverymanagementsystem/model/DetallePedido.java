@@ -13,6 +13,23 @@ import java.util.ArrayList;
  */
 public class DetallePedido {
 
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Pedido getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
+    }
     private ArrayList<ItemMenu> items = new ArrayList<>();
     private Pedido pedido;
 

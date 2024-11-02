@@ -32,7 +32,11 @@ public class ItemsPedidoMemoryTest {
     private ArrayList<ItemMenu> items;
     private Pedido pedido;
 
+<<<<<<< HEAD
     public ItemPedidoMemory itemsMemory = new ItemPedidoMemory();
+=======
+    public DetallePedidoMemory itemsMemory = new DetallePedidoMemory();
+>>>>>>> 6fbd0e8 (Daos y actualizacion itemsPedido a DetallesPedido)
 
     @BeforeEach
     public void setUp() {
@@ -115,7 +119,7 @@ public class ItemsPedidoMemoryTest {
         // Inicializar ItemsPedido con los ítems y el pedido
         pedido.setDetallePedido(new DetallePedido(items));
 
-        itemsMemory.agregarPedido(pedido);
+        itemsMemory.agregarDetallePedido(pedido);
     }
 
     @Test
