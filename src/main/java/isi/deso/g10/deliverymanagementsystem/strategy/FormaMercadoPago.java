@@ -23,4 +23,9 @@ public class FormaMercadoPago implements FormaPagoI{
         montoFinal = montoInicial + montoInicial * RECARGO_MP;
         return montoFinal;
     }
+    
+    @Override
+    public String toString(){
+     return "Mercado Pago";
+    }
 }

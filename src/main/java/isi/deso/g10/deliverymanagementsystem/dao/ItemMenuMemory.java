@@ -5,10 +5,12 @@
 package isi.deso.g10.deliverymanagementsystem.dao;
 
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ItemMenuDao;
+import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedorDao;
 import isi.deso.g10.deliverymanagementsystem.model.*;
 import isi.deso.g10.deliverymanagementsystem.exception.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -17,10 +19,13 @@ import java.util.List;
 public class ItemMenuMemory implements ItemMenuDao {
 
     private ArrayList<ItemMenu> items;
+    private static VendedorDao vendedorDao;
     private static ItemMenuMemory self;
 
     private ItemMenuMemory() {
         this.items = new ArrayList<>();
+        this.vendedorDao = VendedorMemory.getInstance();
+        
         this.generarItems();
         self = this;
     }
@@ -33,22 +38,30 @@ public class ItemMenuMemory implements ItemMenuDao {
     }
 
     private void generarItems() {
+        ArrayList<Vendedor> vendedores = (ArrayList) vendedorDao.obtenerVendedores();
         Categoria minutas = new Categoria(1, "minuta", Categoria.TipoItem.COMIDA);
         Categoria bebida = new Categoria(1, "bebida", Categoria.TipoItem.BEBIDA);
-        Plato milanesaPollo = new Plato(200, 1, "Milanesa de Pollo", "Milanesa de Pollo", 4500, minutas, 400, false, false, false);
+        
+        Plato milanesaPollo = new Plato(1, "Milanesa de Pollo", "Milanesa de Pollo", 4500, minutas, 400, false, false, false, vendedores.get(0), 200);
         items.add(milanesaPollo);
-        Plato pizzaMuzza = new Plato(350, 2, "Pizza de Muzza", "Pizza con queso mozzarella", 3000, minutas, 800, false, false, false);
+
+        Plato pizzaMuzza = new Plato(2, "Pizza de Muzza", "Pizza con queso mozzarella", 3000, minutas, 800, false, false, false, vendedores.get(1), 350);
         items.add(pizzaMuzza);
-        Plato papasFritas = new Plato(250, 3, "Papas Fritas", "Papas fritas crocantes", 1500, minutas, 600, false, true, true);
+
+        Plato papasFritas = new Plato(3, "Papas Fritas", "Papas fritas crocantes", 1500, minutas, 600, false, true, true, vendedores.get(2), 250);
         items.add(papasFritas);
-        Bebida cocaCola = new Bebida(0, 500, 4, "Coca Cola", "Gaseosa Coca Cola 500ml", 500, bebida, 200, true, true, true);
+
+        // Crear Bebidas con vendedores asignados mediante .get()
+        Bebida cocaCola = new Bebida(4, "Coca Cola", "Gaseosa Coca Cola 500ml", 500, bebida, 200, true, true, true, vendedores.get(3), 0, 500);
         items.add(cocaCola);
-        //double graduacionAlcoholica, double volumenEnMl, int id, String nombre, String descripcion, double precio, Categoria categoria, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano
-        //double peso, int id, String nombre, String descripcion, double precio, Categoria categoria, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano
-        Bebida agua = new Bebida(0, 500, 5, "Agua mineral", "Agua sin gas 500ml", 300.00, bebida, 100, true, true, true);
+
+        Bebida agua = new Bebida(5, "Agua mineral", "Agua sin gas 500ml", 300, bebida, 100, true, true, true, vendedores.get(4), 0, 500);
         items.add(agua);
-        Bebida cerveza = new Bebida(5.70, 700, 6, "Cerveza DUFF", "Cerveza DUFF 700ml", 600.00, bebida, 500, true, true, true);
+
+        Bebida cerveza = new Bebida(6, "Cerveza DUFF", "Cerveza DUFF 700ml", 600, bebida, 500, true, true, true, vendedores.get(0), 5.70, 700);
         items.add(cerveza);
+        
+        
     }
 
     @Override
@@ -110,6 +123,8 @@ public class ItemMenuMemory implements ItemMenuDao {
     }
 
     public ArrayList<ItemMenu> buscarVendedor(Vendedor vendedor) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    return items.stream()
+                .filter(e -> e.getVendedor().equals(vendedor))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

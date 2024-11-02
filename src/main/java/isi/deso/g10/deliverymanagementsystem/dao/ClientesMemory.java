@@ -4,32 +4,33 @@
  */
 package isi.deso.g10.deliverymanagementsystem.dao;
 
-import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ClientesDao;
 import isi.deso.g10.deliverymanagementsystem.model.Cliente;
 import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
 import java.util.ArrayList;
 import java.util.List;
+import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ClienteDao;
 
 /**
  *
  * @author giuli
  */
-public class ClientesMemory implements ClientesDao {
+public class ClientesMemory implements ClienteDao {
 
     private static ClientesMemory self;
     private ArrayList<Cliente> clientes;
     
     public ClientesMemory(){
         generarClientes();
-       self=this;
+        self=this;
     };
     
     public static ClientesMemory getInstance(){
-        if(self==null){
-            self = new ClientesMemory();
-        }
-        return self;
+    if(self == null){
+        
+        self = new ClientesMemory();
     }
+    return self;
+}
     
     private void generarClientes() {
         clientes = new ArrayList<>(); 
@@ -60,8 +61,7 @@ public class ClientesMemory implements ClientesDao {
 
     @Override
     public Cliente actualizarCliente(Cliente cliente) {
-          //TODO 
-          Cliente cli = this.buscarClientePorId(cliente.getId());;
+          Cliente cli = this.buscarClientePorId(cliente.getId());
           cli.setNombre(cliente.getNombre());
           cli.setCuit(cliente.getCuit());
           cli.setEmail(cliente.getEmail());

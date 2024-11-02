@@ -4,6 +4,9 @@
  */
 package isi.deso.g10.deliverymanagementsystem.view.crear;
 
+import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
@@ -12,6 +15,8 @@ import javax.swing.JTextField;
  * @author giuli
  */
 public class CrearVendedorDialog extends javax.swing.JDialog {
+
+    private boolean editorMode = false;
 
     /**
      * Creates new form CrearVendedorDialog
@@ -32,7 +37,7 @@ public class CrearVendedorDialog extends javax.swing.JDialog {
 
         jPanel4 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        tituloFrame = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         latitudField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -54,10 +59,10 @@ public class CrearVendedorDialog extends javax.swing.JDialog {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Crear Vendedor");
+        tituloFrame.setBackground(new java.awt.Color(255, 255, 255));
+        tituloFrame.setForeground(new java.awt.Color(0, 0, 0));
+        tituloFrame.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        tituloFrame.setText("Crear Vendedor");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -65,14 +70,14 @@ public class CrearVendedorDialog extends javax.swing.JDialog {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(113, 113, 113)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(tituloFrame, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(112, 112, 112))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tituloFrame, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35))
         );
 
@@ -308,7 +313,6 @@ public class CrearVendedorDialog extends javax.swing.JDialog {
     private javax.swing.JButton cancelarButton;
     private javax.swing.JButton crearButton;
     private javax.swing.JTextField direccionField;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -321,6 +325,7 @@ public class CrearVendedorDialog extends javax.swing.JDialog {
     private javax.swing.JTextField latitudField;
     private javax.swing.JTextField longitudField;
     private javax.swing.JTextField nombreField;
+    private javax.swing.JLabel tituloFrame;
     // End of variables declaration//GEN-END:variables
 
     public JButton getCancelarButton() {
@@ -347,5 +352,13 @@ public class CrearVendedorDialog extends javax.swing.JDialog {
         return nombreField;
     }
     
-
+    public void setEditorMode(Vendedor vendedor){
+        editorMode = true;
+        crearButton.setText("Guardar");
+        tituloFrame.setText("Editar Vendedor");
+        nombreField.setText(vendedor.getNombre());
+        direccionField.setText(vendedor.getDireccion());
+        longitudField.setText(String.valueOf(vendedor.getCoordenadas().getLongitud()));
+        latitudField.setText(String.valueOf(vendedor.getCoordenadas().getLatitud()));
+    }
 }

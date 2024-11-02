@@ -7,7 +7,6 @@ package isi.deso.g10.deliverymanagementsystem.controller;
 import isi.deso.g10.deliverymanagementsystem.dao.ItemMenuMemory;
 import isi.deso.g10.deliverymanagementsystem.dao.PedidoMemory;
 import isi.deso.g10.deliverymanagementsystem.dao.VendedorMemory;
-import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ClientesDao;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.PedidosDao;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedorDao;
 import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
@@ -27,6 +26,9 @@ import java.util.function.Consumer;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ClienteDao;
+import isi.deso.g10.deliverymanagementsystem.strategy.FormaMercadoPago;
+import isi.deso.g10.deliverymanagementsystem.view.crear.FormaDePagoDialog;
 
 /**
  *
@@ -117,15 +119,18 @@ public class PedidoController implements Controller {
     @Override
     public void crear() {
         CrearPedidoDialog crearPedido = new CrearPedidoDialog(menu,true);
+        double totalFinal;
         
         ArrayList<Vendedor> vendedores= (ArrayList) vendedorDao.obtenerVendedores();
+       
         
-        ArrayList<ItemMenu> itemMenusSeleccionados = new ArrayList();
+        ArrayList<ItemMenu> itemMenuSeleccionados = new ArrayList();
         
         DefaultTableModel menuModel = (DefaultTableModel) crearPedido.getTablaMenu().getModel();
         DefaultTableModel pedidoModel = (DefaultTableModel) crearPedido.getTablaPedido().getModel();
         
         for(Vendedor vendedor: vendedores){
+            
             crearPedido.getVendedorBox().addItem(vendedor);
         }
         
@@ -136,9 +141,13 @@ public class PedidoController implements Controller {
                 buscarVendedor((Vendedor) crearPedido.getVendedorBox().getSelectedItem());
                 
                 menuModel.setRowCount(0);
+                
                 for(ItemMenu itemMenu : itemsMenu){
                       menuModel.addRow(new Object[]{itemMenu.getId(),itemMenu.getDescripcion()});
                 }
+                
+                itemMenuSeleccionados.clear();
+                updateTablePedido(pedidoModel,itemMenuSeleccionados);
             }
         });
         
@@ -161,26 +170,76 @@ public class PedidoController implements Controller {
         crearPedido.getSeleccionarButton().addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(crearPedido.getSeleccionarButton().getText() == "Seleccionar"){
-                    //itemsMenuSeleccionados.add(obtenerItemMenu(crearPedido.getTablaMenu().getSelectedRow().getValue()));
+                int selectedRow = crearPedido.getTablaMenu().getSelectedRow();
+                if(selectedRow == -1){ 
+                    JOptionPane.showMessageDialog(crearPedido, "Seleccione una fila");
+                    throw new RuntimeException("Seleccione una fila");
                 }
+                if(crearPedido.getSeleccionarButton().getText() == "Seleccionar"){
+                    String value = String.valueOf(crearPedido.getTablaMenu().getValueAt(selectedRow, 0)); // Usa el índice de columna adecuado
+                    itemMenuSeleccionados.add(obtenerItemMenu(value));
+                }                           
+                else if(crearPedido.getSeleccionarButton().getText() == "Eliminar"){
+                    String value = String.valueOf(crearPedido.getTablaMenu().getValueAt(selectedRow, 0));
+                    itemMenuSeleccionados.remove(obtenerItemMenu(value));
+                 }
+                updateTablePedido((DefaultTableModel)crearPedido.getTablaPedido().getModel(),itemMenuSeleccionados);
             }
         });
         
+        crearPedido.getCancelarButton().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               crearPedido.dispose();
+            }       
+        });        
+        
+        crearPedido.getPedirButton().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                formaPago();
+            }
+        });
+        
+        crearPedido.setVisible(true);
     }
     
     private void buscarVendedor(Vendedor vendedor){
        itemsMenu= itemMenuDao.buscarVendedor(vendedor);
     }
     
-    private void updateTablaPedido(ArrayList<ItemMenu> itemMenuSeleccionado){
+    private void formaPago(){
+        FormaDePagoDialog formaPago= new FormaDePagoDialog(null,true);
         
+        formaPago.getPedirButton().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               if(formaPago.getFormaBox().getSelectedItem().equals("Mercado Pago")){
+               
+               }
+               else if(formaPago.getFormaBox().getSelectedItem().equals("Transferencia")){
+               
+               } else{
+                   JOptionPane.showMessageDialog(null,"Elija una forma de pago");
+                   throw new RuntimeException("Elija una forma de pago");
+               }
+              
+            }
+        });
     }
     
-    private ItemMenu obtenerItemMenu(String descripcion){
-        return itemsMenu.stream().filter(e -> e.getDescripcion() == descripcion).findFirst().orElse(null);
+    
+    private ItemMenu obtenerItemMenu(String id){
+        return itemsMenu.stream().filter(e -> e.getId() == Integer.parseInt(id)).findFirst().orElse(null);
     }
-    private ItemMenu obtenerItemPedido(String descripcion){
-        return itemsMenu.stream().filter(e -> e.getDescripcion() == descripcion).findFirst().orElse(null);
+    private ItemMenu obtenerItemPedido(String id){
+        return itemsMenu.stream().filter(e -> e.getId() == Integer.parseInt(id)).findFirst().orElse(null);
+    }
+    
+    private void updateTablePedido(DefaultTableModel tablaPedido, ArrayList<ItemMenu> itemMenuSeleccionados){
+        tablaPedido.setRowCount(0);
+        for(ItemMenu itemMenu: itemMenuSeleccionados){
+                  tablaPedido.addRow(new Object[]{itemMenu.getDescripcion()});
+        }
     }
 }
