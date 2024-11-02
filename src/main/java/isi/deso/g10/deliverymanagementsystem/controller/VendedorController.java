@@ -33,12 +33,12 @@ public class VendedorController implements Controller {
 
     PantallaPrincipal menu;
     DefaultTableModel tableModel;
-    
+
     //DAOS
     VendedorDao vendedoresDao;
-    
+
     List<Vendedor> vendedores;
-    
+
     public VendedorController(PantallaPrincipal menu) {
         this.menu = menu;
         vendedoresDao = VendedorMemory.getInstance();
@@ -49,7 +49,6 @@ public class VendedorController implements Controller {
         //Aca debería haber listeners del frame de creacion, edición y eliminación, creo que la busqueda se podría hacer en el MenuController tranquilamente
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-   
 
     @Override
     public void setTable() {
@@ -59,7 +58,7 @@ public class VendedorController implements Controller {
         modelo.addColumn("Dirección");
         modelo.addColumn("Coordenadas");
         modelo.addColumn("Acciones");
-      
+
         JTable table = menu.getTabla();
         table.setModel(modelo);
         this.tableModel = modelo;
@@ -78,11 +77,11 @@ public class VendedorController implements Controller {
         ButtonsPanelEditor buttonsPanelEditor = new ButtonsPanelEditor(buttonsPanel, editAction, deleteAction);
 
         table.getColumn("Acciones").setCellEditor(buttonsPanelEditor);
-        
+
         vendedores = vendedoresDao.obtenerVendedores();
-        
+
         //Llena la tabla de vendedores
-        for(Vendedor vendedor: vendedores){
+        for (Vendedor vendedor : vendedores) {
             modelo.addRow(new Object[]{
                 vendedor.getId(),
                 vendedor.getNombre(),
@@ -91,17 +90,27 @@ public class VendedorController implements Controller {
                 new ButtonsPanel()
             });
         }
-        
+
     }
-    
+
     private void editarButtonHandler(int row) {
-        Object id = this.tableModel.getValueAt(row, 0);
-        JOptionPane.showMessageDialog(this.menu.getParent(), "Editar en fila: " + row + " ID: " + id.toString());
+        //Editar vendedor
+        int id = (int) this.tableModel.getValueAt(row, 0);
+        Vendedor vendedor = vendedoresDao.buscarVendedorPorId(id);
+        editar(vendedor);
+        
+        //Actualizar tabla
+        setTable();
     }
 
     private void eliminarButtonHandler(int row) {
-        Object id = this.tableModel.getValueAt(row, 0);
-        JOptionPane.showMessageDialog(this.menu.getParent(), "Eliminar en fila: " + row + " ID: " + id.toString());
+        //Eliminar vendedor
+        int id = (int) this.tableModel.getValueAt(row, 0);
+        vendedoresDao.eliminarVendedor(id);
+        
+        //Actualizar tabla
+        setTable();
+        JOptionPane.showMessageDialog(this.menu.getParent(), "Vendedor con ID " + id + " eliminado.");
     }
 
     @Override
@@ -110,41 +119,90 @@ public class VendedorController implements Controller {
         crearVendedor.setLocationRelativeTo(null);
 
         crearVendedor.getCrearButton().addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            Vendedor vendedorCreado;
-            try {
-                FieldAnalyzer.todosLosCamposLlenos(crearVendedor);
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Vendedor vendedorCreado;
+                try {
+                    FieldAnalyzer.todosLosCamposLlenos(crearVendedor);
 
-                Coordenada coordenadas = new Coordenada(
-                        Double.parseDouble(crearVendedor.getLatitudField().getText()),
-                        Double.parseDouble(crearVendedor.getLongitudField().getText())
-                );
+                    Coordenada coordenadas = new Coordenada(
+                            Double.parseDouble(crearVendedor.getLatitudField().getText()),
+                            Double.parseDouble(crearVendedor.getLongitudField().getText())
+                    );
 
-                Vendedor vendedor = new Vendedor(
-                        -1,
-                        crearVendedor.getNombreField().getText(),
-                        crearVendedor.getDireccionField().getText(),
-                        coordenadas
-                );
+                    Vendedor vendedor = new Vendedor(
+                            -1,
+                            crearVendedor.getNombreField().getText(),
+                            crearVendedor.getDireccionField().getText(),
+                            coordenadas
+                    );
 
-                vendedorCreado = vendedoresDao.agregarVendedor(vendedor);
-                JOptionPane.showMessageDialog(crearVendedor, "Vendedor creado con id: " + vendedorCreado.getId(), "Creación exitosa", JOptionPane.INFORMATION_MESSAGE);
-                crearVendedor.dispose();
-            } catch (RuntimeException ex) {
-                JOptionPane.showMessageDialog(crearVendedor, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    vendedorCreado = vendedoresDao.agregarVendedor(vendedor);
+                    JOptionPane.showMessageDialog(crearVendedor, "Vendedor creado con id: " + vendedorCreado.getId(), "Creación exitosa", JOptionPane.INFORMATION_MESSAGE);
+                    crearVendedor.dispose();
+                } catch (RuntimeException ex) {
+                    JOptionPane.showMessageDialog(crearVendedor, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                
+                //Actualizar tabla
+                setTable();
             }
-        }
-    });
+        });
 
-    crearVendedor.getCancelarButton().addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            crearVendedor.dispose();
-        }
-    });
+        crearVendedor.getCancelarButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                crearVendedor.dispose();
+            }
+        });
 
-    crearVendedor.setVisible(true);
-}
+        crearVendedor.setVisible(true);
+    }
     
+    public void editar(Vendedor vendedor) {
+        CrearVendedorDialog editarVendedor = new CrearVendedorDialog(menu, true);
+        editarVendedor.setLocationRelativeTo(null);
+        editarVendedor.setEditorMode(vendedor);
+
+        editarVendedor.getCrearButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Vendedor vendedorEditado;
+                try {
+                    FieldAnalyzer.todosLosCamposLlenos(editarVendedor);
+
+                    Coordenada coordenadas = new Coordenada(
+                            Double.parseDouble(editarVendedor.getLatitudField().getText()),
+                            Double.parseDouble(editarVendedor.getLongitudField().getText())
+                    );
+                    
+                    vendedorEditado = new Vendedor(
+                            vendedor.getId(),
+                            editarVendedor.getNombreField().getText(),
+                            editarVendedor.getDireccionField().getText(),
+                            coordenadas
+                    );
+
+                    vendedoresDao.actualizarVendedor(vendedorEditado);
+                    JOptionPane.showMessageDialog(editarVendedor, "Vendedor con ID " + vendedorEditado.getId() + " editado correctamente.", "Edición exitosa", JOptionPane.INFORMATION_MESSAGE);
+                    editarVendedor.dispose();
+                } catch (RuntimeException ex) {
+                    JOptionPane.showMessageDialog(editarVendedor, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                
+                //Actualizar tabla
+                setTable();
+            }
+        });
+
+        editarVendedor.getCancelarButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editarVendedor.dispose();
+            }
+        });
+
+        editarVendedor.setVisible(true);
+    }
+
 }

@@ -18,9 +18,11 @@ public class VendedorMemory implements VendedorDao {
 
     private static VendedorMemory self;
     private ArrayList<Vendedor> vendedores;
+    private int newId = 1; //determina la id del proximo vendedor que se agregue
 
     private VendedorMemory() {
-        this.vendedores = generarVendedores();
+        this.vendedores = new ArrayList<>();
+        generarVendedores();
         self = this;
     }
 
@@ -52,6 +54,7 @@ public class VendedorMemory implements VendedorDao {
         vendedores.add(vendedor4);
         vendedores.add(vendedor5);
 
+        this.newId = 6;
         this.vendedores = vendedores;
 
         return vendedores;
@@ -64,6 +67,8 @@ public class VendedorMemory implements VendedorDao {
 
     @Override
     public Vendedor agregarVendedor(Vendedor vendedor) {
+        vendedor.setId(this.newId);
+        this.newId++;
         vendedores.add(vendedor); // Agrega el vendedor a la lista
         return vendedor; // Retorna el vendedor agregado
     }
