@@ -41,12 +41,12 @@ public class PedidoMemory implements PedidosDao {
     }
 
     @Override
-    public List<Pedido> obtenerPedidos() {
+    public List<Pedido> obtenerTodos() {
         return pedidos;
     }
 
     @Override
-    public Pedido agregarPedido(Pedido pedido) {
+    public Pedido crear(Pedido pedido) {
         pedido.setId(newId);
         newId++;
         pedidos.add(pedido); // Agrega el pedido a la lista
@@ -54,7 +54,7 @@ public class PedidoMemory implements PedidosDao {
     }
 
     @Override
-    public Pedido actualizarPedido(Pedido pedido) {
+    public Pedido actualizar(Pedido pedido) {
         for (Pedido p : pedidos) {
             if (p.getId() == pedido.getId()) {
                 int index = pedidos.indexOf(p); // Obtiene el índice del pedido encontrado
@@ -66,7 +66,7 @@ public class PedidoMemory implements PedidosDao {
     }
 
     @Override
-    public boolean eliminarPedido(int id) {
+    public boolean eliminar(int id) {
         for (Pedido p : pedidos) {
             if (p.getId() == id) {
                 pedidos.remove(p); // Elimina el pedido encontrado
@@ -77,7 +77,7 @@ public class PedidoMemory implements PedidosDao {
     }
 
     @Override
-    public Pedido buscarPedidoPorId(int id) {
+    public Pedido obtenerPorId(int id) {
         for (Pedido p : pedidos) {
             if (p.getId() == id) {
                 return p; // Retorna el pedido encontrado

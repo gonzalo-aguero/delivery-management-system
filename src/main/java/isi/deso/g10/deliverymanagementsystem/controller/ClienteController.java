@@ -126,7 +126,7 @@ public class ClienteController implements Controller {
 
         table.getColumn("Acciones").setCellEditor(buttonsPanelEditor);
 
-        clientes = clientesDao.obtenerClientes();
+        clientes = clientesDao.obtenerTodos();
 
         //Llena la tabla de vendedores
         for (Cliente cliente : clientes) {
@@ -159,7 +159,7 @@ public class ClienteController implements Controller {
         //obtengo el cliente
         Object id = this.tableModel.getValueAt(row, 0);
         Object coordenadas = this.tableModel.getValueAt(row, 5);
-        Cliente cliente  = clientesDao.buscarClientePorId((int)id);
+        Cliente cliente  = clientesDao.obtenerPorId((int)id);
         //le agrego los datos existentes a los campos
         crearCliente.getNombreField().setText(cliente.getNombre());
         crearCliente.getEmailField().setText(cliente.getEmail());
@@ -189,7 +189,7 @@ public class ClienteController implements Controller {
                             crearCliente.getDireccionField().getText(),
                             coordenadas
                     );
-                   clientesDao.actualizarCliente(cliente);
+                   clientesDao.actualizar(cliente);
                    setTable();
                 }catch(RuntimeException ex){
                     JOptionPane.showMessageDialog(crearCliente,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
@@ -210,7 +210,7 @@ public class ClienteController implements Controller {
 
     private void eliminarButtonHandler(int row) {
         int id = (int) this.tableModel.getValueAt(row, 0);
-        clientesDao.eliminarCliente(id);
+        clientesDao.eliminar(id);
         JOptionPane.showMessageDialog(this.menu.getParent(), "Eliminar en fila: " + (row+1)+ " ID: " + id);
         setTable();
     }
@@ -239,7 +239,7 @@ public class ClienteController implements Controller {
                             coordenadas
                     );
                     
-                   clienteCreado = clientesDao.agregarCliente(cliente);
+                   clienteCreado = clientesDao.crear(cliente);
                    setTable();
                 }catch(RuntimeException ex){
                     JOptionPane.showMessageDialog(crearCliente,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);

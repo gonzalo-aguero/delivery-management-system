@@ -6,7 +6,6 @@ package isi.deso.g10.deliverymanagementsystem.dao.interfaces;
 
 import isi.deso.g10.deliverymanagementsystem.exception.ItemNoEncontradoException;
 import isi.deso.g10.deliverymanagementsystem.model.DetallePedido;
-import isi.deso.g10.deliverymanagementsystem.model.Pedido;
 
 import java.util.List;
 
@@ -17,11 +16,13 @@ import java.util.List;
  *
  * @author giuli
  */
-public interface DetallePedidoDao {
-
+public interface DetallePedidoDao extends GenericDao<DetallePedido>{
+    
     public enum TipoOrdenamiento {
         ASC, DESC
     }
+    
+    // Métodos específicos de la entidad
 
     List<DetallePedido> buscarPorIdVendedor(int idVendedor) throws ItemNoEncontradoException;
 
@@ -36,15 +37,5 @@ public interface DetallePedidoDao {
     List<DetallePedido> ordenarPorNombreCliente(TipoOrdenamiento ordenamiento) throws ItemNoEncontradoException;
 
     List<DetallePedido> ordenarPorMontoTotal(TipoOrdenamiento ordenamiento) throws ItemNoEncontradoException;
-
-    public List<DetallePedido> obtenerDetallesPedidos();
-
-    public DetallePedido agregarDetallePedido(DetallePedido detallePedido);
-
-    public DetallePedido actualizarDetallePedido(DetallePedido detallePedido);
-
-    public boolean eliminarDetallePedido(int id);
-
-    public DetallePedido buscarDetallePedidoPorId(int id);
 
 }

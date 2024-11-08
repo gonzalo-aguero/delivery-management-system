@@ -78,12 +78,12 @@ public class VendedorMemory implements VendedorDao {
     }
 
     @Override
-    public List<Vendedor> obtenerVendedores() {
+    public List<Vendedor> obtenerTodos() {
         return vendedores;
     }
 
     @Override
-    public Vendedor agregarVendedor(Vendedor vendedor) {
+    public Vendedor crear(Vendedor vendedor) {
         vendedor.setId(this.newId);
         this.newId++;
         vendedores.add(vendedor); // Agrega el vendedor a la lista
@@ -91,7 +91,7 @@ public class VendedorMemory implements VendedorDao {
     }
 
     @Override
-    public Vendedor actualizarVendedor(Vendedor vendedor) {
+    public Vendedor actualizar(Vendedor vendedor) {
         for (Vendedor v : vendedores) {
             if (v.getId() == vendedor.getId()) { // Compara IDs
                 int index = vendedores.indexOf(v); // Obtiene el índice del vendedor
@@ -103,7 +103,7 @@ public class VendedorMemory implements VendedorDao {
     }
 
     @Override
-    public boolean eliminarVendedor(int id) {
+    public boolean eliminar(int id) {
         for (Vendedor v : vendedores) {
             if (v.getId() == id) { // Compara IDs
                 vendedores.remove(v); // Elimina el vendedor encontrado
@@ -114,7 +114,7 @@ public class VendedorMemory implements VendedorDao {
     }
 
     @Override
-    public Vendedor buscarVendedorPorId(int id) {
+    public Vendedor obtenerPorId(int id) {
         for (Vendedor v : vendedores) {
             if (v.getId() == id) { // Compara IDs
                 return v; // Retorna el vendedor encontrado

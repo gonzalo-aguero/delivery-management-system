@@ -11,16 +11,8 @@ import java.util.List;
  *
  * @author giuli
  */
-public interface PedidosDao {
+public interface PedidosDao extends GenericDao<Pedido>{
     
-    public List<Pedido> obtenerPedidos();
-
-    public Pedido agregarPedido(Pedido pedido);
-
-    public Pedido actualizarPedido(Pedido pedido);
-
-    public boolean eliminarPedido(int id);
-
-    public Pedido buscarPedidoPorId(int id);
+    // Métodos específicos de la entidad    
     
 }

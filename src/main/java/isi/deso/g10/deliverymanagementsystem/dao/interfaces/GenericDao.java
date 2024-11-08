@@ -4,17 +4,16 @@
  */
 package isi.deso.g10.deliverymanagementsystem.dao.interfaces;
 
-import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
 import java.util.List;
 
 /**
  *
- * @author giuli
+ * @author gonzalo90fa
  */
-public interface VendedorDao extends GenericDao<Vendedor>{
-    
-    // Métodos específicos de la entidad
-    
-    public List<Vendedor> buscarVendedorPorNombre(String cadena);
-
+public interface GenericDao<T> {
+    public T crear(T entidad);
+    public T obtenerPorId(int id);
+    public List<T> obtenerTodos();
+    public T actualizar(T entidad);
+    public boolean eliminar(int id);
 }

@@ -35,7 +35,7 @@ public class DetallePedidoMemory implements DetallePedidoDao {
     }
 
     @Override
-    public DetallePedido agregarDetallePedido(DetallePedido detallePedido) {
+    public DetallePedido crear(DetallePedido detallePedido) {
         this.detallesPedidos.add(detallePedido);
         return detallePedido;
     }
@@ -143,12 +143,12 @@ public class DetallePedidoMemory implements DetallePedidoDao {
     }
 
     @Override
-    public List<DetallePedido> obtenerDetallesPedidos() {
+    public List<DetallePedido> obtenerTodos() {
         return detallesPedidos;
     }
 
     @Override
-    public DetallePedido actualizarDetallePedido(DetallePedido detallePedido) {
+    public DetallePedido actualizar(DetallePedido detallePedido) {
         for (int i = 0; i < detallesPedidos.size(); i++) {
             DetallePedido p = detallesPedidos.get(i);
             if (p.getId() == detallePedido.getId()) {
@@ -161,7 +161,7 @@ public class DetallePedidoMemory implements DetallePedidoDao {
     }
 
     @Override
-    public boolean eliminarDetallePedido(int id) {
+    public boolean eliminar(int id) {
         for (DetallePedido detallePedido : detallesPedidos) {
             if (detallePedido.getId() == id) {
                 detallesPedidos.remove(detallePedido);
@@ -172,7 +172,7 @@ public class DetallePedidoMemory implements DetallePedidoDao {
     }
 
     @Override
-    public DetallePedido buscarDetallePedidoPorId(int id) {
+    public DetallePedido obtenerPorId(int id) {
         for (DetallePedido detallePedido : detallesPedidos) {
             if (detallePedido.getId() == id) {
                 return detallePedido; // Retorna el pedido encontrado

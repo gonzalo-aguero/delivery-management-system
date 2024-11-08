@@ -15,11 +15,8 @@ import isi.deso.g10.deliverymanagementsystem.view.PantallaPrincipal;
 import isi.deso.g10.deliverymanagementsystem.view.crear.CrearVendedorDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.function.Consumer;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -120,7 +117,7 @@ public class VendedorController implements Controller {
 
         table.getColumn("Acciones").setCellEditor(buttonsPanelEditor);
 
-        vendedores = vendedoresDao.obtenerVendedores();
+        vendedores = vendedoresDao.obtenerTodos();
 
         //Llena la tabla de vendedores
         for (Vendedor vendedor : vendedores) {
@@ -138,7 +135,7 @@ public class VendedorController implements Controller {
     private void editarButtonHandler(int row) {
         //Editar vendedor
         int id = (int) this.tableModel.getValueAt(row, 0);
-        Vendedor vendedor = vendedoresDao.buscarVendedorPorId(id);
+        Vendedor vendedor = vendedoresDao.obtenerPorId(id);
         editar(vendedor);
         
         //Actualizar tabla
@@ -148,7 +145,7 @@ public class VendedorController implements Controller {
     private void eliminarButtonHandler(int row) {
         //Eliminar vendedor
         int id = (int) this.tableModel.getValueAt(row, 0);
-        vendedoresDao.eliminarVendedor(id);
+        vendedoresDao.eliminar(id);
         
         //Actualizar tabla
         setTable();
@@ -179,7 +176,7 @@ public class VendedorController implements Controller {
                             coordenadas
                     );
 
-                    vendedorCreado = vendedoresDao.agregarVendedor(vendedor);
+                    vendedorCreado = vendedoresDao.crear(vendedor);
                     JOptionPane.showMessageDialog(crearVendedor, "Vendedor creado con id: " + vendedorCreado.getId(), "Creación exitosa", JOptionPane.INFORMATION_MESSAGE);
                     crearVendedor.dispose();
                 } catch (RuntimeException ex) {
@@ -225,7 +222,7 @@ public class VendedorController implements Controller {
                             coordenadas
                     );
 
-                    vendedoresDao.actualizarVendedor(vendedorEditado);
+                    vendedoresDao.actualizar(vendedorEditado);
                     JOptionPane.showMessageDialog(editarVendedor, "Vendedor con ID " + vendedorEditado.getId() + " editado correctamente.", "Edición exitosa", JOptionPane.INFORMATION_MESSAGE);
                     editarVendedor.dispose();
                 } catch (RuntimeException ex) {

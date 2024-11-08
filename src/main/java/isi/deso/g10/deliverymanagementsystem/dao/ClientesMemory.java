@@ -48,7 +48,7 @@ public class ClientesMemory implements ClienteDao {
     }
 
     @Override
-    public List<Cliente> obtenerClientes() {
+    public List<Cliente> obtenerTodos() {
         return clientes;
     }
     
@@ -70,7 +70,7 @@ public class ClientesMemory implements ClienteDao {
     }
 
     @Override
-    public Cliente agregarCliente(Cliente cliente) {
+    public Cliente crear(Cliente cliente) {
         int id = lastId()+1;
         cliente.setId(id);
         clientes.add(cliente);
@@ -78,8 +78,8 @@ public class ClientesMemory implements ClienteDao {
     }
 
     @Override
-    public Cliente actualizarCliente(Cliente cliente) {
-          Cliente cli = this.buscarClientePorId(cliente.getId());
+    public Cliente actualizar(Cliente cliente) {
+          Cliente cli = this.obtenerPorId(cliente.getId());
           cli.setNombre(cliente.getNombre());
           cli.setCuit(cliente.getCuit());
           cli.setEmail(cliente.getEmail());
@@ -89,7 +89,7 @@ public class ClientesMemory implements ClienteDao {
     }
 
     @Override
-    public boolean eliminarCliente(int id) {
+    public boolean eliminar(int id) {
         boolean ret = false;
         Iterator<Cliente> iterator = clientes.iterator();
         while (iterator.hasNext()) {
@@ -103,7 +103,7 @@ public class ClientesMemory implements ClienteDao {
         return ret;
     }
     @Override
-    public Cliente buscarClientePorId(int id) {
+    public Cliente obtenerPorId(int id) {
         int index = -1;
          for(Cliente cli : clientes){
              if(cli.getId()==id){

@@ -22,12 +22,10 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ClienteDao;
 import isi.deso.g10.deliverymanagementsystem.model.Cliente;
 import isi.deso.g10.deliverymanagementsystem.model.Pedido.EstadoPedido;
 import isi.deso.g10.deliverymanagementsystem.strategy.FormaMercadoPago;
@@ -35,8 +33,6 @@ import isi.deso.g10.deliverymanagementsystem.strategy.FormaPagoI;
 import isi.deso.g10.deliverymanagementsystem.strategy.FormaTransferencia;
 import isi.deso.g10.deliverymanagementsystem.view.EditarPedidoDialog;
 import isi.deso.g10.deliverymanagementsystem.view.crear.FormaDePagoDialog;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 public class PedidoController implements Controller {
 
@@ -100,7 +96,7 @@ public class PedidoController implements Controller {
 
         table.getColumn("Acciones").setCellEditor(buttonsPanelEditor);
 
-        pedidos = (ArrayList) pedidoDao.obtenerPedidos();
+        pedidos = (ArrayList) pedidoDao.obtenerTodos();
 
         for (Pedido pedido : pedidos) {
             modelo.addRow(new Object[]{
@@ -118,7 +114,7 @@ public class PedidoController implements Controller {
     private void editarButtonHandler(int row) {
         //Editar pedido
         int id = (int) this.tableModel.getValueAt(row, 0);
-        Pedido pedido = pedidoDao.buscarPedidoPorId(id);
+        Pedido pedido = pedidoDao.obtenerPorId(id);
         editar(pedido);
 
         //Actualizar tabla
@@ -128,7 +124,7 @@ public class PedidoController implements Controller {
     private void eliminarButtonHandler(int row) {
         //Eliminar pedido
         int id = (int) this.tableModel.getValueAt(row, 0);
-        pedidoDao.eliminarPedido(id);
+        pedidoDao.eliminar(id);
 
         //Actualizar tabla
         setTable();
@@ -139,7 +135,7 @@ public class PedidoController implements Controller {
     public void crear() {
         crearPedidoDialog = new CrearPedidoDialog(menu, true);
 
-        ArrayList<Vendedor> vendedores = (ArrayList) vendedorDao.obtenerVendedores();
+        ArrayList<Vendedor> vendedores = (ArrayList) vendedorDao.obtenerTodos();
 
         ArrayList<ItemMenu> itemsSeleccionados = new ArrayList();
 
@@ -288,7 +284,7 @@ public class PedidoController implements Controller {
 
                 
                 try {
-                    pedidoDao.actualizarPedido(pedido);
+                    pedidoDao.actualizar(pedido);
                     JOptionPane.showMessageDialog(editarPedido, "Pedido actualizado exitosamente.");
                     editarPedido.dispose();
                 } catch (Exception ex) {
@@ -368,7 +364,7 @@ public class PedidoController implements Controller {
                 pedido.setEstado(Pedido.EstadoPedido.RECIBIDO);
 
                 try {
-                    pedidoDao.agregarPedido(pedido);
+                    pedidoDao.crear(pedido);
                     JOptionPane.showMessageDialog(formaDePagoDialog, "Pedido guardado exitosamente.");
                     crearPedidoDialog.dispose();
                 } catch (Exception ex) {
@@ -407,7 +403,7 @@ public class PedidoController implements Controller {
      * @return
      */
     private Cliente obtenerCliente() {
-        return ClientesMemory.getInstance().obtenerClientes().getFirst();
+        return ClientesMemory.getInstance().obtenerTodos().getFirst();
     }
 
     private void updateTablePedido(DefaultTableModel tablaPedido, ArrayList<ItemMenu> itemMenuSeleccionados) {

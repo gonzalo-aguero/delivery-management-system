@@ -14,17 +14,7 @@ import java.util.List;
  *
  * @author giuli
  */
-public interface ItemMenuDao {
-
-    public List<ItemMenu> obtenerItemsMenu();
-
-    public ItemMenu agregarItemMenu(ItemMenu itemMenu);
-
-    public boolean actualizarItemMenu(ItemMenu itemMenu);
-
-    public boolean eliminarItemMenu(int id);
-
-    public ItemMenu buscarItemMenuPorId(int id);
+public interface ItemMenuDao extends GenericDao<ItemMenu>{
     
     public ArrayList<ItemMenu> buscarVendedor(Vendedor vendedor);
     

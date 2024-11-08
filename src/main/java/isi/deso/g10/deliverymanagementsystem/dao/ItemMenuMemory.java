@@ -6,7 +6,6 @@ package isi.deso.g10.deliverymanagementsystem.dao;
 
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ItemMenuDao;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedorDao;
-import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedorDao;
 import isi.deso.g10.deliverymanagementsystem.model.*;
 import isi.deso.g10.deliverymanagementsystem.exception.*;
 import isi.deso.g10.deliverymanagementsystem.model.Categoria.TipoItem;
@@ -35,9 +34,10 @@ public class ItemMenuMemory implements ItemMenuDao {
         this.categorias.add(new Categoria(2, "Pastas", TipoItem.COMIDA));
         this.categorias.add(new Categoria(3, "Cervezas", TipoItem.BEBIDA));
         this.categorias.add(new Categoria(4, "Vinos", TipoItem.BEBIDA));
-        this.generarItems(vendedorDao.obtenerVendedores());
+        this.generarItems(vendedorDao.obtenerTodos());
     }
     
+    @Override
     public List<Categoria> getCategorias() {
         return categorias;
     }
@@ -75,12 +75,12 @@ public class ItemMenuMemory implements ItemMenuDao {
     }
 
     @Override
-    public List<ItemMenu> obtenerItemsMenu() {
+    public List<ItemMenu> obtenerTodos() {
         return items;
     }
 
     @Override
-    public ItemMenu buscarItemMenuPorId(int id) {
+    public ItemMenu obtenerPorId(int id) {
         try {
             ItemMenu itemRet = null;
             for (ItemMenu item : items) {
@@ -116,7 +116,7 @@ public class ItemMenuMemory implements ItemMenuDao {
     }
 
     @Override
-    public boolean eliminarItemMenu(int id) {
+    public boolean eliminar(int id) {
         Iterator<ItemMenu> iterator = items.iterator();
         while (iterator.hasNext()) {
             ItemMenu item = iterator.next();
@@ -129,12 +129,11 @@ public class ItemMenuMemory implements ItemMenuDao {
     }
 
     @Override
-    public boolean actualizarItemMenu(ItemMenu itemMenu) {
+    public ItemMenu actualizar(ItemMenu itemMenu) {
         String descripcion = itemMenu.getDescripcion();
         double precio = itemMenu.getPrecio();
         int id = itemMenu.getId();
         
-        boolean modificado = false;
         for (ItemMenu item : items) {
             if (item.getId() == id) {
                 item.setDescripcion(descripcion);
@@ -146,18 +145,22 @@ public class ItemMenuMemory implements ItemMenuDao {
                 item.setCategoria(item.getCategoria());
                 item.setCalorias(item.getCalorias());
                 item.setVendedor(item.getVendedor());
-                modificado = true;
+                
+                return item;
             }
         }
-        return modificado;
+        
+        return null;
     }
 
-    public ItemMenu agregarItemMenu(ItemMenu itemMenu) {
-        itemMenu.setId(this.items.getLast().getId()+1);
+    @Override
+    public ItemMenu crear(ItemMenu itemMenu) {
+        itemMenu.setId(this.items.getLast().getId() + 1);
         items.add(itemMenu);
         return itemMenu;
     }
 
+    @Override
     public ArrayList<ItemMenu> buscarVendedor(Vendedor vendedor) {
     return items.stream()
                 .filter(e -> e.getVendedor().equals(vendedor))
