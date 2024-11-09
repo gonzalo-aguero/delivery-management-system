@@ -4,8 +4,8 @@
  */
 package isi.deso.g10.deliverymanagementsystem.controller;
 
-import isi.deso.g10.deliverymanagementsystem.dao.ItemMenuMemory;
-import isi.deso.g10.deliverymanagementsystem.dao.VendedorMemory;
+import isi.deso.g10.deliverymanagementsystem.dao.memory.ItemMenuMemory;
+import isi.deso.g10.deliverymanagementsystem.dao.memory.VendedorMemory;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ItemMenuDao;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedorDao;
 import isi.deso.g10.deliverymanagementsystem.model.Bebida;

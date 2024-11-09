@@ -4,7 +4,7 @@
  */
 package isi.deso.g10.deliverymanagementsystem.controller;
 
-import isi.deso.g10.deliverymanagementsystem.dao.ClientesMemory;
+import isi.deso.g10.deliverymanagementsystem.dao.memory.ClientesMemory;
 import isi.deso.g10.deliverymanagementsystem.model.Cliente;
 import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
 import isi.deso.g10.deliverymanagementsystem.utils.FieldAnalyzer;

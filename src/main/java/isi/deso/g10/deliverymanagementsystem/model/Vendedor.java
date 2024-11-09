@@ -29,6 +29,10 @@ public class Vendedor {
         this.menu = new ArrayList();
     }
 
+    public Vendedor() {
+        
+    }
+
     //geters y setters
     public ArrayList<ItemMenu> getMenu() {
         return menu;
