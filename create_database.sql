@@ -1,3 +1,8 @@
+CREATE DATABASE IF NOT EXISTS `tpdesarrollo` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+USE `tpdesarrollo`;
+
+
 CREATE TABLE vendedor (
     id_vendedor INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
