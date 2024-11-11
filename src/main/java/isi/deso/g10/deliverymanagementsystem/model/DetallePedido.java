@@ -14,7 +14,10 @@ import java.util.ArrayList;
 public class DetallePedido {
 
     private int id;
-
+    private ArrayList<ItemMenu> items = new ArrayList<>();
+    private Pedido pedido;
+    
+    
     public int getId() {
         return id;
     }
@@ -30,8 +33,7 @@ public class DetallePedido {
     public void setPedido(Pedido pedido) {
         this.pedido = pedido;
     }
-    private ArrayList<ItemMenu> items = new ArrayList<>();
-    private Pedido pedido;
+    
 
     public DetallePedido(ArrayList<ItemMenu> items) {
         this.items = items;
