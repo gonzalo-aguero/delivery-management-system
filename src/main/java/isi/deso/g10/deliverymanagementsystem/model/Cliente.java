@@ -23,6 +23,9 @@ public class Cliente implements PedidoObserver{
     private String direccion;
     private Coordenada coordenadas;
     
+    public Cliente() {
+    }
+
     public Cliente(int id, String cuit, String nombre, String email, String direccion, Coordenada coordenadas) {
         this.id = id;
         this.cuit = cuit;

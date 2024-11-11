@@ -63,7 +63,7 @@ public abstract class GenericMySQLDaoImpl<T> implements GenericDao<T> {
                 return mapResultSetToEntity(resultSet);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getLogger(GenericMySQLDaoImpl.class.getName()).log(Level.SEVERE, "Error retrieving record by ID", e);
         }
         return null;
     }
@@ -78,7 +78,7 @@ public abstract class GenericMySQLDaoImpl<T> implements GenericDao<T> {
                 list.add(mapResultSetToEntity(resultSet));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getLogger(GenericMySQLDaoImpl.class.getName()).log(Level.SEVERE, "Error retrieving all records", e);
         }
         return list;
     }
@@ -95,9 +95,34 @@ public abstract class GenericMySQLDaoImpl<T> implements GenericDao<T> {
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setObject(1, id);
             statement.executeUpdate();
+            
+            // Check if the deletion was successful
+            if (statement.getUpdateCount() == 0) {
+                throw new SQLException("No rows affected, deletion failed.");
+            }
+
             deleted = true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getLogger(GenericMySQLDaoImpl.class.getName()).log(Level.SEVERE, "Error deleting record by ID", e);
+        }
+        return deleted;
+    }
+
+    // Generic method to delete all records
+    public boolean eliminarTodos() {
+        String sql = "DELETE FROM " + getTableName();
+        boolean deleted = false;
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
+            statement.executeUpdate(sql);
+            
+            // Check if the deletion was successful
+            if (statement.getUpdateCount() == 0) {
+                throw new SQLException("No rows affected, deletion failed.");
+            }
+
+            deleted = true;
+        } catch (SQLException e) {
+            Logger.getLogger(GenericMySQLDaoImpl.class.getName()).log(Level.SEVERE, "Error deleting all records", e);
         }
         return deleted;
     }

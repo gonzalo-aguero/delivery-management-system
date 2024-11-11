@@ -27,7 +27,7 @@ public class DetallePedidoMemory implements DetallePedidoDao {
         self = this;
     }
 
-    public DetallePedidoMemory getInstance() {
+    public static DetallePedidoMemory getInstance() {
         if (self == null) {
             self = new DetallePedidoMemory();
         }

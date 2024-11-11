@@ -69,14 +69,16 @@ public class VendedorMySQLDaoImpl extends GenericMySQLDaoImpl<Vendedor> {
             int affectedRows = statement.executeUpdate();
 
             if (affectedRows == 0) {
+                entity = null;
                 throw new SQLException("Creating vendedor failed, no rows affected.");
             }
 
             // Retrieve generated keys (ID) if there is an auto-increment ID in the database
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    entity.setId(generatedKeys.getInt(1)); // Assuming ID is the first column
+                    entity.setId(generatedKeys.getInt(1));
                 } else {
+                    entity = null;
                     throw new SQLException("Creating vendedor failed, no ID obtained.");
                 }
             }
@@ -90,7 +92,7 @@ public class VendedorMySQLDaoImpl extends GenericMySQLDaoImpl<Vendedor> {
     @Override
     public Vendedor actualizar(Vendedor entity) {
         String sql = "UPDATE " + getTableName() + " SET nombre = ?, direccion = ?, latitud = ?, longitud = ? WHERE " + getPrimaryKeyColumn() + " = ?";
-
+        
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, entity.getNombre());
@@ -101,6 +103,7 @@ public class VendedorMySQLDaoImpl extends GenericMySQLDaoImpl<Vendedor> {
 
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
+                entity = null;
                 throw new SQLException("Updating vendedor failed, no rows affected.");
             }
 
