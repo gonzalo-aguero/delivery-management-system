@@ -5,6 +5,7 @@
 package isi.deso.g10.deliverymanagementsystem;
 
 import isi.deso.g10.deliverymanagementsystem.controller.MenuController;
+import isi.deso.g10.deliverymanagementsystem.utils.DatabaseInitializer;
 import isi.deso.g10.deliverymanagementsystem.view.PantallaPrincipal;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -19,6 +20,7 @@ public class Etapa6 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        DatabaseInitializer.initialize();
         PantallaPrincipal menu = new PantallaPrincipal();
         MenuController controller = new MenuController(menu);
         
