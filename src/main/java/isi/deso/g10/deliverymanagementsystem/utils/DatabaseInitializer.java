@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import isi.deso.g10.deliverymanagementsystem.dao.mysql.VendedorMySQLDaoImpl;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
@@ -26,7 +28,7 @@ public class DatabaseInitializer {
 
             String createDatabaseSQL = "CREATE DATABASE IF NOT EXISTS tpdesarrollo";
             stmt.executeUpdate(createDatabaseSQL);
-            System.out.println("Base de datos 'tpdesarrollo' verificada o creada.");
+            System.out.println("Base de datos 'tpdesarrollo' verificada o creada correctamente.");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,7 +38,7 @@ public class DatabaseInitializer {
         // CREAR TABLAS
         try (Connection conn = DriverManager.getConnection(URLDESARROLLO, USER, PASSWORD);
                 Statement stmt = conn.createStatement()) {
-            
+
             // Crear tabla vendedor
             String ejecutarSQL = "CREATE TABLE IF NOT EXISTS vendedor (" +
                     "    id_vendedor INT AUTO_INCREMENT PRIMARY KEY," +
@@ -78,8 +80,7 @@ public class DatabaseInitializer {
 
             // Crear tabla Plato
             ejecutarSQL = "CREATE TABLE IF NOT EXISTS Plato (" +
-                    "    id INT AUTO_INCREMENT PRIMARY KEY," +
-                    "    id_item INT NOT NULL," +
+                    "    id_item INT PRIMARY KEY," +
                     "    peso DOUBLE NOT NULL," +
                     "    FOREIGN KEY (id_item) REFERENCES ItemMenu(id)" +
                     ");";
@@ -87,8 +88,7 @@ public class DatabaseInitializer {
 
             // Crear tabla Bebida
             ejecutarSQL = "CREATE TABLE IF NOT EXISTS Bebida (" +
-                    "    id INT AUTO_INCREMENT PRIMARY KEY," +
-                    "    id_item INT NOT NULL," +
+                    "    id_item INT PRIMARY KEY," +
                     "    graduacionAlcoholica DOUBLE NOT NULL," +
                     "    volumenEnMl DOUBLE NOT NULL," +
                     "    FOREIGN KEY (id_item) REFERENCES ItemMenu(id)" +
@@ -111,18 +111,18 @@ public class DatabaseInitializer {
                     "    id INT AUTO_INCREMENT PRIMARY KEY," +
                     "    clienteId INT," +
                     "    estado_pedido VARCHAR(20)," +
-                    // "    detallePedidoId INT," +
-                    // "    datosPagoId INT," +
+                    // " detallePedidoId INT," +
+                    // " datosPagoId INT," +
                     "    formaPagoId INT," +
                     "    FOREIGN KEY (clienteId) REFERENCES cliente(id_cliente)," +
-                    // "    FOREIGN KEY (detallePedidoId) REFERENCES DetallePedido(id)," +
-                    // "    FOREIGN KEY (datosPagoId) REFERENCES Pago(id)," +
+                    // " FOREIGN KEY (detallePedidoId) REFERENCES DetallePedido(id)," +
+                    // " FOREIGN KEY (datosPagoId) REFERENCES Pago(id)," +
                     "    FOREIGN KEY (formaPagoId) REFERENCES FormaPago(id)" +
                     ");";
             stmt.executeUpdate(ejecutarSQL);
 
             // Crear tabla DetallePedido
-            // ? Supuse que al igual que la clase DetallePedido, debería tener una lista 
+            // ? Supuse que al igual que la clase DetallePedido, debería tener una lista
             // ? de items y un pedido asociado.
             ejecutarSQL = "CREATE TABLE IF NOT EXISTS DetallePedido (" +
                     "    id INT AUTO_INCREMENT PRIMARY KEY," +
@@ -145,19 +145,18 @@ public class DatabaseInitializer {
                     ");";
             stmt.executeUpdate(ejecutarSQL);
 
-            System.out.println("Tablas creadas y datos insertados correctamente.");
+            System.out.println("Tablas creadas correctamente.");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    // ! no testeado
     public static void insertTestData() {
-        String sqlFilePath = "test_data.sql"; // Reemplaza con la ruta correcta a tu archivo SQL
+        String sqlFilePath = "test_data.sql";
 
         try (Connection conn = DriverManager.getConnection(URLDESARROLLO, USER, PASSWORD);
-             Statement stmt = conn.createStatement();
-             BufferedReader br = new BufferedReader(new FileReader(sqlFilePath))) {
+                Statement stmt = conn.createStatement();
+                BufferedReader br = new BufferedReader(new FileReader(sqlFilePath))) {
 
             StringBuilder sql = new StringBuilder();
             String line;
@@ -170,8 +169,14 @@ public class DatabaseInitializer {
             }
 
             System.out.println("Datos de prueba insertados correctamente.");
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            Logger.getLogger(DatabaseInitializer.class.getName()).log(Level.SEVERE, "Error al insertar datos de prueba", e);
+        } catch (SQLException e) {
+            if (e.getSQLState().equals("23000")) { // SQL state code for duplicate entry
+                Logger.getLogger(DatabaseInitializer.class.getName()).log(Level.WARNING, "Datos de prueba ya insertados anteriormente.");
+            } else {
+                Logger.getLogger(DatabaseInitializer.class.getName()).log(Level.OFF, "Error al insertar datos de prueba", e);
+            }
         }
     }
 
