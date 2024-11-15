@@ -26,7 +26,7 @@ public class Vendedor {
         this.nombre = nombre;
         this.direccion = direccion;
         this.coordenadas = coordenadas;
-        this.menu = new ArrayList();
+        this.menu = new ArrayList<ItemMenu>();
     }
 
     public Vendedor() {
@@ -105,7 +105,7 @@ public class Vendedor {
     
     
     public ArrayList<Bebida> getItemsBebidas() {
-        ArrayList<Bebida> bebidas = new ArrayList();
+        ArrayList<Bebida> bebidas = new ArrayList<Bebida>();
         for (ItemMenu item : menu) {
             if (item.esBebida()) {
                 bebidas.add((Bebida)item);
@@ -115,7 +115,7 @@ public class Vendedor {
     }
 
     public ArrayList<Plato> getItemsComidas() {
-        ArrayList<Plato> comidas = new ArrayList();
+        ArrayList<Plato> comidas = new ArrayList<Plato>();
         for (ItemMenu item : menu) {
             if (item.esComida()) {
                 comidas.add((Plato)item);
@@ -125,7 +125,7 @@ public class Vendedor {
     }
 
     public ArrayList<Plato> getItemsComidasVeganas() {
-        ArrayList<Plato> comidasVeganas = new ArrayList();
+        ArrayList<Plato> comidasVeganas = new ArrayList<Plato>();
         for (ItemMenu item : menu) {
             if (item.esComida() && item.aptoVegano()) {
                 comidasVeganas.add((Plato)item);
@@ -135,7 +135,7 @@ public class Vendedor {
     }
     
     public ArrayList<Bebida> getItemsBebidasVeganas() {
-        ArrayList<Bebida> bebidasVeganas = new ArrayList();
+        ArrayList<Bebida> bebidasVeganas = new ArrayList<Bebida>();
         for (ItemMenu item : menu) {
             if (item.esBebida() && item.aptoVegano()) {
                 bebidasVeganas.add((Bebida)item);
@@ -145,7 +145,7 @@ public class Vendedor {
     }
     
     public ArrayList<Plato> getItemsComidasVegetarianas() {
-        ArrayList<Plato> comidasVegetarianas = new ArrayList();
+        ArrayList<Plato> comidasVegetarianas = new ArrayList<Plato>();
         for (ItemMenu item : menu) {
             if (item.esComida() && item.aptoVegetariano()) {
                 comidasVegetarianas.add((Plato)item);
@@ -155,7 +155,7 @@ public class Vendedor {
     }
         
     public ArrayList<Bebida> getItemsBebidasVegetarianas() {
-        ArrayList<Bebida> bebidasVegetarianas = new ArrayList();
+        ArrayList<Bebida> bebidasVegetarianas = new ArrayList<Bebida>();
         for (ItemMenu item : menu) {
             if (item.esBebida() && item.aptoVegetariano()) {
                 bebidasVegetarianas.add((Bebida)item);
@@ -165,7 +165,7 @@ public class Vendedor {
     }
     
     public ArrayList<Plato> getItemsComidasAptoCeliaco() {
-        ArrayList<Plato> comidasCeliaco = new ArrayList();
+        ArrayList<Plato> comidasCeliaco = new ArrayList<Plato>();
         for (ItemMenu item : menu) {
             if (item.esComida() && item.aptoCeliaco()) {
                 comidasCeliaco.add((Plato)item);
@@ -175,7 +175,7 @@ public class Vendedor {
     }
     
     public ArrayList<Bebida> getItemsBebidasAptoCeliaco() {
-        ArrayList<Bebida> bebidasCeliaco = new ArrayList();
+        ArrayList<Bebida> bebidasCeliaco = new ArrayList<Bebida>();
         for (ItemMenu item : menu) {
             if (item.esBebida() && item.aptoCeliaco()) {
                 bebidasCeliaco.add((Bebida)item);
@@ -185,7 +185,7 @@ public class Vendedor {
     }
     
     public ArrayList<Bebida> getItemsBebidaSinAlcohol() {
-        ArrayList<Bebida> bebidasSinAlcohol = new ArrayList();
+        ArrayList<Bebida> bebidasSinAlcohol = new ArrayList<Bebida>();
         for (ItemMenu item : menu) {
             if (item.esBebida() && ((Bebida) item).getGraduacionAlcoholica() == 0) {
                 bebidasSinAlcohol.add((Bebida)item);
