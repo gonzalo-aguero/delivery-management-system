@@ -34,6 +34,8 @@ public class DetallePedido {
         this.pedido = pedido;
     }
     
+    public DetallePedido() {
+    }
 
     public DetallePedido(ArrayList<ItemMenu> items) {
         this.items = items;

@@ -4,7 +4,10 @@
  */
 package isi.deso.g10.deliverymanagementsystem.dao.mysql;
 
+import isi.deso.g10.deliverymanagementsystem.dao.memory.CategoriaMemory;
+import isi.deso.g10.deliverymanagementsystem.dao.mysql.mappers.PedidoMapper;
 import isi.deso.g10.deliverymanagementsystem.model.Bebida;
+import isi.deso.g10.deliverymanagementsystem.model.Categoria;
 import isi.deso.g10.deliverymanagementsystem.model.Cliente;
 import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
 import isi.deso.g10.deliverymanagementsystem.model.DetallePedido;
@@ -12,6 +15,7 @@ import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
 import isi.deso.g10.deliverymanagementsystem.model.Pedido;
 import isi.deso.g10.deliverymanagementsystem.model.Pedido.EstadoPedido;
 import isi.deso.g10.deliverymanagementsystem.model.Plato;
+import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
 import isi.deso.g10.deliverymanagementsystem.strategy.FormaMercadoPago;
 import isi.deso.g10.deliverymanagementsystem.strategy.FormaPagoI;
 import isi.deso.g10.deliverymanagementsystem.strategy.FormaTransferencia;
@@ -34,6 +38,7 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
 
     // Singleton instance for Pedido
     private static PedidoMySQLDaoImpl instance;
+    private static final PedidoMapper pedidoMapper = new PedidoMapper();;
 
     private PedidoMySQLDaoImpl() {
         // Constructor privado para evitar instanciación externa
@@ -49,44 +54,7 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
 
     @Override
     protected Pedido mapResultSetToEntity(ResultSet resultSet) throws SQLException {
-        Pedido pedido = new Pedido();
-        pedido.setId(resultSet.getInt("id"));
-
-        // Get and set Cliente
-        Cliente cliente = new Cliente();
-        cliente.setId(resultSet.getInt("clienteId"));
-        cliente.setCuit(resultSet.getString("cuit"));
-        cliente.setNombre(resultSet.getString("nombre_cliente"));
-        cliente.setEmail(resultSet.getString("email_cliente"));
-        cliente.setDireccion(resultSet.getString("direccion_cliente"));
-        cliente.setCoordenadas(
-                new Coordenada(resultSet.getDouble("latitud_cliente"), resultSet.getDouble("longitud_cliente")));
-        pedido.setCliente(cliente);
-
-        // Get and set EstadoPedido
-        EstadoPedido estado;
-        try {
-            estado = EstadoPedido.valueOf(resultSet.getString("estado_pedido"));
-        } catch (IllegalArgumentException e) {
-            estado = null;
-        }
-        pedido.setEstado(estado);
-
-        // Get and set Forma de Pago
-        FormaPagoI formaPago;
-        String tipoFormaPago = resultSet.getString("tipoFormaPago");
-        if ("MercadoPago".equals(tipoFormaPago)) {
-            formaPago = new FormaMercadoPago(resultSet.getString("aliasVendedor"));
-        } else if ("Transferencia".equals(tipoFormaPago)) {
-            formaPago = new FormaTransferencia(
-                    resultSet.getString("cuitVendedor"),
-                    resultSet.getString("cbuVendedor"));
-        } else {
-            formaPago = null;
-        }
-        pedido.setFormapago(formaPago);
-
-        return pedido;
+        return pedidoMapper.mapResultSetToEntity(resultSet);
     }
 
     @Override
@@ -181,12 +149,24 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
         return entity;
     }
 
-    private List<ItemMenu> obtenerDetallePedidoPorPedidoId(int pedidoId) {
-        String sql = "SELECT dp.id_item, im.nombre, im.descripcion, im.precio, im.categoria, im.calorias, " +
-                "im.aptoCeliaco, im.aptoVegetariano, im.aptoVegano, im.id_vendedor " +
-                "FROM DetallePedido dp " +
-                "JOIN ItemMenu im ON dp.id_item = im.id " +
-                "WHERE dp.id_pedido = ?";
+    
+    /**
+     * Obtiene el detalle de un pedido por su ID.
+     *
+     * @param pedidoId El ID del pedido.
+     * @return Un objeto DetallePedido que contiene una lista de los ítems del menú asociados al pedido.
+     * @throws SQLException Si ocurre un error al acceder a la base de datos.
+     */
+    private DetallePedido obtenerDetallePedidoPorPedidoId(int pedidoId) {
+        String sql = "SELECT dp.id, dp.id_item, im.nombre, im.descripcion, im.precio, im.categoria, im.calorias, " +
+             "im.aptoCeliaco, im.aptoVegetariano, im.aptoVegano, im.id_vendedor, " +
+             "b.graduacionAlcoholica, b.volumenEnMl, " +
+             "p.peso " +
+             "FROM DetallePedido dp " +
+             "JOIN ItemMenu im ON dp.id_item = im.id " +
+             "LEFT JOIN Bebida b ON im.id = b.id_item " +
+             "LEFT JOIN Plato p ON im.id = p.id_item " +
+             "WHERE dp.id_pedido = ?";
 
         List<ItemMenu> items = new ArrayList<>();
 
@@ -194,7 +174,7 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
             statement.setInt(1, pedidoId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    ItemMenu item = mapResultSetToItemMenu(resultSet);
+                    ItemMenu item = pedidoMapper.mapResultSetToItemMenu(resultSet);
                     items.add(item);
                 }
             }
@@ -202,42 +182,18 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
             Logger.getLogger(PedidoMySQLDaoImpl.class.getName()).log(Level.SEVERE,
                     "Error al obtener detalle del pedido", ex);
         }
-        return items;
+
+        DetallePedido detallePedido = new DetallePedido((ArrayList<ItemMenu>) items);
+        return detallePedido;
     }
 
-    private ItemMenu mapResultSetToItemMenu(ResultSet resultSet) throws SQLException {
-        ItemMenu itemMenu;
-        if (resultSet.getString("graduacionAlcoholica") != null) {
-            itemMenu = new Bebida();
-            ((Bebida) itemMenu).setGraduacionAlcoholica(resultSet.getDouble("graduacionAlcoholica"));
-            ((Bebida) itemMenu).setVolumenEnMl(resultSet.getDouble("volumenEnMl"));
-        } else if (resultSet.getString("peso") != null) {
-            itemMenu = new Plato();
-            ((Plato) itemMenu).setPeso(resultSet.getDouble("peso"));
-        } else {
-            throw new RuntimeException("El resultado no coincide con alguno de los dos tipos (Plato/Bebida)");
-        }
-
-        itemMenu.setId(resultSet.getInt("id_item"));
-        itemMenu.setNombre(resultSet.getString("nombre"));
-        itemMenu.setDescripcion(resultSet.getString("descripcion"));
-        itemMenu.setPrecio(resultSet.getDouble("precio"));
-        itemMenu.setCategoria(resultSet.getString("categoria"));
-        itemMenu.setCalorias(resultSet.getInt("calorias"));
-        itemMenu.setAptoCeliaco(resultSet.getBoolean("aptoCeliaco"));
-        itemMenu.setAptoVegetariano(resultSet.getBoolean("aptoVegetariano"));
-        itemMenu.setAptoVegano(resultSet.getBoolean("aptoVegano"));
-        itemMenu.setIdVendedor(resultSet.getInt("id_vendedor"));
-
-        return itemMenu;
-    }
 
     @Override
     public Pedido obtenerPorId(int id) {
         String sql = "SELECT p.id, p.clienteId, p.estado_pedido, p.formaPagoId, " +
-                "c.cuit, c.nombre AS nombre_cliente, c.email AS email_cliente, c.direccion AS direccion_cliente, c.latitud AS latitud_cliente, c.longitud AS longitud_cliente, "
+                "c.cuit AS cuit_cliente, c.nombre AS nombre_cliente, c.email AS email_cliente, c.direccion AS direccion_cliente, c.latitud AS latitud_cliente, c.longitud AS longitud_cliente, "
                 +
-                "f.tipoFormaPago, f.aliasVendedor, f.cuitVendedor, f.cbuVendedor " +
+                "f.id AS id_FormaPago, f.tipoFormaPago, f.aliasVendedor, f.cuitVendedor, f.cbuVendedor " +
                 "FROM Pedido p " +
                 "JOIN Cliente c ON p.clienteId = c.id_cliente " +
                 "JOIN FormaPago f ON p.formaPagoId = f.id " +
@@ -248,9 +204,11 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     Pedido pedido = mapResultSetToEntity(resultSet);
-                    List<ItemMenu> items = obtenerDetallePedidoPorPedidoId(id);
-                    DetallePedido detallePedido = new DetallePedido((ArrayList<ItemMenu>) items);
+
+                    DetallePedido detallePedido = obtenerDetallePedidoPorPedidoId(id);
+                    detallePedido.setPedido(pedido);
                     pedido.setDetallePedido(detallePedido);
+                    
                     return pedido;
                 }
             }
@@ -258,6 +216,7 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
             Logger.getLogger(PedidoMySQLDaoImpl.class.getName()).log(Level.SEVERE, "Error al obtener pedido por ID",
                     ex);
         }
+
         return null;
     }
 

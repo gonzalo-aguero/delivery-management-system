@@ -62,6 +62,13 @@ public class CategoriaMemory implements CategoriaDao {
     public boolean eliminar(int id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    public Categoria obtenerPorDescripcion(String descripcion) {
+        return categorias.stream()
+            .filter(categoria -> categoria.getDescripcion().equalsIgnoreCase(descripcion))
+            .findFirst()
+            .orElse(null);
+    }
     
     
 }
