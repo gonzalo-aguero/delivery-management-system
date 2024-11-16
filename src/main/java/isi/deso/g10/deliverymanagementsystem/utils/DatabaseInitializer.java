@@ -82,7 +82,9 @@ public class DatabaseInitializer {
             ejecutarSQL = "CREATE TABLE IF NOT EXISTS Plato (" +
                     "    id_item INT PRIMARY KEY," +
                     "    peso DOUBLE NOT NULL," +
-                    "    FOREIGN KEY (id_item) REFERENCES ItemMenu(id)" +
+                    "    FOREIGN KEY (id_item) REFERENCES ItemMenu(id)"
+                    + " ON DELETE CASCADE"
+                    + " ON UPDATE CASCADE" +
                     ");";
             stmt.executeUpdate(ejecutarSQL);
 
@@ -91,7 +93,9 @@ public class DatabaseInitializer {
                     "    id_item INT PRIMARY KEY," +
                     "    graduacionAlcoholica DOUBLE NOT NULL," +
                     "    volumenEnMl DOUBLE NOT NULL," +
-                    "    FOREIGN KEY (id_item) REFERENCES ItemMenu(id)" +
+                    "    FOREIGN KEY (id_item) REFERENCES ItemMenu(id)"
+                    + " ON DELETE CASCADE"
+                    + " ON UPDATE CASCADE" +
                     ");";
             stmt.executeUpdate(ejecutarSQL);
 
@@ -144,6 +148,7 @@ public class DatabaseInitializer {
                     "    FOREIGN KEY (id_pedido) REFERENCES Pedido(id)" +
                     ");";
             stmt.executeUpdate(ejecutarSQL);
+            
 
             System.out.println("Tablas creadas correctamente.");
         } catch (Exception e) {

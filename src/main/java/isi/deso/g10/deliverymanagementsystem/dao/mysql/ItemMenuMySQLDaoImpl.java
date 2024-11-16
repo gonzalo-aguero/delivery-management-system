@@ -4,6 +4,7 @@
  */
 package isi.deso.g10.deliverymanagementsystem.dao.mysql;
 
+import isi.deso.g10.deliverymanagementsystem.dao.memory.CategoriaMemory;
 import isi.deso.g10.deliverymanagementsystem.model.Bebida;
 import isi.deso.g10.deliverymanagementsystem.model.Categoria;
 import isi.deso.g10.deliverymanagementsystem.model.Categoria.TipoItem;
@@ -14,6 +15,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,6 +42,42 @@ public class ItemMenuMySQLDaoImpl extends GenericMySQLDaoImpl<ItemMenu>{
     
     
     @Override
+    public List<ItemMenu> obtenerTodos() {
+        List<ItemMenu> list = new ArrayList<>();
+        String sql = "SELECT DISTINCT * " +
+             "FROM " + getTableName() + " im " +
+             "LEFT JOIN plato p ON im.id = p.id_item " +
+             "LEFT JOIN bebida b ON im.id = b.id_item";
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                list.add(mapResultSetToEntity(resultSet));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(GenericMySQLDaoImpl.class.getName()).log(Level.SEVERE, "Error retrieving all records", e);
+        }
+        return list;
+    }
+
+    @Override
+    public ItemMenu obtenerPorId(int id) {
+        String sql = "SELECT * FROM " 
+            + getTableName() + " im " +
+             "LEFT JOIN plato p ON im.id = p.id_item " +
+             "LEFT JOIN bebida b ON im.id = b.id_item" + " WHERE im." + getPrimaryKeyColumn() + " = ?";
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setObject(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return mapResultSetToEntity(resultSet);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(GenericMySQLDaoImpl.class.getName()).log(Level.SEVERE, "Error retrieving record by ID", e);
+        }
+        return null;
+    }
+    
+    
+    @Override
     protected ItemMenu mapResultSetToEntity(ResultSet resultSet) throws SQLException {
             ItemMenu itemMenu;
             String tipo;
@@ -57,9 +96,9 @@ public class ItemMenuMySQLDaoImpl extends GenericMySQLDaoImpl<ItemMenu>{
             itemMenu.setNombre(resultSet.getString("nombre"));
             itemMenu.setDescripcion(resultSet.getString("descripcion"));
             itemMenu.setPrecio(resultSet.getDouble("precio"));
-            Categoria categoria = new Categoria(0,
-                    resultSet.getString("categoria"),
-                    tipo == "bebida"? TipoItem.BEBIDA : TipoItem.COMIDA);
+            String categoriaDesc= resultSet.getString("categoria");
+            Categoria categoria = CategoriaMemory.getInstance().obtenerTodos().stream().filter(e-> e.getDescripcion().equals(categoriaDesc)).
+                                        findFirst().orElseThrow(() -> new RuntimeException("Error de mapeo"));
             itemMenu.setCategoria(categoria);
             itemMenu.setCalorias(resultSet.getInt("calorias"));
             itemMenu.setAptoCeliaco(resultSet.getBoolean("aptoceliaco"));
@@ -104,59 +143,65 @@ public class ItemMenuMySQLDaoImpl extends GenericMySQLDaoImpl<ItemMenu>{
 
     @Override
     public ItemMenu crear(ItemMenu entity) {
-        String sql= "INSERT INTO " + getTableName() + "(nombre,descripcion,precio,categoria,calorias,aptoCeliaco,aptoVegetariano,aptoVegano) VALUES (?,?,?,?,?,?,?,?)";
-        try (Connection connection = getConnection(); 
-            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        String sqlItemMenu = "INSERT INTO " + getTableName() + "(nombre, descripcion, precio, categoria, calorias, aptoCeliaco, aptoVegetariano, aptoVegano, id_vendedor) VALUES (?,?,?,?,?,?,?,?,?);";
+        String sqlPlato = "INSERT INTO " + getChildrenTableName(entity) + " VALUES (?,?);";
+        String sqlBebida = "INSERT INTO " + getChildrenTableName(entity) + " VALUES (?,?,?);";
 
-           statement.setString(1, entity.getNombre());         
-           statement.setString(2, entity.getDescripcion());     
-           statement.setDouble(3, entity.getPrecio());          
-           statement.setString(4, entity.getCategoria().toString());       
-           statement.setDouble(5, entity.getCalorias());       
-           statement.setBoolean(6, entity.isAptoCeliaco());     
-           statement.setBoolean(7, entity.isAptoVegetariano()); 
-           statement.setBoolean(8, entity.isAptoVegano());      
+        try (Connection connection = getConnection()) {
+            // Inicia una transacción
+            connection.setAutoCommit(false);
 
-           // Ejecutar la consulta
-           int affectedRows = statement.executeUpdate();
-           if (affectedRows > 0) {
-               try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                   if (generatedKeys.next()) {
-                       entity.setId(generatedKeys.getInt(1));
-                   }
-               }
-           }
-            } catch (SQLException e) {
-                Logger.getLogger(ItemMenuMySQLDaoImpl.class.getName()).log(Level.SEVERE, "Error al crear item menu", e);
+            try (PreparedStatement statement = connection.prepareStatement(sqlItemMenu, Statement.RETURN_GENERATED_KEYS)) {
+                statement.setString(1, entity.getNombre());
+                statement.setString(2, entity.getDescripcion());
+                statement.setDouble(3, entity.getPrecio());
+                statement.setString(4, entity.getCategoria().toString());
+                statement.setDouble(5, entity.getCalorias());
+                statement.setBoolean(6, entity.isAptoCeliaco());
+                statement.setBoolean(7, entity.isAptoVegetariano());
+                statement.setBoolean(8, entity.isAptoVegano());
+                statement.setInt(9, entity.getVendedor().getId());
+
+                
+                int affectedRows = statement.executeUpdate();
+                if (affectedRows > 0) {
+                    try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                        if (generatedKeys.next()) {
+                            entity.setId(generatedKeys.getInt(1)); // Obtener el id generado
+                        }
+                    }
+                }
+            }
+
+            
+            if (entity instanceof Plato plato) {
+                try (PreparedStatement statement = connection.prepareStatement(sqlPlato)) {
+                    statement.setInt(1, plato.getId());
+                    statement.setDouble(2, plato.getPeso());
+                    statement.executeUpdate();
+                }
+            } else if (entity instanceof Bebida bebida) {
+                try (PreparedStatement statement = connection.prepareStatement(sqlBebida)) {
+                    statement.setInt(1, bebida.getId());
+                    statement.setDouble(2, bebida.getGraduacionAlcoholica());
+                    statement.setDouble(3, bebida.getVolumenEnMl());
+                    statement.executeUpdate();
+                }
+            }
+
+            //Commit
+            connection.commit();
+        } catch (SQLException e) {
+          
+            Logger.getLogger(ItemMenuMySQLDaoImpl.class.getName()).log(Level.SEVERE, "Error al crear item menu", e);
+            try (Connection connection = getConnection()) {
+                connection.rollback();  // Revertir los cambios
+            } catch (SQLException rollbackEx) {
+                Logger.getLogger(ItemMenuMySQLDaoImpl.class.getName()).log(Level.SEVERE, "Error al revertir la transacción", rollbackEx);
+            }
+            return null;
         }
-       
-        if(entity instanceof Plato plato){
-        sql= "INSERT INTO " + getChildrenTableName(entity) + "VALUES (?,?)";
-        
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.setInt(1, plato.getId());
-            statement.setDouble(2, plato.getPeso());
-             
-            statement.executeUpdate();
-           } catch (SQLException e) {
-                Logger.getLogger(ItemMenuMySQLDaoImpl.class.getName()).log(Level.SEVERE, "Error al crear item menu", e);
-        }
-        }
-        
-        else if(entity instanceof Bebida bebida){
-            sql= "INSERT INTO " + getChildrenTableName(entity) + "VALUES (?,?,?)";
-        
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.setInt(1, bebida.getId());
-            statement.setDouble(2, bebida.getGraduacionAlcoholica());
-            statement.setDouble(3, bebida.getVolumenEnMl());
-             
-            statement.executeUpdate();
-           } catch (SQLException e) {
-                Logger.getLogger(ItemMenuMySQLDaoImpl.class.getName()).log(Level.SEVERE, "Error al crear item menu", e);
-        }
-        }
-        
+
         return entity;
     }
 
@@ -213,4 +258,5 @@ public class ItemMenuMySQLDaoImpl extends GenericMySQLDaoImpl<ItemMenu>{
         return entity;
     }
     
+   
 }

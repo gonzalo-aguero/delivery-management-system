@@ -4,10 +4,14 @@
  */
 package isi.deso.g10.deliverymanagementsystem.controller;
 
+import isi.deso.g10.deliverymanagementsystem.dao.interfaces.GenericDao;
 import isi.deso.g10.deliverymanagementsystem.dao.memory.ItemMenuMemory;
 import isi.deso.g10.deliverymanagementsystem.dao.memory.VendedorMemory;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ItemMenuDao;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedorDao;
+import isi.deso.g10.deliverymanagementsystem.dao.memory.CategoriaMemory;
+import isi.deso.g10.deliverymanagementsystem.dao.mysql.ItemMenuMySQLDaoImpl;
+import isi.deso.g10.deliverymanagementsystem.dao.mysql.VendedorMySQLDaoImpl;
 import isi.deso.g10.deliverymanagementsystem.model.Bebida;
 import isi.deso.g10.deliverymanagementsystem.model.Categoria;
 import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
@@ -21,6 +25,7 @@ import isi.deso.g10.deliverymanagementsystem.view.crear.CrearItemMenuDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -35,16 +40,16 @@ public class ItemMenuController implements Controller {
     private DefaultTableModel tableModel;
 
     //DAO
-    private final ItemMenuDao itemMenuDao;
-    private final VendedorDao vendedorDao;
+    private final GenericDao<ItemMenu> itemMenuDao;
+    private final GenericDao<Vendedor> vendedorDao;
 
-    private ArrayList<ItemMenu> itemsMenu;
+    private List<ItemMenu> itemsMenu;
 
     private final PantallaPrincipal menu;
 
     public ItemMenuController(PantallaPrincipal menu) {
-        this.itemMenuDao = ItemMenuMemory.getInstance();
-        this.vendedorDao = VendedorMemory.getInstance();
+        this.itemMenuDao = (ItemMenuMySQLDaoImpl) ItemMenuMySQLDaoImpl.getInstance();
+        this.vendedorDao = VendedorMySQLDaoImpl.getInstance();
         this.menu = menu;
     }
 
@@ -83,7 +88,7 @@ public class ItemMenuController implements Controller {
 
         table.getColumn("Acciones").setCellEditor(buttonsPanelEditor);
 
-        itemsMenu = (ArrayList) itemMenuDao.obtenerTodos();
+        itemsMenu = itemMenuDao.obtenerTodos();
 
         for (ItemMenu item : itemsMenu) {
             modelo.addRow(new Object[]{
@@ -127,7 +132,17 @@ public class ItemMenuController implements Controller {
 
         table.getColumn("Acciones").setCellEditor(buttonsPanelEditor);
 
-        itemsMenu = (ArrayList) itemMenuDao.buscarItemsPorNombre(cadena);
+        itemsMenu = itemMenuDao.obtenerTodos();
+        
+        List<ItemMenu> itemsFiltrados = itemsMenu.stream().filter(e-> {
+            String filter = cadena.toLowerCase();
+               boolean bool= e.getNombre().toLowerCase().startsWith(filter) ||
+                e.getVendedor().getNombre().toLowerCase().startsWith(filter) ||
+                e.getDescripcion().toLowerCase().startsWith(filter);
+               
+               return bool;        
+                        }
+                        ).toList();
 
         for (ItemMenu item : itemsMenu) {
             modelo.addRow(new Object[]{
@@ -144,8 +159,12 @@ public class ItemMenuController implements Controller {
     private void editarButtonHandler(int row) {
         int id = (int) this.tableModel.getValueAt(row, 0);
         ItemMenu item = itemMenuDao.obtenerPorId(id);
-        editar(item);
-
+        if(item != null) editar(item);
+        else{
+            JOptionPane.showMessageDialog(menu, "Error: No existe item con id:" + id);
+            throw new RuntimeException("No existe item con id:" + id);
+        }
+        
         //Actualizar tabla
         setTable();
     }
@@ -160,7 +179,7 @@ public class ItemMenuController implements Controller {
                 crearIM.getVendedoresBox().addItem(vendedor);
             }
 
-            ArrayList<Categoria> categorias = (ArrayList) itemMenuDao.getCategorias();
+            ArrayList<Categoria> categorias = (ArrayList) CategoriaMemory.getInstance().obtenerTodos();
 
             for (Categoria categoria : categorias) {
                 crearIM.getCategoriaBox().addItem(categoria);
@@ -291,7 +310,7 @@ public class ItemMenuController implements Controller {
                 crearIM.getVendedoresBox().addItem(vendedor);
             }
 
-            ArrayList<Categoria> categorias = (ArrayList) itemMenuDao.getCategorias();
+            ArrayList<Categoria> categorias = (ArrayList) CategoriaMemory.getInstance().obtenerTodos();
 
             for (Categoria categoria : categorias) {
                 crearIM.getCategoriaBox().addItem(categoria);
