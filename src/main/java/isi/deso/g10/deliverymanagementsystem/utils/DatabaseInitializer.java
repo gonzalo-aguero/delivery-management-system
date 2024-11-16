@@ -9,10 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import isi.deso.g10.deliverymanagementsystem.dao.mysql.VendedorMySQLDaoImpl;
-import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
-
 public class DatabaseInitializer {
     private static final String URL = "jdbc:mysql://localhost:3306";
     private static final String URLDESARROLLO = "jdbc:mysql://localhost:3306/tpdesarrollo";
@@ -53,7 +49,7 @@ public class DatabaseInitializer {
             // Crear tabla cliente
             ejecutarSQL = "CREATE TABLE IF NOT EXISTS cliente (" +
                     "    id_cliente INT AUTO_INCREMENT PRIMARY KEY," +
-                    "    cuit VARCHAR(20) NOT NULL," +
+                    "    cuit VARCHAR(20) NOT NULL UNIQUE," +
                     "    nombre VARCHAR(100) NOT NULL," +
                     "    email VARCHAR(100) NOT NULL," +
                     "    direccion VARCHAR(255)," +
@@ -98,11 +94,12 @@ public class DatabaseInitializer {
             // Crear tabla FormaPago
             ejecutarSQL = "CREATE TABLE IF NOT EXISTS FormaPago (" +
                     "    id INT AUTO_INCREMENT PRIMARY KEY," +
-                    "    montoFinal DOUBLE NOT NULL," +
+                    "    id_vendedor INT," +
                     "    tipoFormaPago VARCHAR(50) NOT NULL," +
-                    "    alias VARCHAR(100)," +
-                    "    cuitCliente VARCHAR(20)," +
-                    "    cbuCliente VARCHAR(20)" +
+                    "    aliasVendedor VARCHAR(100)," +
+                    "    cuitVendedor VARCHAR(20)," +
+                    "    cbuVendedor VARCHAR(20)," +
+                    "    FOREIGN KEY (id_vendedor) REFERENCES vendedor(id_vendedor)" +
                     ");";
             stmt.executeUpdate(ejecutarSQL);
 
@@ -175,7 +172,7 @@ public class DatabaseInitializer {
             if (e.getSQLState().equals("23000")) { // SQL state code for duplicate entry
                 Logger.getLogger(DatabaseInitializer.class.getName()).log(Level.WARNING, "Datos de prueba ya insertados anteriormente.");
             } else {
-                Logger.getLogger(DatabaseInitializer.class.getName()).log(Level.OFF, "Error al insertar datos de prueba", e);
+                Logger.getLogger(DatabaseInitializer.class.getName()).log(Level.SEVERE, "Error al insertar datos de prueba", e);
             }
         }
     }

@@ -10,6 +10,7 @@ package isi.deso.g10.deliverymanagementsystem.strategy;
  */
 public class FormaMercadoPago implements FormaPagoI{
 
+    private int id;
     private String alias;
     private double montoFinal;
     private final double RECARGO_MP = 0.04;
@@ -28,4 +29,25 @@ public class FormaMercadoPago implements FormaPagoI{
     public String toString(){
      return "Mercado Pago";
     }
+
+    public static String getTipo(){
+        return "Mercado Pago";
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
 }

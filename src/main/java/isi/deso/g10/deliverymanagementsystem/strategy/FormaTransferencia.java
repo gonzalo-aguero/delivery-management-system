@@ -8,8 +8,15 @@ package isi.deso.g10.deliverymanagementsystem.strategy;
  * @author giuli
  */
 public class FormaTransferencia implements FormaPagoI {
+
+    private int id;
     private  String cuitCliente;
     private  String cbuCliente;
+
+    public void setCbuCliente(String cbuCliente) {
+        this.cbuCliente = cbuCliente;
+    }
+
     private double montoFinal;
     private final double RECARGO_TRANSFERENCIA = 0.02;
 
@@ -24,8 +31,32 @@ public class FormaTransferencia implements FormaPagoI {
         return montoFinal;
     }
 
+    public static String getTipo(){
+        return "Transferencia";
+    }
+
     @Override
     public String toString(){
      return "Transferencia";
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getCuitCliente() {
+        return cuitCliente;
+    }
+
+    public void setCuitCliente(String cuitCliente) {
+        this.cuitCliente = cuitCliente;
+    }
+
+    public String getCbuCliente() {
+        return cbuCliente;
     }
 }
