@@ -35,8 +35,8 @@ public class DatabaseInitializer {
         try (Connection conn = DriverManager.getConnection(URLDESARROLLO, USER, PASSWORD);
                 Statement stmt = conn.createStatement()) {
 
-            // Crear tabla vendedor
-            String ejecutarSQL = "CREATE TABLE IF NOT EXISTS vendedor (" +
+            // Crear tabla Vendedor
+            String ejecutarSQL = "CREATE TABLE IF NOT EXISTS Vendedor (" +
                     "    id_vendedor INT AUTO_INCREMENT PRIMARY KEY," +
                     "    nombre VARCHAR(100) NOT NULL," +
                     "    direccion VARCHAR(255)," +
@@ -46,11 +46,11 @@ public class DatabaseInitializer {
 
             stmt.executeUpdate(ejecutarSQL);
 
-            // Crear tabla cliente
-            ejecutarSQL = "CREATE TABLE IF NOT EXISTS cliente (" +
+            // Crear tabla Cliente
+            ejecutarSQL = "CREATE TABLE IF NOT EXISTS Cliente (" +
                     "    id_cliente INT AUTO_INCREMENT PRIMARY KEY," +
-                    "    cuit VARCHAR(20) NOT NULL UNIQUE," +
                     "    nombre VARCHAR(100) NOT NULL," +
+                    "    cuit VARCHAR(20) NOT NULL UNIQUE," +
                     "    email VARCHAR(100) NOT NULL," +
                     "    direccion VARCHAR(255)," +
                     "    latitud DOUBLE," +
@@ -70,7 +70,7 @@ public class DatabaseInitializer {
                     "    aptoVegetariano BOOLEAN," +
                     "    aptoVegano BOOLEAN," +
                     "    id_vendedor INT NOT NULL," +
-                    "    FOREIGN KEY (id_vendedor) REFERENCES vendedor(id_vendedor)" +
+                    "    FOREIGN KEY (id_vendedor) REFERENCES Vendedor(id_vendedor)" +
                     ");";
             stmt.executeUpdate(ejecutarSQL);
 
@@ -102,8 +102,8 @@ public class DatabaseInitializer {
                     "    tipoFormaPago VARCHAR(50) NOT NULL," +
                     "    aliasVendedor VARCHAR(100)," +
                     "    cuitVendedor VARCHAR(20)," +
-                    "    cbuVendedor VARCHAR(20)," +
-                    "    FOREIGN KEY (id_vendedor) REFERENCES vendedor(id_vendedor)" +
+                    "    cbuVendedor VARCHAR(100)," +
+                    "    FOREIGN KEY (id_vendedor) REFERENCES Vendedor(id_vendedor)" +
                     ");";
             stmt.executeUpdate(ejecutarSQL);
 
@@ -115,7 +115,7 @@ public class DatabaseInitializer {
                     // " detallePedidoId INT," +
                     // " datosPagoId INT," +
                     "    formaPagoId INT," +
-                    "    FOREIGN KEY (clienteId) REFERENCES cliente(id_cliente)," +
+                    "    FOREIGN KEY (clienteId) REFERENCES Cliente(id_cliente)," +
                     // " FOREIGN KEY (detallePedidoId) REFERENCES DetallePedido(id)," +
                     // " FOREIGN KEY (datosPagoId) REFERENCES Pago(id)," +
                     "    FOREIGN KEY (formaPagoId) REFERENCES FormaPago(id)" +
@@ -123,8 +123,6 @@ public class DatabaseInitializer {
             stmt.executeUpdate(ejecutarSQL);
 
             // Crear tabla DetallePedido
-            // ? Supuse que al igual que la clase DetallePedido, debería tener una lista
-            // ? de items y un pedido asociado.
             ejecutarSQL = "CREATE TABLE IF NOT EXISTS DetallePedido (" +
                     "    id INT AUTO_INCREMENT PRIMARY KEY," +
                     "    id_pedido INT NOT NULL," +

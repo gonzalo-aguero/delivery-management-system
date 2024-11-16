@@ -47,7 +47,7 @@ public class VendedorMySQLDaoImpl extends GenericMySQLDaoImpl<Vendedor> {
 
     @Override
     protected String getTableName() {
-        return "vendedor";
+        return "Vendedor";
     }
 
     @Override

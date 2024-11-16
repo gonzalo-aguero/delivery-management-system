@@ -4,4 +4,6 @@ public interface FormaPagoI {
     double totalizar(double monto);
 
     int getId();
+    
+    void setId(int id);
 }

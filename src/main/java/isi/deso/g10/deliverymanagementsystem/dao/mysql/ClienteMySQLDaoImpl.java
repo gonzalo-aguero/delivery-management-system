@@ -41,7 +41,7 @@ public class ClienteMySQLDaoImpl extends GenericMySQLDaoImpl<Cliente> {
 
     @Override
     protected String getTableName() {
-        return "cliente";
+        return "Cliente";
     }
 
     @Override

@@ -24,7 +24,9 @@ public class Pedido implements Observable {
     private FormaPagoI formapago;
     private List<PedidoObserver> observers;
 
-    public Pedido() { }
+    public Pedido() { 
+        this.observers = new ArrayList<>();
+    }
 
     public Pedido(int idPedido ,ArrayList<ItemMenu> itemsPedido, Cliente cliente) {
         this.id = idPedido;

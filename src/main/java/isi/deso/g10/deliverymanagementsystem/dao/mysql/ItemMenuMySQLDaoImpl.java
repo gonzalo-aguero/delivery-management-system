@@ -44,8 +44,8 @@ public class ItemMenuMySQLDaoImpl extends GenericMySQLDaoImpl<ItemMenu> {
         List<ItemMenu> list = new ArrayList<>();
         String sql = "SELECT DISTINCT * " +
                 "FROM " + getTableName() + " im " +
-                "LEFT JOIN plato p ON im.id = p.id_item " +
-                "LEFT JOIN bebida b ON im.id = b.id_item";
+                "LEFT JOIN Plato p ON im.id = p.id_item " +
+                "LEFT JOIN Bebida b ON im.id = b.id_item";
         try (Connection connection = getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(sql)) {
@@ -62,8 +62,8 @@ public class ItemMenuMySQLDaoImpl extends GenericMySQLDaoImpl<ItemMenu> {
     public ItemMenu obtenerPorId(int id) {
         String sql = "SELECT * FROM "
                 + getTableName() + " im " +
-                "LEFT JOIN plato p ON im.id = p.id_item " +
-                "LEFT JOIN bebida b ON im.id = b.id_item" + " WHERE im." + getPrimaryKeyColumn() + " = ?";
+                "LEFT JOIN Plato p ON im.id = p.id_item " +
+                "LEFT JOIN Bebida b ON im.id = b.id_item" + " WHERE im." + getPrimaryKeyColumn() + " = ?";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setObject(1, id);
             ResultSet resultSet = statement.executeQuery();
@@ -122,7 +122,7 @@ public class ItemMenuMySQLDaoImpl extends GenericMySQLDaoImpl<ItemMenu> {
 
     @Override
     protected String getTableName() {
-        return "itemmenu";
+        return "ItemMenu";
     }
 
     @Override
@@ -132,9 +132,9 @@ public class ItemMenuMySQLDaoImpl extends GenericMySQLDaoImpl<ItemMenu> {
 
     protected String getChildrenTableName(ItemMenu entity) {
         if (entity instanceof Plato) {
-            return "plato";
+            return "Plato";
         } else if (entity instanceof Bebida) {
-            return "bebida";
+            return "Bebida";
         } else
             return null;
     }

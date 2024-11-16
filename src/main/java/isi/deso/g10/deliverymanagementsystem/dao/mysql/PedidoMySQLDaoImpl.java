@@ -4,10 +4,14 @@
  */
 package isi.deso.g10.deliverymanagementsystem.dao.mysql;
 
+import isi.deso.g10.deliverymanagementsystem.model.Bebida;
 import isi.deso.g10.deliverymanagementsystem.model.Cliente;
 import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
+import isi.deso.g10.deliverymanagementsystem.model.DetallePedido;
+import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
 import isi.deso.g10.deliverymanagementsystem.model.Pedido;
 import isi.deso.g10.deliverymanagementsystem.model.Pedido.EstadoPedido;
+import isi.deso.g10.deliverymanagementsystem.model.Plato;
 import isi.deso.g10.deliverymanagementsystem.strategy.FormaMercadoPago;
 import isi.deso.g10.deliverymanagementsystem.strategy.FormaPagoI;
 import isi.deso.g10.deliverymanagementsystem.strategy.FormaTransferencia;
@@ -96,37 +100,60 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
     }
 
     @Override
-    public Pedido crear(Pedido entity) {
-        String sql = "INSERT INTO " + getTableName() + " (clienteId, estado_pedido, formaPagoId) VALUES (?, ?, ?)";
+    public Pedido crear(Pedido pedido) {
+        String sqlPedido = "INSERT INTO Pedido (clienteId, estado_pedido, formaPagoId) VALUES (?, ?, ?)";
+        String sqlDetallePedido = "INSERT INTO DetallePedido (id_pedido, id_item) VALUES (?, ?)";
 
-        try (Connection connection = getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = getConnection()) {
+            connection.setAutoCommit(false); // Iniciar transacción
 
-            statement.setInt(1, entity.getCliente().getId());
-            statement.setString(2, entity.getEstado().toString());
-            statement.setInt(3, entity.getFormapago().getId());
+            try (PreparedStatement statementPedido = connection.prepareStatement(sqlPedido,
+                    Statement.RETURN_GENERATED_KEYS)) {
+                // Insertar Pedido
+                statementPedido.setInt(1, pedido.getCliente().getId());
+                statementPedido.setString(2, pedido.getEstado().name());
+                statementPedido.setInt(3, pedido.getFormapago().getId());
 
-            int affectedRows = statement.executeUpdate();
+                int affectedRows = statementPedido.executeUpdate();
 
-            if (affectedRows == 0) {
-                entity = null;
-                throw new SQLException("Creating pedido failed, no rows affected.");
-            }
-
-            // Retrieve generated keys (ID) if there is an auto-increment ID in the database
-            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    entity.setId(generatedKeys.getInt(1));
-                } else {
-                    entity = null;
-                    throw new SQLException("Creating pedido failed, no ID obtained.");
+                if (affectedRows == 0) {
+                    connection.rollback();
+                    throw new SQLException("Creating pedido failed, no rows affected.");
                 }
+
+                // Obtener ID generado para Pedido
+                try (ResultSet generatedKeys = statementPedido.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        pedido.setId(generatedKeys.getInt(1));
+                    } else {
+                        connection.rollback();
+                        throw new SQLException("Creating pedido failed, no ID obtained.");
+                    }
+                }
+
+                // Insertar DetallePedido
+                try (PreparedStatement statementDetallePedido = connection.prepareStatement(sqlDetallePedido)) {
+                    for (ItemMenu item : pedido.getDetallePedido().getItems()) {
+                        statementDetallePedido.setInt(1, pedido.getId());
+                        statementDetallePedido.setInt(2, item.getId());
+                        statementDetallePedido.addBatch();
+                    }
+                    statementDetallePedido.executeBatch();
+                }
+
+                connection.commit(); // Confirmar transacción
+            } catch (SQLException ex) {
+                connection.rollback(); // Revertir transacción en caso de error
+                Logger.getLogger(PedidoMySQLDaoImpl.class.getName()).log(Level.SEVERE, "Error al crear pedido", ex);
+                throw ex;
+            } finally {
+                connection.setAutoCommit(true); // Restaurar modo de auto-commit
             }
         } catch (SQLException ex) {
             Logger.getLogger(PedidoMySQLDaoImpl.class.getName()).log(Level.SEVERE, "Error al crear pedido", ex);
         }
 
-        return entity;
+        return pedido;
     }
 
     @Override
@@ -154,6 +181,57 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
         return entity;
     }
 
+    private List<ItemMenu> obtenerDetallePedidoPorPedidoId(int pedidoId) {
+        String sql = "SELECT dp.id_item, im.nombre, im.descripcion, im.precio, im.categoria, im.calorias, " +
+                "im.aptoCeliaco, im.aptoVegetariano, im.aptoVegano, im.id_vendedor " +
+                "FROM DetallePedido dp " +
+                "JOIN ItemMenu im ON dp.id_item = im.id " +
+                "WHERE dp.id_pedido = ?";
+
+        List<ItemMenu> items = new ArrayList<>();
+
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, pedidoId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    ItemMenu item = mapResultSetToItemMenu(resultSet);
+                    items.add(item);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PedidoMySQLDaoImpl.class.getName()).log(Level.SEVERE,
+                    "Error al obtener detalle del pedido", ex);
+        }
+        return items;
+    }
+
+    private ItemMenu mapResultSetToItemMenu(ResultSet resultSet) throws SQLException {
+        ItemMenu itemMenu;
+        if (resultSet.getString("graduacionAlcoholica") != null) {
+            itemMenu = new Bebida();
+            ((Bebida) itemMenu).setGraduacionAlcoholica(resultSet.getDouble("graduacionAlcoholica"));
+            ((Bebida) itemMenu).setVolumenEnMl(resultSet.getDouble("volumenEnMl"));
+        } else if (resultSet.getString("peso") != null) {
+            itemMenu = new Plato();
+            ((Plato) itemMenu).setPeso(resultSet.getDouble("peso"));
+        } else {
+            throw new RuntimeException("El resultado no coincide con alguno de los dos tipos (Plato/Bebida)");
+        }
+
+        itemMenu.setId(resultSet.getInt("id_item"));
+        itemMenu.setNombre(resultSet.getString("nombre"));
+        itemMenu.setDescripcion(resultSet.getString("descripcion"));
+        itemMenu.setPrecio(resultSet.getDouble("precio"));
+        itemMenu.setCategoria(resultSet.getString("categoria"));
+        itemMenu.setCalorias(resultSet.getInt("calorias"));
+        itemMenu.setAptoCeliaco(resultSet.getBoolean("aptoCeliaco"));
+        itemMenu.setAptoVegetariano(resultSet.getBoolean("aptoVegetariano"));
+        itemMenu.setAptoVegano(resultSet.getBoolean("aptoVegano"));
+        itemMenu.setIdVendedor(resultSet.getInt("id_vendedor"));
+
+        return itemMenu;
+    }
+
     @Override
     public Pedido obtenerPorId(int id) {
         String sql = "SELECT p.id, p.clienteId, p.estado_pedido, p.formaPagoId, " +
@@ -169,7 +247,11 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return mapResultSetToEntity(resultSet);
+                    Pedido pedido = mapResultSetToEntity(resultSet);
+                    List<ItemMenu> items = obtenerDetallePedidoPorPedidoId(id);
+                    DetallePedido detallePedido = new DetallePedido((ArrayList<ItemMenu>) items);
+                    pedido.setDetallePedido(detallePedido);
+                    return pedido;
                 }
             }
         } catch (SQLException ex) {

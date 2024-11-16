@@ -4,7 +4,19 @@
  */
 package isi.deso.g10.deliverymanagementsystem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import isi.deso.g10.deliverymanagementsystem.controller.MenuController;
+import isi.deso.g10.deliverymanagementsystem.dao.mysql.ClienteMySQLDaoImpl;
+import isi.deso.g10.deliverymanagementsystem.dao.mysql.ItemMenuMySQLDaoImpl;
+import isi.deso.g10.deliverymanagementsystem.dao.mysql.PedidoMySQLDaoImpl;
+import isi.deso.g10.deliverymanagementsystem.model.Cliente;
+import isi.deso.g10.deliverymanagementsystem.model.DetallePedido;
+import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
+import isi.deso.g10.deliverymanagementsystem.model.Pedido;
+import isi.deso.g10.deliverymanagementsystem.strategy.FormaMercadoPago;
+import isi.deso.g10.deliverymanagementsystem.strategy.FormaPagoI;
 import isi.deso.g10.deliverymanagementsystem.utils.DatabaseInitializer;
 import isi.deso.g10.deliverymanagementsystem.view.PantallaPrincipal;
 
@@ -33,8 +45,46 @@ public class DesarrolloBDD {
         // Insertamos los datos de prueba
         DatabaseInitializer.insertTestData();
         
-        PantallaPrincipal menu = new PantallaPrincipal();
-        MenuController controller = new MenuController(menu);
+        // PantallaPrincipal menu = new PantallaPrincipal();
+        // MenuController controller = new MenuController(menu);
+
+        // Crear una instancia del DAO
+        PedidoMySQLDaoImpl pedidoDao = PedidoMySQLDaoImpl.getInstance();
+        ClienteMySQLDaoImpl clienteDao = ClienteMySQLDaoImpl.getInstance();
+        ItemMenuMySQLDaoImpl itemMenuDao = ItemMenuMySQLDaoImpl.getInstance();
+
+        // Probar la inserción de un nuevo pedido
+        // Pedido nuevoPedido = new Pedido();
+        // nuevoPedido.setCliente(clienteDao.obtenerPorId(1));
+        // nuevoPedido.setEstado(Pedido.EstadoPedido.RECIBIDO);
+        // ArrayList<ItemMenu> items = new ArrayList<>();
+        // items.add(itemMenuDao.obtenerPorId(1));
+        // items.add(itemMenuDao.obtenerPorId(2));
+        // DetallePedido detallePedido = new DetallePedido(items);
+        // detallePedido.setId(1);
+        // detallePedido.setPedido(nuevoPedido);
+        // nuevoPedido.setDetallePedido(detallePedido);
+        // FormaPagoI formaPago = new FormaMercadoPago(null);
+        // formaPago.setId(1);
+        // nuevoPedido.setFormapago(formaPago);
+        // pedidoDao.crear(nuevoPedido);
+
+        // Probar la obtención de un pedido por ID
+        Pedido pedidoObtenido = pedidoDao.obtenerPorId(1);
+        System.out.println("Pedido obtenido: " + pedidoObtenido.getCliente().getNombre());
+
+        // // Probar la actualización de un pedido
+        // pedidoObtenido.setDescripcion("Pedido de prueba actualizado");
+        // pedidoDao.update(pedidoObtenido);
+
+        // // Probar la eliminación de un pedido
+        // pedidoDao.delete(1);
+
+        // // Probar la obtención de todos los pedidos
+        // List<Pedido> pedidos = pedidoDao.getAll();
+        // for (Pedido pedido : pedidos) {
+        //     System.out.println(pedido);
+        // }
         
     }
     
