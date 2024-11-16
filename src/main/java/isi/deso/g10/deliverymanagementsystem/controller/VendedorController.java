@@ -4,6 +4,7 @@
  */
 package isi.deso.g10.deliverymanagementsystem.controller;
 
+import isi.deso.g10.deliverymanagementsystem.dao.interfaces.GenericDao;
 import isi.deso.g10.deliverymanagementsystem.dao.memory.VendedorMemory;
 import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
@@ -21,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedorDao;
+import isi.deso.g10.deliverymanagementsystem.dao.mysql.VendedorMySQLDaoImpl;
 
 /**
  *
@@ -32,13 +34,13 @@ public class VendedorController implements Controller {
     DefaultTableModel tableModel;
 
     //DAOS
-    VendedorDao vendedoresDao;
+    GenericDao<Vendedor> vendedoresDao;
 
     List<Vendedor> vendedores;
 
     public VendedorController(PantallaPrincipal menu) {
         this.menu = menu;
-        vendedoresDao = VendedorMemory.getInstance();
+        vendedoresDao = VendedorMySQLDaoImpl.getInstance();
     }
 
     @Override
@@ -75,10 +77,12 @@ public class VendedorController implements Controller {
 
         table.getColumn("Acciones").setCellEditor(buttonsPanelEditor);
 
-        vendedores = vendedoresDao.buscarVendedorPorNombre(cadena);
+        vendedores = vendedoresDao.obtenerTodos();
+        
+        List<Vendedor> vendedoresFiltrados = vendedores.stream().filter(e -> e.getNombre().toLowerCase().startsWith(cadena.toLowerCase())).toList();
 
         //Llena la tabla de vendedores
-        for (Vendedor vendedor : vendedores) {
+        for (Vendedor vendedor : vendedoresFiltrados) {
             modelo.addRow(new Object[]{
                 vendedor.getId(),
                 vendedor.getNombre(),

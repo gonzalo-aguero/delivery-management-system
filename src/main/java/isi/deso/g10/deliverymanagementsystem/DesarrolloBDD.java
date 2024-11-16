@@ -4,15 +4,9 @@
  */
 package isi.deso.g10.deliverymanagementsystem;
 
-import java.lang.reflect.Array;
-import java.sql.Time;
-import java.util.ArrayList;
-
-import isi.deso.g10.deliverymanagementsystem.dao.interfaces.VendedorDao;
-import isi.deso.g10.deliverymanagementsystem.dao.mysql.VendedorMySQLDaoImpl;
-import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
-import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
+import isi.deso.g10.deliverymanagementsystem.controller.MenuController;
 import isi.deso.g10.deliverymanagementsystem.utils.DatabaseInitializer;
+import isi.deso.g10.deliverymanagementsystem.view.PantallaPrincipal;
 
 /**
  *
@@ -38,6 +32,9 @@ public class DesarrolloBDD {
 
         // Insertamos los datos de prueba
         DatabaseInitializer.insertTestData();
+        
+        PantallaPrincipal menu = new PantallaPrincipal();
+        MenuController controller = new MenuController(menu);
         
     }
     

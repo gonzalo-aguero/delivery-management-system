@@ -24,6 +24,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.ClienteDao;
+import isi.deso.g10.deliverymanagementsystem.dao.interfaces.GenericDao;
+import isi.deso.g10.deliverymanagementsystem.dao.mysql.ClienteMySQLDaoImpl;
 
 /**
  *
@@ -34,7 +36,7 @@ public class ClienteController implements Controller {
     private DefaultTableModel tableModel;
 
     //DAO
-    private final ClienteDao clientesDao;
+    private final GenericDao<Cliente> clientesDao;
 
     private List<Cliente> clientes;
 
@@ -42,7 +44,7 @@ public class ClienteController implements Controller {
 
     public ClienteController(PantallaPrincipal menu) {
         this.menu = menu;
-        clientesDao = ClientesMemory.getInstance();
+        clientesDao = ClienteMySQLDaoImpl.getInstance();
     }
 
     @Override
@@ -80,10 +82,12 @@ public class ClienteController implements Controller {
 
         table.getColumn("Acciones").setCellEditor(buttonsPanelEditor);
 
-        clientes = clientesDao.obtenerClientesPorNombre(cadena);
+        clientes = clientesDao.obtenerTodos();
+        
+        List<Cliente> clientesFiltrados = clientes.stream().filter(e -> e.getNombre().toLowerCase().startsWith(cadena.toLowerCase())).toList();
 
         //Llena la tabla de vendedores
-        for (Cliente cliente : clientes) {
+        for (Cliente cliente : clientesFiltrados) {
 
             // Agregamos la fila a la tabla
             modelo.addRow(new Object[]{cliente.getId(),
