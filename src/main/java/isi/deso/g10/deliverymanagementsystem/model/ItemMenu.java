@@ -21,6 +21,8 @@ public abstract class ItemMenu {
     protected boolean aptoVegetariano;
     protected boolean aptoVegano;
     protected Vendedor vendedor;
+    
+    public ItemMenu(){};
 
     //constructor (eliminar y dejar el completo)
     public ItemMenu(int id, String nombre, String descripcion, double precio, Categoria categoria, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano) {

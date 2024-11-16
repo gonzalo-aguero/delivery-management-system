@@ -14,6 +14,10 @@ public class Plato extends ItemMenu {
     private double peso;
 
     
+    public Plato(){
+        super();
+    }
+    
     //constructor (eliminar y dejar el completo)
     public Plato(double peso, int id, String nombre, String descripcion, double precio, Categoria categoria, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano) {
         super(id, nombre, descripcion, precio, categoria, calorias, aptoCeliaco, aptoVegetariano, aptoVegano);

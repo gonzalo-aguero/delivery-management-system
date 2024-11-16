@@ -29,6 +29,8 @@ public class Bebida extends ItemMenu {
         this.volumenEnMl = volumenEnMl;
     }
     
+    
+    
     /**
      * Constructor con todos los atributos.
      * @param id
@@ -44,6 +46,10 @@ public class Bebida extends ItemMenu {
      * @param graduacionAlcoholica
      * @param volumenEnMl 
      */
+    public Bebida(){
+        super();
+            };
+    
     public Bebida(int id, String nombre, String descripcion, double precio, Categoria categoria, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano, Vendedor vendedor, double graduacionAlcoholica, double volumenEnMl) {
         super(id, nombre, descripcion, precio, categoria, calorias, aptoCeliaco, aptoVegetariano, aptoVegano, vendedor);
         this.graduacionAlcoholica = graduacionAlcoholica;
