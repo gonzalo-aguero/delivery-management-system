@@ -4,22 +4,6 @@
  */
 package isi.deso.g10.deliverymanagementsystem.dao.mysql;
 
-import isi.deso.g10.deliverymanagementsystem.dao.memory.CategoriaMemory;
-import isi.deso.g10.deliverymanagementsystem.dao.mysql.mappers.PedidoMapper;
-import isi.deso.g10.deliverymanagementsystem.model.Bebida;
-import isi.deso.g10.deliverymanagementsystem.model.Categoria;
-import isi.deso.g10.deliverymanagementsystem.model.Cliente;
-import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
-import isi.deso.g10.deliverymanagementsystem.model.DetallePedido;
-import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
-import isi.deso.g10.deliverymanagementsystem.model.Pedido;
-import isi.deso.g10.deliverymanagementsystem.model.Pedido.EstadoPedido;
-import isi.deso.g10.deliverymanagementsystem.model.Plato;
-import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
-import isi.deso.g10.deliverymanagementsystem.strategy.FormaMercadoPago;
-import isi.deso.g10.deliverymanagementsystem.strategy.FormaPagoI;
-import isi.deso.g10.deliverymanagementsystem.strategy.FormaTransferencia;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,8 +14,22 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import isi.deso.g10.deliverymanagementsystem.dao.mysql.mappers.PedidoMapper;
+import isi.deso.g10.deliverymanagementsystem.model.DetallePedido;
+import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
+import isi.deso.g10.deliverymanagementsystem.model.Pedido;
+
 /**
- *
+ * Implementación del DAO de Pedido para la base de datos MySQL.
+ * Esta clase utiliza el patrón Singleton para asegurar que solo se cree una
+ * instancia.
+ * Proporciona métodos para crear, actualizar y recuperar entidades de Pedido de
+ * la base de datos.
+ * 
+ * Nota: El mapeo de profundidad llega hasta ItemsMenu (con su correspondiente
+ * herencia).
+ * Si se desea el vendedor del ítem, se debe realizar otra consulta.
+ * 
  * @author giuli
  */
 public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
@@ -62,6 +60,10 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
         return "Pedido";
     }
 
+    protected String getDetalleTableName() {
+        return "DetallePedido";
+    }
+
     @Override
     protected String getPrimaryKeyColumn() {
         return "id";
@@ -69,8 +71,9 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
 
     @Override
     public Pedido crear(Pedido pedido) {
-        String sqlPedido = "INSERT INTO Pedido (clienteId, estado_pedido, formaPagoId) VALUES (?, ?, ?)";
-        String sqlDetallePedido = "INSERT INTO DetallePedido (id_pedido, id_item) VALUES (?, ?)";
+        String sqlPedido = "INSERT INTO " + getTableName()
+                + " (clienteId, estado_pedido, formaPagoId) VALUES (?, ?, ?)";
+        String sqlDetallePedido = "INSERT INTO " + getDetalleTableName() + " (id_pedido, id_item) VALUES (?, ?)";
 
         try (Connection connection = getConnection()) {
             connection.setAutoCommit(false); // Iniciar transacción
@@ -125,48 +128,80 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
     }
 
     @Override
-    public Pedido actualizar(Pedido entity) {
-        String sql = "UPDATE " + getTableName() + " SET clienteId = ?, estado_pedido = ?, formaPagoId = ? WHERE "
+    public Pedido actualizar(Pedido pedido) {
+        String sqlPedido = "UPDATE " + getTableName() + " SET clienteId = ?, estado_pedido = ?, formaPagoId = ? WHERE "
                 + getPrimaryKeyColumn() + " = ?";
+        String sqlDeleteDetallePedido = "DELETE FROM " + getDetalleTableName() + " WHERE id_pedido = ?";
+        String sqlInsertDetallePedido = "INSERT INTO " + getDetalleTableName() + " (id_pedido, id_item) VALUES (?, ?)";
 
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = getConnection()) {
+            connection.setAutoCommit(false); // Iniciar transacción
 
-            statement.setInt(1, entity.getCliente().getId());
-            statement.setString(2, entity.getEstado().toString());
-            statement.setInt(3, entity.getFormapago().getId());
-            statement.setInt(4, entity.getId());
+            try (PreparedStatement statementPedido = connection.prepareStatement(sqlPedido)) {
+                // Actualizar Pedido
+                statementPedido.setInt(1, pedido.getCliente().getId());
+                statementPedido.setString(2, pedido.getEstado().name());
+                statementPedido.setInt(3, pedido.getFormapago().getId());
+                statementPedido.setInt(4, pedido.getId());
 
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 0) {
-                entity = null;
-                throw new SQLException("Updating pedido failed, no rows affected.");
+                int affectedRows = statementPedido.executeUpdate();
+                if (affectedRows == 0) {
+                    connection.rollback();
+                    throw new SQLException("Updating pedido failed, no rows affected.");
+                }
+
+                // Eliminar DetallePedido existente
+                try (PreparedStatement statementDeleteDetallePedido = connection
+                        .prepareStatement(sqlDeleteDetallePedido)) {
+                    statementDeleteDetallePedido.setInt(1, pedido.getId());
+                    statementDeleteDetallePedido.executeUpdate();
+                }
+
+                // Insertar nuevo DetallePedido
+                try (PreparedStatement statementInsertDetallePedido = connection
+                        .prepareStatement(sqlInsertDetallePedido)) {
+                    for (ItemMenu item : pedido.getDetallePedido().getItems()) {
+                        statementInsertDetallePedido.setInt(1, pedido.getId());
+                        statementInsertDetallePedido.setInt(2, item.getId());
+                        statementInsertDetallePedido.addBatch();
+                    }
+                    statementInsertDetallePedido.executeBatch();
+                }
+
+                connection.commit(); // Confirmar transacción
+            } catch (SQLException ex) {
+                connection.rollback(); // Revertir transacción en caso de error
+                Logger.getLogger(PedidoMySQLDaoImpl.class.getName()).log(Level.SEVERE, "Error al actualizar pedido",
+                        ex);
+                throw ex;
+            } finally {
+                connection.setAutoCommit(true); // Restaurar modo de auto-commit
             }
-
         } catch (SQLException ex) {
             Logger.getLogger(PedidoMySQLDaoImpl.class.getName()).log(Level.SEVERE, "Error al actualizar pedido", ex);
         }
 
-        return entity;
+        return pedido;
     }
 
-    
     /**
      * Obtiene el detalle de un pedido por su ID.
      *
      * @param pedidoId El ID del pedido.
-     * @return Un objeto DetallePedido que contiene una lista de los ítems del menú asociados al pedido.
+     * @return Un objeto DetallePedido que contiene una lista de los ítems del menú
+     *         asociados al pedido.
      * @throws SQLException Si ocurre un error al acceder a la base de datos.
      */
     private DetallePedido obtenerDetallePedidoPorPedidoId(int pedidoId) {
         String sql = "SELECT dp.id, dp.id_item, im.nombre, im.descripcion, im.precio, im.categoria, im.calorias, " +
-             "im.aptoCeliaco, im.aptoVegetariano, im.aptoVegano, im.id_vendedor, " +
-             "b.graduacionAlcoholica, b.volumenEnMl, " +
-             "p.peso " +
-             "FROM DetallePedido dp " +
-             "JOIN ItemMenu im ON dp.id_item = im.id " +
-             "LEFT JOIN Bebida b ON im.id = b.id_item " +
-             "LEFT JOIN Plato p ON im.id = p.id_item " +
-             "WHERE dp.id_pedido = ?";
+                "im.aptoCeliaco, im.aptoVegetariano, im.aptoVegano, im.id_vendedor, " +
+                "b.graduacionAlcoholica, b.volumenEnMl, " +
+                "p.peso " +
+                "FROM DetallePedido dp " +
+                "JOIN ItemMenu im ON dp.id_item = im.id " +
+                "LEFT JOIN Bebida b ON im.id = b.id_item " +
+                "LEFT JOIN Plato p ON im.id = p.id_item " +
+                "WHERE dp.id_pedido = ?";
 
         List<ItemMenu> items = new ArrayList<>();
 
@@ -187,7 +222,14 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
         return detallePedido;
     }
 
-
+    /**
+     * Obtiene un pedido por su ID.
+     *
+     * @param id el ID del pedido a obtener.
+     * @return el pedido correspondiente al ID proporcionado, o null si no se
+     *         encuentra.
+     * @throws SQLException si ocurre un error al acceder a la base de datos.
+     */
     @Override
     public Pedido obtenerPorId(int id) {
         String sql = "SELECT p.id, p.clienteId, p.estado_pedido, p.formaPagoId, " +
@@ -208,7 +250,7 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
                     DetallePedido detallePedido = obtenerDetallePedidoPorPedidoId(id);
                     detallePedido.setPedido(pedido);
                     pedido.setDetallePedido(detallePedido);
-                    
+
                     return pedido;
                 }
             }
@@ -223,9 +265,9 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
     @Override
     public List<Pedido> obtenerTodos() {
         String sql = "SELECT p.id, p.clienteId, p.estado_pedido, p.formaPagoId, " +
-                "c.cuit, c.nombre AS nombre_cliente, c.email AS email_cliente, c.direccion AS direccion_cliente, c.latitud AS latitud_cliente, c.longitud AS longitud_cliente, "
+                "c.cuit AS cuit_cliente, c.nombre AS nombre_cliente, c.email AS email_cliente, c.direccion AS direccion_cliente, c.latitud AS latitud_cliente, c.longitud AS longitud_cliente, "
                 +
-                "f.tipoFormaPago, f.aliasVendedor, f.cuitVendedor, f.cbuVendedor " +
+                "f.id AS id_FormaPago, f.tipoFormaPago, f.aliasVendedor, f.cuitVendedor, f.cbuVendedor " +
                 "FROM Pedido p " +
                 "JOIN Cliente c ON p.clienteId = c.id_cliente " +
                 "JOIN FormaPago f ON p.formaPagoId = f.id";
@@ -237,6 +279,11 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
                 ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 Pedido pedido = mapResultSetToEntity(resultSet);
+
+                DetallePedido detallePedido = obtenerDetallePedidoPorPedidoId(pedido.getId());
+                detallePedido.setPedido(pedido);
+                pedido.setDetallePedido(detallePedido);
+
                 pedidos.add(pedido);
             }
         } catch (SQLException ex) {
@@ -245,5 +292,47 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
         }
 
         return pedidos;
+    }
+
+    @Override
+    public boolean eliminar(int id) {
+        String sqlDeleteDetallePedido = "DELETE FROM "+getDetalleTableName()+" WHERE id_pedido = ?";
+        String sqlDeletePedido = "DELETE FROM "+getTableName()+" WHERE "+getPrimaryKeyColumn()+" = ?";
+
+        try (Connection connection = getConnection()) {
+            connection.setAutoCommit(false); // Iniciar transacción
+
+            try {
+                // Eliminar DetallePedido asociado
+                try (PreparedStatement statementDeleteDetallePedido = connection
+                        .prepareStatement(sqlDeleteDetallePedido)) {
+                    statementDeleteDetallePedido.setInt(1, id);
+                    statementDeleteDetallePedido.executeUpdate();
+                }
+
+                // Eliminar Pedido
+                try (PreparedStatement statementDeletePedido = connection.prepareStatement(sqlDeletePedido)) {
+                    statementDeletePedido.setInt(1, id);
+                    int affectedRows = statementDeletePedido.executeUpdate();
+
+                    if (affectedRows == 0) {
+                        connection.rollback();
+                        throw new SQLException("Deleting pedido failed, no rows affected.");
+                    }
+                }
+
+                connection.commit(); // Confirmar transacción
+                return true;
+            } catch (SQLException ex) {
+                connection.rollback(); // Revertir transacción en caso de error
+                Logger.getLogger(PedidoMySQLDaoImpl.class.getName()).log(Level.SEVERE, "Error al eliminar pedido", ex);
+                throw ex;
+            } finally {
+                connection.setAutoCommit(true); // Restaurar modo de auto-commit
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PedidoMySQLDaoImpl.class.getName()).log(Level.SEVERE, "Error al eliminar pedido", ex);
+            return false;
+        }
     }
 }
