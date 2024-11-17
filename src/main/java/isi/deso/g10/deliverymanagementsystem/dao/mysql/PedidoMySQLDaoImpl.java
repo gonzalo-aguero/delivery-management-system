@@ -296,8 +296,8 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
 
     @Override
     public boolean eliminar(int id) {
-        String sqlDeleteDetallePedido = "DELETE FROM "+getDetalleTableName()+" WHERE id_pedido = ?";
-        String sqlDeletePedido = "DELETE FROM "+getTableName()+" WHERE "+getPrimaryKeyColumn()+" = ?";
+        String sqlDeleteDetallePedido = "DELETE FROM " + getDetalleTableName() + " WHERE id_pedido = ?";
+        String sqlDeletePedido = "DELETE FROM " + getTableName() + " WHERE " + getPrimaryKeyColumn() + " = ?";
 
         try (Connection connection = getConnection()) {
             connection.setAutoCommit(false); // Iniciar transacción
@@ -332,6 +332,48 @@ public class PedidoMySQLDaoImpl extends GenericMySQLDaoImpl<Pedido> {
             }
         } catch (SQLException ex) {
             Logger.getLogger(PedidoMySQLDaoImpl.class.getName()).log(Level.SEVERE, "Error al eliminar pedido", ex);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean eliminarTodos() {
+        String sqlDeleteDetallePedido = "DELETE FROM " + getDetalleTableName() + " WHERE id_pedido IN (SELECT "+getPrimaryKeyColumn()+" FROM " + getTableName() + ")";
+        String sqlDeletePedido = "DELETE FROM " + getTableName() + " WHERE " + getPrimaryKeyColumn() + " IS NOT NULL";
+
+        try (Connection connection = getConnection()) {
+            connection.setAutoCommit(false); // Iniciar transacción
+
+            try {
+                // Eliminar todos los DetallePedido asociados
+                try (PreparedStatement statementDeleteDetallePedido = connection
+                        .prepareStatement(sqlDeleteDetallePedido)) {
+                    statementDeleteDetallePedido.executeUpdate();
+                }
+
+                // Eliminar todos los Pedido
+                try (PreparedStatement statementDeletePedido = connection.prepareStatement(sqlDeletePedido)) {
+                    int affectedRows = statementDeletePedido.executeUpdate();
+
+                    if (affectedRows == 0) {
+                        connection.rollback();
+                        throw new SQLException("Deleting all pedidos failed, no rows affected.");
+                    }
+                }
+
+                connection.commit(); // Confirmar transacción
+                return true;
+            } catch (SQLException ex) {
+                connection.rollback(); // Revertir transacción en caso de error
+                Logger.getLogger(PedidoMySQLDaoImpl.class.getName()).log(Level.SEVERE,
+                        "Error al eliminar todos los pedidos", ex);
+                throw ex;
+            } finally {
+                connection.setAutoCommit(true); // Restaurar modo de auto-commit
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PedidoMySQLDaoImpl.class.getName()).log(Level.SEVERE,
+                    "Error al eliminar todos los pedidos", ex);
             return false;
         }
     }

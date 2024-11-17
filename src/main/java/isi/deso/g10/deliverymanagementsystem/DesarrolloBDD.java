@@ -49,6 +49,12 @@ public class DesarrolloBDD {
         // PantallaPrincipal menu = new PantallaPrincipal();
         // MenuController controller = new MenuController(menu);
 
+
+
+        /**
+         * PRUEBAS DE PedidoMySQLDaoImpl
+         */
+        
         // Crear una instancia del DAO
         PedidoMySQLDaoImpl pedidoDao = PedidoMySQLDaoImpl.getInstance();
         ClienteMySQLDaoImpl clienteDao = ClienteMySQLDaoImpl.getInstance();
@@ -100,7 +106,11 @@ public class DesarrolloBDD {
         // pedidoDao.eliminar(2);
 
         // Probar eliminar todos los pedidos
-        // List<Pedido> pedidos = pedidoDao.obtenerTodos();
+        // if(pedidoDao.eliminarTodos()){
+        //     System.out.println("Se eliminaron todos los pedidos");
+        // } else {
+        //     System.out.println("No se eliminaron todos los pedidos");
+        // }
 
         // Probar la obtención de todos los pedidos
         // List<Pedido> pedidos = pedidoDao.obtenerTodos();
