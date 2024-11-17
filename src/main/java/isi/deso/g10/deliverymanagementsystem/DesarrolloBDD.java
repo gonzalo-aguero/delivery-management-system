@@ -46,8 +46,8 @@ public class DesarrolloBDD {
         // Insertamos los datos de prueba
         DatabaseInitializer.insertTestData();
 
-        // PantallaPrincipal menu = new PantallaPrincipal();
-        // MenuController controller = new MenuController(menu);
+        PantallaPrincipal menu = new PantallaPrincipal();
+        MenuController controller = new MenuController(menu);
 
 
 
@@ -61,46 +61,46 @@ public class DesarrolloBDD {
         ItemMenuMySQLDaoImpl itemMenuDao = ItemMenuMySQLDaoImpl.getInstance();
 
         // Probar la inserción de un nuevo pedido
-        // Pedido nuevoPedido = new Pedido();
-        // nuevoPedido.setCliente(clienteDao.obtenerPorId(1));
-        // nuevoPedido.setEstado(Pedido.EstadoPedido.EN_ENVIO);
-        // ArrayList<ItemMenu> items = new ArrayList<>();
-        // items.add(itemMenuDao.obtenerPorId(1));
-        // items.add(itemMenuDao.obtenerPorId(2));
-        // DetallePedido detallePedido = new DetallePedido(items);
-        // detallePedido.setPedido(nuevoPedido);
-        // nuevoPedido.setDetallePedido(detallePedido);
-        // FormaPagoI formaPago = new FormaMercadoPago(null);
-        // formaPago.setId(1);
-        // nuevoPedido.setFormapago(formaPago);
-        // pedidoDao.crear(nuevoPedido);
+        Pedido nuevoPedido = new Pedido();
+        nuevoPedido.setCliente(clienteDao.obtenerPorId(1));
+        nuevoPedido.setEstado(Pedido.EstadoPedido.EN_ENVIO);
+        ArrayList<ItemMenu> items = new ArrayList<>();
+        items.add(itemMenuDao.obtenerPorId(1));
+        items.add(itemMenuDao.obtenerPorId(2));
+        DetallePedido detallePedido = new DetallePedido(items);
+        detallePedido.setPedido(nuevoPedido);
+        nuevoPedido.setDetallePedido(detallePedido);
+        FormaPagoI formaPago = new FormaMercadoPago(null);
+        formaPago.setId(1);
+        nuevoPedido.setFormapago(formaPago);
+        pedidoDao.crear(nuevoPedido);
 
         // Probar la obtención de un pedido por ID
-        // for (int i = 1; i < 6; i++) {
-        //     Pedido pedidoObtenido = pedidoDao.obtenerPorId(i);
-        //     System.out.println("Cliente: " + pedidoObtenido.getCliente().getNombre());
-        //     System.out.println("Monto total (con recargo de la Forma de Pago): "
-        //             + pedidoObtenido.getFormapago().totalizar(pedidoObtenido.getDetallePedido().calcularMontoTotal()));
+        for (int i = 1; i < 6; i++) {
+            Pedido pedidoObtenido = pedidoDao.obtenerPorId(i);
+            System.out.println("Cliente: " + pedidoObtenido.getCliente().getNombre());
+            System.out.println("Monto total (con recargo de la Forma de Pago): "
+                    + pedidoObtenido.getFormapago().totalizar(pedidoObtenido.getDetallePedido().calcularMontoTotal()));
             
-        //     List<ItemMenu> items = pedidoObtenido.getDetallePedido().getItems();
-        //     if (items.size() > 0) {
-        //         System.out.println("Primer item: " + items.get(0).getNombre() + " - " + items.get(0).getCategoria() + " - " + items.get(0).getClass().getSimpleName());
-        //     }
-        //     if (items.size() > 1) {
-        //         System.out.println("Segundo item: " + items.get(1).getNombre() + " - " + items.get(1).getCategoria() + " - " + items.get(1).getClass().getSimpleName());
-        //     }
-        // }
+            List<ItemMenu> items2 = pedidoObtenido.getDetallePedido().getItems();
+            if (items2.size() > 0) {
+                System.out.println("Primer item: " + items2.get(0).getNombre() + " - " + items2.get(0).getCategoria() + " - " + items2.get(0).getClass().getSimpleName());
+            }
+            if (items2.size() > 1) {
+                System.out.println("Segundo item: " + items2.get(1).getNombre() + " - " + items2.get(1).getCategoria() + " - " + items2.get(1).getClass().getSimpleName());
+            }
+        }
 
         // Probar la actualización del estado de un pedido
-        // Pedido pedidoObtenido = pedidoDao.obtenerPorId(1);
-        // pedidoObtenido.setEstado(EstadoPedido.FINALIZADO);
-        // pedidoDao.actualizar(pedidoObtenido);
+        Pedido pedidoObtenido = pedidoDao.obtenerPorId(1);
+        pedidoObtenido.setEstado(EstadoPedido.FINALIZADO);
+        pedidoDao.actualizar(pedidoObtenido);
 
         // Probar la actualización del detalle de un pedido
-        // Pedido pedidoObtenido = pedidoDao.obtenerPorId(1);
-        // pedidoObtenido.getDetallePedido().getItems().add(itemMenuDao.obtenerPorId(2));
-        // pedidoObtenido.getDetallePedido().getItems().add(itemMenuDao.obtenerPorId(3));
-        // pedidoDao.actualizar(pedidoObtenido);
+        Pedido pedidoObtenido2 = pedidoDao.obtenerPorId(1);
+        pedidoObtenido2.getDetallePedido().getItems().add(itemMenuDao.obtenerPorId(2));
+        pedidoObtenido2.getDetallePedido().getItems().add(itemMenuDao.obtenerPorId(3));
+        pedidoDao.actualizar(pedidoObtenido2);
 
         // Probar la eliminación de un pedido
         // pedidoDao.eliminar(2);
@@ -113,20 +113,20 @@ public class DesarrolloBDD {
         // }
 
         // Probar la obtención de todos los pedidos
-        // List<Pedido> pedidos = pedidoDao.obtenerTodos();
-        // for (Pedido pedidoObtenido : pedidos) {
-        //     System.out.println("Cliente: " + pedidoObtenido.getCliente().getNombre());
-        //     System.out.println("Monto total (con recargo de la Forma de Pago): "
-        //             + pedidoObtenido.getFormapago().totalizar(pedidoObtenido.getDetallePedido().calcularMontoTotal()));
+        List<Pedido> pedidos = pedidoDao.obtenerTodos();
+        for (Pedido pedido : pedidos) {
+            System.out.println("Cliente: " + pedido.getCliente().getNombre());
+            System.out.println("Monto total (con recargo de la Forma de Pago): "
+                    + pedido.getFormapago().totalizar(pedido.getDetallePedido().calcularMontoTotal()));
             
-        //     List<ItemMenu> items = pedidoObtenido.getDetallePedido().getItems();
-        //     if (items.size() > 0) {
-        //         System.out.println("Primer item: " + items.get(0).getNombre() + " - " + items.get(0).getCategoria() + " - " + items.get(0).getClass().getSimpleName());
-        //     }
-        //     if (items.size() > 1) {
-        //         System.out.println("Segundo item: " + items.get(1).getNombre() + " - " + items.get(1).getCategoria() + " - " + items.get(1).getClass().getSimpleName());
-        //     }
-        // }
+            List<ItemMenu> itemsPedido = pedido.getDetallePedido().getItems();
+            if (itemsPedido.size() > 0) {
+                System.out.println("Primer item: " + itemsPedido.get(0).getNombre() + " - " + itemsPedido.get(0).getCategoria() + " - " + itemsPedido.get(0).getClass().getSimpleName());
+            }
+            if (itemsPedido.size() > 1) {
+                System.out.println("Segundo item: " + itemsPedido.get(1).getNombre() + " - " + itemsPedido.get(1).getCategoria() + " - " + itemsPedido.get(1).getClass().getSimpleName());
+            }
+        }
 
     }
 
