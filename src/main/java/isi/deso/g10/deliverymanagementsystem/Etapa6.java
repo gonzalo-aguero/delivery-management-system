@@ -4,7 +4,7 @@
  */
 package isi.deso.g10.deliverymanagementsystem;
 
-import isi.deso.g10.deliverymanagementsystem.controller.MenuController;
+import isi.deso.g10.deliverymanagementsystem.controller.swing.MenuController;
 import isi.deso.g10.deliverymanagementsystem.utils.DatabaseInitializer;
 import isi.deso.g10.deliverymanagementsystem.view.PantallaPrincipal;
 import java.awt.event.WindowEvent;

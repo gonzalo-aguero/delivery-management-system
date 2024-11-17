@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package isi.deso.g10.deliverymanagementsystem.controller;
+package isi.deso.g10.deliverymanagementsystem.controller.swing;
 
 import isi.deso.g10.deliverymanagementsystem.dao.interfaces.GenericDao;
 import isi.deso.g10.deliverymanagementsystem.dao.memory.VendedorMemory;

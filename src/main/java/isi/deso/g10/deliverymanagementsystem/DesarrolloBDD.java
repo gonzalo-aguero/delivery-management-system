@@ -4,7 +4,7 @@
  */
 package isi.deso.g10.deliverymanagementsystem;
 
-import isi.deso.g10.deliverymanagementsystem.controller.MenuController;
+import isi.deso.g10.deliverymanagementsystem.controller.swing.MenuController;
 import java.lang.reflect.Array;
 import java.sql.Time;
 import java.util.ArrayList;
