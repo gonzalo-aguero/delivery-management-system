@@ -4,6 +4,14 @@
  */
 package isi.deso.g10.deliverymanagementsystem.model;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import static java.lang.Math.*;
 import java.util.ArrayList;
 
@@ -11,13 +19,21 @@ import java.util.ArrayList;
  *
  * @author giuli
  */
+@Entity
+@Table(name="vendedor")
 public class Vendedor {
 
     //atributos
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    
     private String nombre;
     private String direccion;
+    @OneToOne(mappedBy="vendedor",cascade = CascadeType.ALL,orphanRemoval = true)
     private Coordenada coordenadas;
+    
+    @OneToMany(mappedBy="vendedor")
     private ArrayList<ItemMenu> menu;
 
     //constructor

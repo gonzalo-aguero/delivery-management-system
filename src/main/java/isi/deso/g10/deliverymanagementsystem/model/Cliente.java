@@ -9,19 +9,36 @@ import java.util.Date;
 import isi.deso.g10.deliverymanagementsystem.model.Pedido.EstadoPedido;
 import isi.deso.g10.deliverymanagementsystem.observer.PedidoObserver;
 import isi.deso.g10.deliverymanagementsystem.strategy.FormaMercadoPago;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import java.util.List;
 
 /**
  *
  * @author giuli
  */
+@Entity
+@Table(name = "cliente")
 public class Cliente implements PedidoObserver{
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String cuit;
     private String nombre;
     private String email;
     private String direccion;
+    @OneToOne(mappedBy="cliente",cascade = CascadeType.ALL,orphanRemoval = true)
     private Coordenada coordenadas;
+    @OneToMany(mappedBy= "cliente",cascade = CascadeType.ALL,orphanRemoval = false, fetch = FetchType.LAZY)
+    private List<Pedido> pedidos;
     
     public Cliente() {
     }
@@ -94,7 +111,7 @@ public class Cliente implements PedidoObserver{
        System.out.println("Generando pago para el pedido " + pedido.getId() + "...");
         if(pedido.getFormapago().getClass() == FormaMercadoPago.class) {
             Pago pago = new Pago(
-                    pedido.getId(),
+                    pedido,
                     new Date(),
                     this.nombre,
                     this.cuit,
@@ -105,7 +122,7 @@ public class Cliente implements PedidoObserver{
             return pago;
         }else{
             Pago pago = new Pago(
-                    pedido.getId(),
+                    pedido,
                     new Date(),
                     this.nombre,
                     this.cuit,

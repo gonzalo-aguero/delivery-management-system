@@ -4,14 +4,40 @@
  */
 package isi.deso.g10.deliverymanagementsystem.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
 /**
  *
  * @author giuli
  */
+@Entity
+@Table(name="coordenada")
 public class Coordenada {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private double latitud;
     private double longitud;
+    
+    @OneToOne
+    @JoinColumn(name="cliente_id",nullable = true)
+    private Cliente cliente;
+    
+    @OneToOne
+    @JoinColumn(name="vendedor_id",nullable = true)  
+    private Vendedor vendedor;
+    
+    
+    
 
     public Coordenada(double lat,double lng){
         this.latitud=lat;

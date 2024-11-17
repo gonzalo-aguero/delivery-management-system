@@ -1,17 +1,32 @@
 package isi.deso.g10.deliverymanagementsystem.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import java.util.Date;
 
+@Entity
+@Table(name = "pago")
 public class Pago {
+    
+    @Id
+    private int id;
+
+    
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
+    private Pedido pedido;
     private double monto;
     private String formaPago;
     private Date fecha;
-    private int idPedido;
     private String nombreCliente;
     private String cuitCliente;
 
-    public Pago(int idPedido, Date fecha, String nombreCliente, String cuitCliente, double monto, String formaPago) {
-        this.idPedido = idPedido;
+    public Pago(Pedido pedido, Date fecha, String nombreCliente, String cuitCliente, double monto, String formaPago) {
+        this.pedido = pedido;
         this.fecha = fecha;
         this.nombreCliente = nombreCliente;
         this.cuitCliente = cuitCliente;
@@ -43,12 +58,12 @@ public class Pago {
         this.fecha = fecha;
     }
 
-    public int getIdPedido() {
-        return idPedido;
+    public Pedido getPedido() {
+        return pedido;
     }
 
-    public void setIdPedido(int idPedido) {
-        this.idPedido = idPedido;
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
     }
 
     public String getNombreCliente() {
@@ -69,7 +84,7 @@ public class Pago {
 
     public void printPagoInfo() {
         System.out.println("--------------------------- Pago Generado ---------------------------");
-        System.out.println("ID Pedido: " + idPedido);
+        System.out.println("ID Pedido: " + pedido);
         System.out.println("Fecha: " + fecha);
         System.out.println("Nombre Cliente: " + nombreCliente);
         System.out.println("CUIT Cliente: " + cuitCliente);

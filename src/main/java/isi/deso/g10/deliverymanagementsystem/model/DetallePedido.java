@@ -4,6 +4,16 @@
  */
 package isi.deso.g10.deliverymanagementsystem.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import java.util.ArrayList;
 
 /**
@@ -11,12 +21,21 @@ import java.util.ArrayList;
  *
  * @author gonzalo90fa
  */
+@Entity
+@Table(name = "detallepedido")
 public class DetallePedido {
 
+    @Id
     private int id;
-    private ArrayList<ItemMenu> items = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "itemmenu_id")
+    private ItemMenu item;
+    @MapsId
+    @ManyToOne()
+    @JoinColumn(name="pedido_id")
     private Pedido pedido;
     
+    private int cantidad;
     
     public int getId() {
         return id;
@@ -35,25 +54,23 @@ public class DetallePedido {
     }
     
 
-    public DetallePedido(ArrayList<ItemMenu> items) {
-        this.items = items;
+    public DetallePedido(ItemMenu item) {
+        this.item = item;
     }
 
     public double calcularMontoTotal() {
-        return items.stream()
-                .map(ItemMenu::getPrecio)
-                .reduce(0d, Double::sum);
+        return item.getPrecio() * cantidad;
     }
     
     /**
      * @return Retorna el vendedor de los items basándose en el vendedor asociado al primer item de la lista
      */
     public Vendedor getVendedor(){
-        return items.get(0).getVendedor();//Cada itemMenu tiene referencia a su vendedor
+        return item.getVendedor();//Cada itemMenu tiene referencia a su vendedor
     }
 
-    public ArrayList<ItemMenu> getItems() {
-        return items;
+    public ItemMenu getItem() {
+        return item;
     }
 
 }

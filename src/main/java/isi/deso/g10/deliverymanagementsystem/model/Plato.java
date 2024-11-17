@@ -4,10 +4,15 @@
  */
 package isi.deso.g10.deliverymanagementsystem.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
 /**
  *
  * @author lucas
  */
+@Entity
+@Table(name="plato")
 public class Plato extends ItemMenu {
 
     //atributos especificos de la clase
