@@ -47,5 +47,33 @@ public class ClienteService {
             throw new RuntimeException("No se pudo guardar el cliente", ex);
         }
     }
+
+    public void deleteById(Integer id) {
+       clienteRepository.deleteById(id);
+    }
+
+    public Cliente updateCliente(Integer id,ClienteDTO clienteDTO) {
+        Optional<Cliente> clienteOpt = clienteRepository.findById(id);
+        if(clienteOpt.isPresent()){
+            Cliente cliente = clienteOpt.get();
+            cliente.setNombre(clienteDTO.getNombre());
+            cliente.setCuit(clienteDTO.getCuit());
+            cliente.setDireccion(clienteDTO.getDireccion());
+            cliente.setEmail(clienteDTO.getEmail());
+            Coordenada coordenadas = new Coordenada(clienteDTO.getCoordenadas().getLatitud(),clienteDTO.getCoordenadas().getLongitud());
+            cliente.setCoordenadas(coordenadas);
+            
+            coordenadas.setPersona(cliente);
+            
+            try{
+                cliente = clienteRepository.save(cliente);
+                return cliente;
+            }catch(RuntimeException ex){
+                throw new RuntimeException("No se pudo guardar el cliente", ex);
+            }
+        }else{
+            throw new RuntimeException("No se encontró el cliente con id " + id);
+        }
+    }
     
 }

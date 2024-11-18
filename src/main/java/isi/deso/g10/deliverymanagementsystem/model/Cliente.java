@@ -10,6 +10,7 @@ import isi.deso.g10.deliverymanagementsystem.model.Pedido.EstadoPedido;
 import isi.deso.g10.deliverymanagementsystem.observer.PedidoObserver;
 import isi.deso.g10.deliverymanagementsystem.strategy.FormaMercadoPago;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -18,6 +19,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.util.List;
 
 /**
@@ -28,6 +30,7 @@ import java.util.List;
 @Table(name = "cliente")
 public class Cliente extends Persona implements PedidoObserver{
 
+    @Column(unique = true)
     private String cuit;
     private String nombre;
     private String email;
