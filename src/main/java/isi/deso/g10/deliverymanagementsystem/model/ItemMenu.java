@@ -48,7 +48,7 @@ public abstract class ItemMenu {
     @JoinColumn(name = "vendedor_id")
     protected Vendedor vendedor;
     
-    @OneToMany(mappedBy = "itemmenu", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
     private List<DetallePedido> detallePedidos;
     
     public ItemMenu(){};

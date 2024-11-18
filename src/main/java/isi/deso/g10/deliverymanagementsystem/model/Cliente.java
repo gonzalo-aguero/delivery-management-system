@@ -51,6 +51,13 @@ public class Cliente implements PedidoObserver{
         this.direccion = direccion;
         this.coordenadas = coordenadas;
     }
+    public Cliente(String cuit, String nombre, String email, String direccion, Coordenada coordenadas) {
+        this.cuit = cuit;
+        this.nombre = nombre;
+        this.email = email;
+        this.direccion = direccion;
+        this.coordenadas = coordenadas;
+    }
 
     public int getId() {
         return id;

@@ -4,6 +4,7 @@
  */
 package isi.deso.g10.deliverymanagementsystem.model;
 
+import isi.deso.g10.deliverymanagementsystem.model.dto.CoordenadaDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -43,6 +44,8 @@ public class Coordenada {
         this.latitud=lat;
         this.longitud=lng;
     }
+
+   
     
     public double getLatitud() {
         return latitud;

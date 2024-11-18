@@ -27,14 +27,16 @@ public class DetallePedido {
 
     @Id
     private int id;
+    
+    
+    @ManyToOne
+    @JoinColumn(name = "pedido_id")
+    @MapsId
+    private Pedido pedido;
+    
     @ManyToOne
     @JoinColumn(name = "itemmenu_id")
     private ItemMenu item;
-    @MapsId
-    @ManyToOne()
-    @JoinColumn(name="pedido_id")
-    private Pedido pedido;
-    
     private int cantidad;
     
     public int getId() {
