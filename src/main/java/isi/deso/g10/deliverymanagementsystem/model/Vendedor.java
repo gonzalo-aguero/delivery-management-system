@@ -21,27 +21,22 @@ import java.util.ArrayList;
  */
 @Entity
 @Table(name="vendedor")
-public class Vendedor {
+public class Vendedor extends Persona{
 
-    //atributos
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
     
     private String nombre;
     private String direccion;
-    @OneToOne(mappedBy="vendedor",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Coordenada coordenadas;
+    
     
     @OneToMany(mappedBy="vendedor")
     private ArrayList<ItemMenu> menu;
 
     //constructor
-    public Vendedor(int id, String nombre, String direccion, Coordenada coordenadas) {
-        this.id = id;
+    public Vendedor( String nombre, String direccion, Coordenada coordenadas) {
+        
+        super(coordenadas);
         this.nombre = nombre;
         this.direccion = direccion;
-        this.coordenadas = coordenadas;
         this.menu = new ArrayList<ItemMenu>();
     }
 
@@ -58,13 +53,6 @@ public class Vendedor {
         this.menu = menu;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getNombre() {
         return nombre;
@@ -82,23 +70,17 @@ public class Vendedor {
         this.direccion = direccion;
     }
 
-    public Coordenada getCoordenadas() {
-        return coordenadas;
-    }
-
-    public void setCoordenadas(Coordenada coordenadas) {
-        this.coordenadas = coordenadas;
-    }
+  
 
     public double distancia(Cliente cliente) {
         final double R = 6378;
 
         //Latitudes
-        double latV = toRadians(this.coordenadas.getLatitud());
+        double latV = toRadians(getCoordenadas().getLatitud());
         double latC = toRadians(cliente.getCoordenadas().getLatitud());
 
         //Longitudes
-        double lngV = toRadians(this.coordenadas.getLongitud());
+        double lngV = toRadians(getCoordenadas().getLongitud());
         double lngC = toRadians(cliente.getCoordenadas().getLongitud());
 
         //Deltas

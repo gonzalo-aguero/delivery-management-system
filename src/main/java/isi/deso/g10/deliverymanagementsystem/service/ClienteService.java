@@ -39,6 +39,7 @@ public class ClienteService {
                 clienteDTO.getEmail(),
                 clienteDTO.getDireccion(),
                 coordenadas);
+        coordenadas.setPersona(cliente);
         try{
             cliente = clienteRepository.save(cliente);
             return cliente;
