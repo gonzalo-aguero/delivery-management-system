@@ -52,7 +52,8 @@ public class ClienteService {
        clienteRepository.deleteById(id);
     }
 
-    public Cliente updateCliente(Integer id,ClienteDTO clienteDTO) {
+    public Cliente updateCliente(ClienteDTO clienteDTO) {
+        int id = clienteDTO.getId();
         Optional<Cliente> clienteOpt = clienteRepository.findById(id);
         if(clienteOpt.isPresent()){
             Cliente cliente = clienteOpt.get();
@@ -60,9 +61,13 @@ public class ClienteService {
             cliente.setCuit(clienteDTO.getCuit());
             cliente.setDireccion(clienteDTO.getDireccion());
             cliente.setEmail(clienteDTO.getEmail());
-            Coordenada coordenadas = new Coordenada(clienteDTO.getCoordenadas().getLatitud(),clienteDTO.getCoordenadas().getLongitud());
-            cliente.setCoordenadas(coordenadas);
-            
+           
+            Coordenada coordenadas = cliente.getCoordenadas();
+            if(coordenadas == null){
+                coordenadas = new Coordenada();
+            }
+            coordenadas.setLatitud(clienteDTO.getCoordenadas().getLatitud());
+            coordenadas.setLongitud(clienteDTO.getCoordenadas().getLongitud());            
             coordenadas.setPersona(cliente);
             
             try{

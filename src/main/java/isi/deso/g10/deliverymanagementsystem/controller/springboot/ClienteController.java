@@ -11,6 +11,7 @@ import java.util.List;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,27 +54,26 @@ public class ClienteController {
     @PostMapping
     public ResponseEntity<Cliente> crearCliente(@RequestBody ClienteDTO clienteDTO) {
         Cliente nuevoCliente = clienteService.saveCliente(clienteDTO);
-        return ResponseEntity.status(201).body(nuevoCliente);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoCliente);
     }
     
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteCliente(@PathVariable("id") Integer id) {
-        Optional<Cliente> cliente = clienteService.getById(id);
-            if (cliente.isPresent()) {
+        
+            try{
                 clienteService.deleteById(id);
-                return ResponseEntity.noContent().build();
-            } else {
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.status(HttpStatus.OK).build();
+            }catch(RuntimeException ex){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
     }
     
     @PutMapping("/update/{id}")
-    public ResponseEntity<Cliente> updateCliente(@PathVariable(value = "id") Integer id, @RequestBody ClienteDTO clienteDTO){
-        Optional<Cliente> clienteOpt = clienteService.getById(id);
-        if(clienteOpt.isPresent()){
-            Cliente nuevoCliente = clienteService.updateCliente(id,clienteDTO);
-            return ResponseEntity.status(201).body(nuevoCliente);
-        }else {
+    public ResponseEntity<Cliente> updateCliente(@RequestBody ClienteDTO clienteDTO){
+        try{
+            Cliente nuevoCliente = clienteService.updateCliente(clienteDTO);
+            return ResponseEntity.status(HttpStatus.OK).body(nuevoCliente);
+        }catch(RuntimeException ex) {
             return ResponseEntity.notFound().build();
         }
     }
