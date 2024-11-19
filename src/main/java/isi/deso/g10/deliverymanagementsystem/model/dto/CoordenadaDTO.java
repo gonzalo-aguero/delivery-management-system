@@ -4,35 +4,20 @@
  */
 package isi.deso.g10.deliverymanagementsystem.model.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  *
  * @author giuli
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CoordenadaDTO {
     
     private double latitud;
     private double longitud;
 
-    // Constructor
-    public CoordenadaDTO(double latitud, double longitud) {
-        this.latitud = latitud;
-        this.longitud = longitud;
-    }
-
-    // Getters y setters
-    public double getLatitud() {
-        return latitud;
-    }
-
-    public void setLatitud(double latitud) {
-        this.latitud = latitud;
-    }
-
-    public double getLongitud() {
-        return longitud;
-    }
-
-    public void setLongitud(double longitud) {
-        this.longitud = longitud;
-    }
 }

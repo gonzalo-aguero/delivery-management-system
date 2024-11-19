@@ -15,11 +15,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author giuli
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name="coordenada")
 public class Coordenada {
@@ -35,9 +41,6 @@ public class Coordenada {
     @JoinColumn(name = "persona_id", referencedColumnName = "id")
     private Persona persona;
     
-    
-    public Coordenada(){}
-
     public Coordenada(double lat,double lng){
         this.latitud=lat;
         this.longitud=lng;
@@ -46,25 +49,5 @@ public class Coordenada {
         this.latitud=lat;
         this.longitud=lng;
     }
-
-   
-    
-    public double getLatitud() {
-        return latitud;
-    }
-
-    public double getLongitud() {
-        return longitud;
-    }
-
-    public Persona getPersona() {
-        return persona;
-    }
-
-    public void setPersona(Persona persona) {
-        this.persona = persona;
-    }
-    
-    
     
 }
