@@ -4,6 +4,7 @@
  */
 package isi.deso.g10.deliverymanagementsystem.service;
 
+import isi.deso.g10.deliverymanagementsystem.model.Bebida;
 import isi.deso.g10.deliverymanagementsystem.model.Categoria;
 import isi.deso.g10.deliverymanagementsystem.model.Categoria.TipoItem;
 import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
@@ -48,24 +49,95 @@ public class ItemMenuService {
         if(vendedor.isEmpty()){throw new RuntimeException("No existe vendedor con id:" + itemMenuDTO.getVendedorId());}
         if(categoria.isEmpty()){throw new RuntimeException("No existe categoria con id:" + itemMenuDTO.getCategoriaId());}
 
-        /*ItemMenu nuevoItemMenu;
+        ItemMenu nuevoItemMenu;
+        
+        
         if(categoria.get().getTipoItem() == TipoItem.COMIDA){
-            nuevoItemMenu = new Plato();
-        }else{}
+            Plato plato = new Plato(itemMenuDTO.getPeso(),
+                    0,
+            itemMenuDTO.getNombre(),
+            itemMenuDTO.getDescripcion(),
+            itemMenuDTO.getPrecio(),
+            categoria.get(),
+            itemMenuDTO.getCalorias(),
+            itemMenuDTO.isAptoCeliaco(),
+            itemMenuDTO.isAptoVegetariano(),
+            itemMenuDTO.isAptoVegano());
+        
+            nuevoItemMenu = plato;
+        }
+        else{
+            Bebida bebida = new Bebida(itemMenuDTO.getGraduacionAlcoholica(),
+                    itemMenuDTO.getVolumenEnMl(),
+                    0,
+            itemMenuDTO.getNombre(),
+            itemMenuDTO.getDescripcion(),
+            itemMenuDTO.getPrecio(),
+            categoria.get(),
+            itemMenuDTO.getCalorias(),
+            itemMenuDTO.isAptoCeliaco(),
+            itemMenuDTO.isAptoVegetariano(),
+            itemMenuDTO.isAptoVegano());
+            
+            nuevoItemMenu = bebida;
+        }
         
         try{
-            
+            nuevoItemMenu = itemMenuRepository.save(nuevoItemMenu);
+            return nuevoItemMenu;
+        }catch(RuntimeException e){
+            throw new RuntimeException("No se pudo guardar el Item Menu", e);
         }
-        COMENTO ACA PORQUE CREO QUE SE PUEDE DE HACER MEJOR FORMA DESPUES VEO*/
-        
     }
 
     public void deleteById(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if(!itemMenuRepository.existsById(id)) {
+            throw new RuntimeException("No se encontró el vendedor con id " + id);
+        }
+        itemMenuRepository.deleteById(id);
     }
 
     public ItemMenu updateItemMenu(ItemMenuDTO itemMenuDTO) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+         int id = itemMenuDTO.getId();
+         
+         Optional<ItemMenu> itemMenuOpt = itemMenuRepository.findById(id);
+         
+         
+         if(itemMenuOpt.isPresent()){
+             
+            Optional<Categoria> categoria = categoriaRepository.findById(itemMenuDTO.getCategoriaId());
+            Optional<Vendedor> vendedor = vendedorRepository.findById(itemMenuDTO.getVendedorId());
+            if(vendedor.isEmpty()){throw new RuntimeException("No existe vendedor con id:" + itemMenuDTO.getVendedorId());}
+            if(categoria.isEmpty()){throw new RuntimeException("No existe categoria con id:" + itemMenuDTO.getCategoriaId());}
+             ItemMenu itemMenu = itemMenuOpt.get();
+             
+             itemMenu.setNombre(itemMenuDTO.getNombre());
+             itemMenu.setDescripcion(itemMenuDTO.getDescripcion()); 
+             itemMenu.setCategoria(categoria.get());
+             itemMenu.setPrecio(itemMenuDTO.getPrecio());
+             itemMenu.setCalorias(itemMenuDTO.getCalorias());
+             itemMenu.setAptoCeliaco(itemMenuDTO.isAptoCeliaco());
+             itemMenu.setAptoVegetariano(itemMenuDTO.isAptoVegetariano());
+             itemMenu.setAptoVegano(itemMenuDTO.isAptoVegano());
+             
+              if (itemMenu instanceof Plato plato) {
+                     plato.setPeso(itemMenuDTO.getPeso());
+              } else if (itemMenu instanceof Bebida bebida) {
+                        bebida.setGraduacionAlcoholica(itemMenuDTO.getGraduacionAlcoholica());
+                        bebida.setVolumenEnMl(itemMenuDTO.getVolumenEnMl());
+                } else {
+                            throw new RuntimeException("Error: tipo desconocido de ItemMenu: " + itemMenu.getClass().getName());
+                        }
+              
+              try{
+              itemMenu = itemMenuRepository.save(itemMenu);
+              return itemMenu;
+              }catch(RuntimeException e){
+                  throw new RuntimeException("Error al guardar");
+              }
+         }else{
+                 throw new RuntimeException("No existe ItemMenu con id:" + id);
+         }
     }
     
 }

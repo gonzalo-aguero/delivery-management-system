@@ -27,4 +27,7 @@ public class ItemMenuDTO {
     private boolean aptoVegetariano;
     private boolean aptoVegano;
     private int vendedorId;
+    private double peso;
+    private double graduacionAlcoholica;
+    private double volumenEnMl;
 }
