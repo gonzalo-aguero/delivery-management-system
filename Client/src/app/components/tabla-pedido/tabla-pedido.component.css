@@ -1,0 +1,48 @@
+.container {
+    margin: 20px;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  th, td {
+    border: 1px solid #000;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f4f4f4;
+  }
+  
+  button {
+    margin-right: 5px;
+    padding: 5px 10px;
+  }
+  
+  .buscador input {
+    padding: 5px;
+    margin-left: 5px;
+  }
+  
+  .btn{
+    width: 220px;
+    height: 40px;
+    background-color: rgb(0, 153, 255);
+    color: white;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+  }

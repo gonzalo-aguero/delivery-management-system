@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="header">
+    <h1>Lista de pedidos</h1>
+  </div>
+  <div class="actions">
+    <button class="btn btn-primary" (click)="crearPedido()">
+      Crear un nuevo pedido
+    </button>
+    <div class="buscador">
+      <label for="buscador">Buscador:</label>
+      <input
+        id="buscador"
+        type="text"
+        [(ngModel)]="filtro"
+        placeholder="Buscar pedido"
+        (input)="filtrarPedidos()"
+      />
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Id Cliente</th>
+        <th>Estado</th>
+        <th>Monto</th>
+        <th>Forma de Pago</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let pedido of pedidosFiltrados">
+        <td>{{ pedido.id }}</td>
+        <td>{{ pedido.idCliente }}</td>
+        <td>{{ pedido.estado }}</td>
+        <td>{{ pedido.monto }}</td>
+        <td>{{ pedido.formaDePago }}</td>
+        <td>
+          <button (click)="editarPedido(pedido)">Editar</button>
+          <button (click)="eliminarPedido(pedido.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

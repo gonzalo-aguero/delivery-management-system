@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="header">
+    <h1>Lista de vendedores</h1>
+  </div>
+  <div class="actions">
+    <button class="btn btn-primary" (click)="crearVendedor()">
+      Crear un nuevo vendedor
+    </button>
+    <div class="buscador">
+      <label for="buscador">Buscador:</label>
+      <input
+        id="buscador"
+        type="text"
+        [(ngModel)]="filtro"
+        placeholder="Buscar vendedor"
+        (input)="filtrarVendedores()"
+      />
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Nombre</th>
+        <th>Direccion</th>
+        <th>Coordenadas</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let vendedor of vendedoresFiltrados">
+        <td>{{ vendedor.id }}</td>
+        <td>{{ vendedor.nombre }}</td>
+        <td>{{ vendedor.direccion }}</td>
+        <td>
+          [ {{ vendedor.coordenadas.latitud }} ;
+          {{ vendedor.coordenadas.longitud }} ]
+        </td>
+        <td>
+          <button (click)="editarVendedor(vendedor)">Editar</button>
+          <button (click)="eliminarVendedor(vendedor.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
