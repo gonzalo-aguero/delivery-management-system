@@ -10,9 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class DesarrolloSpringboot {
 
-    /**
-     * @param args the command line arguments
-     */
+
     public static void main(String[] args) {
         SpringApplication.run(DesarrolloSpringboot.class,args);
     }

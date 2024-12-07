@@ -7,6 +7,7 @@ import isi.deso.g10.deliverymanagementsystem.service.VendedorService;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,24 +30,32 @@ public class VendedorController {
     private VendedorService vendedorService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Vendedor> getVendedor(@PathVariable(value = "id") Integer id) {
-        Optional<Vendedor> vendedor = vendedorService.getById(id);
-        if (vendedor.isPresent()) {
-            return ResponseEntity.ok(vendedor.get());
-        } else {
+    public ResponseEntity<VendedorDTO> getVendedor(@PathVariable(value = "id") Integer id) {
+        try{
+            VendedorDTO vendedor = vendedorService.getById(id);
+            return ResponseEntity.ok(vendedor);
+        }catch(NotFoundException e){
             return ResponseEntity.notFound().build();
+        }catch(RuntimeException e){
+              return ResponseEntity.internalServerError().build();
         }
     }
 
     @GetMapping
-    public ResponseEntity<List<Vendedor>> getVendedores() {
-        List<Vendedor> vendedores = vendedorService.getAll();
-        return ResponseEntity.ok(vendedores);
+    public ResponseEntity<List<VendedorDTO>> getVendedores() {
+        try{
+            List<VendedorDTO> vendedores = vendedorService.getAll();
+            return ResponseEntity.ok(vendedores);
+        }catch(NotFoundException e){
+            return ResponseEntity.notFound().build();
+        }catch(RuntimeException e){
+              return ResponseEntity.internalServerError().build();
+        }
     }
 
     @PostMapping
-    public ResponseEntity<Vendedor> createVendedor(@RequestBody VendedorDTO vendedorDTO) {
-        Vendedor nuevoVendedor = vendedorService.saveVendedor(vendedorDTO);
+    public ResponseEntity<VendedorDTO> createVendedor(@RequestBody VendedorDTO vendedorDTO) {
+        VendedorDTO nuevoVendedor = vendedorService.saveVendedor(vendedorDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoVendedor);
     }
 
@@ -55,18 +64,22 @@ public class VendedorController {
         try{
             vendedorService.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (VendedorNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch(NotFoundException e){
+            return ResponseEntity.notFound().build();
+        }catch(RuntimeException e){
+              return ResponseEntity.internalServerError().build();
         }
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Vendedor> updateVendedor(@RequestBody VendedorDTO vendedorDTO) {
+    public ResponseEntity<VendedorDTO> updateVendedor(@RequestBody VendedorDTO vendedorDTO) {
         try {
-            Vendedor nuevoVendedor = vendedorService.updateVendedor(vendedorDTO);
+            VendedorDTO nuevoVendedor = vendedorService.updateVendedor(vendedorDTO);
             return ResponseEntity.status(HttpStatus.OK).body(nuevoVendedor);
-        } catch (VendedorNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }catch(NotFoundException e){
+            return ResponseEntity.notFound().build();
+        }catch(RuntimeException e){
+              return ResponseEntity.internalServerError().build();
         }
     }
 }

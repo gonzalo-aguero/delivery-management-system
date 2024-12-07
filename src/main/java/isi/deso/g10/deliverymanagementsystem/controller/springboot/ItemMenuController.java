@@ -10,6 +10,8 @@ import isi.deso.g10.deliverymanagementsystem.service.ItemMenuService;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,24 +35,32 @@ public class ItemMenuController {
     ItemMenuService itemMenuService;
     
     @GetMapping("/{id}")
-    public ResponseEntity<ItemMenu> getItemMenu(@PathVariable(value = "id") Integer id){
-        Optional<ItemMenu> itemMenu = itemMenuService.getById(id);
-        if (itemMenu.isPresent()) {
-              return ResponseEntity.ok(itemMenu.get());
-          } else {
-              return ResponseEntity.notFound().build();
-          }
+    public ResponseEntity<ItemMenuDTO> getItemMenu(@PathVariable(value = "id") Integer id){
+        try{
+           ItemMenuDTO itemMenu= itemMenuService.getById(id);
+           return ResponseEntity.ok(itemMenu);
+        }catch(NotFoundException e){
+            return ResponseEntity.notFound().build();
+        }catch(RuntimeException e){
+              return ResponseEntity.internalServerError().build();
+        }
     }
     
     @GetMapping
-    public ResponseEntity<List<ItemMenu>> getItemsMenu(){
-        List<ItemMenu> itemsMenu = itemMenuService.getAll();
-        return ResponseEntity.ok(itemsMenu);
+    public ResponseEntity<List<ItemMenuDTO>> getItemsMenu(){
+        try{
+           List<ItemMenuDTO> itemMenu= itemMenuService.getAll();
+           return ResponseEntity.ok(itemMenu);
+        }catch(NotFoundException e){
+            return ResponseEntity.notFound().build();
+        }catch(RuntimeException e){
+              return ResponseEntity.internalServerError().build();
+        }
     }
     
     @PostMapping
-    public ResponseEntity<ItemMenu> crearItemMenu(@RequestBody ItemMenuDTO itemMenuDTO){
-        ItemMenu nuevoItemMenu = itemMenuService.saveItemMenu(itemMenuDTO);
+    public ResponseEntity<ItemMenuDTO> crearItemMenu(@RequestBody ItemMenuDTO itemMenuDTO){
+        ItemMenuDTO nuevoItemMenu = itemMenuService.saveItemMenu(itemMenuDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoItemMenu);
     }
     
@@ -59,18 +69,22 @@ public class ItemMenuController {
          try{
              itemMenuService.deleteById(id);
              return ResponseEntity.status(HttpStatus.OK).build();
-         }catch(RuntimeException ex){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-         }
+         }catch(NotFoundException e){
+            return ResponseEntity.notFound().build();
+        }catch(RuntimeException e){
+              return ResponseEntity.internalServerError().build();
+        }
     }
     
     @PutMapping("/update/{id}")
-    public ResponseEntity<ItemMenu> updateItemMenu(@RequestBody ItemMenuDTO itemMenuDTO){
+    public ResponseEntity<ItemMenuDTO> updateItemMenu(@RequestBody ItemMenuDTO itemMenuDTO){
         try{
-            ItemMenu nuevoItemMenu = itemMenuService.updateItemMenu(itemMenuDTO);
+            ItemMenuDTO nuevoItemMenu = itemMenuService.updateItemMenu(itemMenuDTO);
             return ResponseEntity.status(HttpStatus.OK).body(nuevoItemMenu);
-        }catch(RuntimeException ex){
+        }catch(NotFoundException e){
             return ResponseEntity.notFound().build();
+        }catch(RuntimeException e){
+              return ResponseEntity.internalServerError().build();
         }
     }
     

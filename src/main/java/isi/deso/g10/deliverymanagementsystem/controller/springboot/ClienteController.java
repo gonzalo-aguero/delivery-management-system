@@ -11,6 +11,8 @@ import java.util.List;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,25 +37,33 @@ public class ClienteController {
     private ClienteService clienteService;
     
     @GetMapping("/{id}")
-      public ResponseEntity<Cliente> getCliente(@PathVariable(value = "id") Integer id) {
-          Optional<Cliente> cliente = clienteService.getById(id);
-          if (cliente.isPresent()) {
-              return ResponseEntity.ok(cliente.get());
-          } else {
-              return ResponseEntity.notFound().build();
-          }
+      public ResponseEntity<ClienteDTO> getCliente(@PathVariable(value = "id") Integer id) {
+        try{
+              ClienteDTO cliente = clienteService.getById(id);
+              return ResponseEntity.ok(cliente);
+        }catch(NotFoundException e){
+            return ResponseEntity.notFound().build();
+        }catch(RuntimeException e){
+              return ResponseEntity.internalServerError().build();
+        }
       }
     
     @GetMapping
-    public ResponseEntity<List<Cliente>> getClientes(){
-        List<Cliente> clientes= clienteService.getAll();
+    public ResponseEntity<List<ClienteDTO>> getClientes(){
+        try{
+        List<ClienteDTO> clientes = clienteService.getAll();
         return ResponseEntity.ok(clientes);
+        }catch(NotFoundException e){
+            return ResponseEntity.notFound().build();
+        }catch(RuntimeException e){
+              return ResponseEntity.internalServerError().build();
+        }
     }
     
       
     @PostMapping
-    public ResponseEntity<Cliente> crearCliente(@RequestBody ClienteDTO clienteDTO) {
-        Cliente nuevoCliente = clienteService.saveCliente(clienteDTO);
+    public ResponseEntity<ClienteDTO> crearCliente(@RequestBody ClienteDTO clienteDTO) {
+        ClienteDTO nuevoCliente = clienteService.saveCliente(clienteDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoCliente);
     }
     
@@ -69,12 +79,14 @@ public class ClienteController {
     }
     
     @PutMapping("/update/{id}")
-    public ResponseEntity<Cliente> updateCliente(@RequestBody ClienteDTO clienteDTO){
+    public ResponseEntity<ClienteDTO> updateCliente(@RequestBody ClienteDTO clienteDTO){
         try{
-            Cliente nuevoCliente = clienteService.updateCliente(clienteDTO);
+            ClienteDTO nuevoCliente = clienteService.updateCliente(clienteDTO);
             return ResponseEntity.status(HttpStatus.OK).body(nuevoCliente);
-        }catch(RuntimeException ex) {
+        }catch(NotFoundException ex) {
             return ResponseEntity.notFound().build();
+        }catch(RuntimeException e){
+              return ResponseEntity.internalServerError().build();
         }
     }
 }

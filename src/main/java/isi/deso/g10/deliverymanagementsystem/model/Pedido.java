@@ -36,7 +36,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name="pedido")
-public class Pedido implements Observable {
+public class Pedido{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -129,23 +129,5 @@ public class Pedido implements Observable {
     }
 
 */
-    @Override
-    public void addObserver(PedidoObserver o) {
-        if (o != null && !observers.contains(o)) {
-            observers.add(o);
-        }
-    }
-
-    @Override
-    public boolean removeObserver(PedidoObserver o) {
-        return observers.remove(o);
-    }
-
-    @Override
-    public void notifyObservers() {
-        for (PedidoObserver observer : observers) {
-            observer.update(this);
-        }
-    }
 
 }

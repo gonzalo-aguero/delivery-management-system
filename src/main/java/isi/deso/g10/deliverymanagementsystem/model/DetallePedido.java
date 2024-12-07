@@ -15,7 +15,9 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Equivalente a la clase PedidoDetalle del diagrama de clases del enunciado.
@@ -23,6 +25,8 @@ import lombok.Data;
  * @author gonzalo90fa
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "detallepedido")
 public class DetallePedido {

@@ -23,6 +23,7 @@ import jakarta.persistence.UniqueConstraint;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -34,7 +35,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "cliente")
-public class Cliente extends Persona implements PedidoObserver{
+@EqualsAndHashCode(callSuper = false)
+public class Cliente extends Persona{
 
     @Column(unique = true)
     private String cuit;
@@ -45,14 +47,6 @@ public class Cliente extends Persona implements PedidoObserver{
     private List<Pedido> pedidos;
     
    
-
-    @Override
-    public void update(Pedido pedido) {
-        System.out.println("El pedido " + pedido.getId() + " ha cambiado de estado a " + pedido.getEstado());    
-        if(pedido.getEstado().equals(EstadoPedido.EN_ENVIO)) {
-            pedido.setDatosPago(generarPago(pedido));
-        }
-    }
     private Pago generarPago(Pedido pedido) {
        System.out.println("Generando pago para el pedido " + pedido.getId() + "...");
         if(pedido.getFormapago().getClass() == FormaMercadoPago.class) {

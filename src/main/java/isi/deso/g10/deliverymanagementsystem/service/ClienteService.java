@@ -7,10 +7,14 @@ package isi.deso.g10.deliverymanagementsystem.service;
 import isi.deso.g10.deliverymanagementsystem.model.Cliente;
 import isi.deso.g10.deliverymanagementsystem.model.Coordenada;
 import isi.deso.g10.deliverymanagementsystem.model.dto.ClienteDTO;
+import isi.deso.g10.deliverymanagementsystem.model.dto.CoordenadaDTO;
 import isi.deso.g10.deliverymanagementsystem.repository.ClienteRepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +28,55 @@ public class ClienteService {
     @Autowired
     ClienteRepository clienteRepository;
     
-    public List<ClienteDTO> getAll() {
-         return 
-    }
+        public List<ClienteDTO> getAll() throws NotFoundException {
+          List<Cliente> clientes = clienteRepository.findAll();
+          if (clientes.isEmpty()) {
+              throw new NotFoundException();
+          }
 
-    public ClienteDTO getById(int id) {
-        return clienteRepository.findById(id);  
+          return clientes.stream()
+                  .map(cliente -> {
+                      ClienteDTO clienteDTO = new ClienteDTO();
+                      clienteDTO.setId(cliente.getId());
+                      clienteDTO.setDireccion(cliente.getDireccion());
+                      clienteDTO.setNombre(cliente.getNombre());
+                      clienteDTO.setCuit(cliente.getCuit());
+                      clienteDTO.setEmail(cliente.getEmail());
+
+               
+                      if (cliente.getCoordenadas() != null) {
+                          CoordenadaDTO coordenadaDTO = new CoordenadaDTO();
+                          coordenadaDTO.setLatitud(cliente.getCoordenadas().getLatitud());
+                          coordenadaDTO.setLongitud(cliente.getCoordenadas().getLongitud());
+                          clienteDTO.setCoordenadas(coordenadaDTO);
+                      }
+
+                      return clienteDTO;
+                  })
+                  .collect(Collectors.toList());
+      }
+
+    public ClienteDTO getById(int id) throws NotFoundException {
+        return clienteRepository.findById(id)
+            .map(cliente -> {
+                ClienteDTO clienteDTO = new ClienteDTO();
+                clienteDTO.setId(cliente.getId());
+                clienteDTO.setDireccion(cliente.getDireccion());
+                clienteDTO.setNombre(cliente.getNombre());
+                clienteDTO.setCuit(cliente.getCuit());
+                clienteDTO.setEmail(cliente.getEmail());
+                
+               
+                if (cliente.getCoordenadas() != null) {
+                    CoordenadaDTO coordenadaDTO = new CoordenadaDTO();
+                    coordenadaDTO.setLatitud(cliente.getCoordenadas().getLatitud());
+                    coordenadaDTO.setLongitud(cliente.getCoordenadas().getLongitud());
+                    clienteDTO.setCoordenadas(coordenadaDTO);
+                }
+
+                return clienteDTO;
+            })
+            .orElseThrow(NotFoundException::new);
     }
 
     public ClienteDTO saveCliente(ClienteDTO clienteDTO) {
@@ -54,7 +101,7 @@ public class ClienteService {
        clienteRepository.deleteById(id);
     }
 
-    public ClienteDTO updateCliente(ClienteDTO clienteDTO) {
+    public ClienteDTO updateCliente(ClienteDTO clienteDTO) throws NotFoundException {
         int id = clienteDTO.getId();
         Optional<Cliente> clienteOpt = clienteRepository.findById(id);
         if(clienteOpt.isPresent()){
@@ -80,7 +127,7 @@ public class ClienteService {
                 throw new RuntimeException("No se pudo guardar el cliente", ex);
             }
         }else{
-            throw new RuntimeException("No se encontró el cliente con id " + id);
+            throw new NotFoundException();
         }
     }
     

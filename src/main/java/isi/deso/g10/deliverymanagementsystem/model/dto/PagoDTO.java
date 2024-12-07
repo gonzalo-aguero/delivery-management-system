@@ -4,15 +4,18 @@
  */
 package isi.deso.g10.deliverymanagementsystem.model.dto;
 
+import isi.deso.g10.deliverymanagementsystem.model.Pago;
 import java.util.Date;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author giuli
  */
 @Data
-class PagoDTO {
+@NoArgsConstructor
+public class PagoDTO {
 
     private int id;
     private PedidoDTO pedido;
@@ -22,4 +25,13 @@ class PagoDTO {
     private String nombreCliente;
     private String cuitCliente;
     
+    
+    public PagoDTO(Pago pago) {
+    this.id = pago.getId();
+    this.monto = pago.getMonto();
+    this.formaPago = pago.getFormaPago();
+    this.fecha = pago.getFecha();
+    this.nombreCliente = pago.getNombreCliente();
+    this.cuitCliente = pago.getCuitCliente();
+            }
 }
