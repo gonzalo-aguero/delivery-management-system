@@ -15,12 +15,14 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
+import lombok.Data;
 
 /**
  * Equivalente a la clase PedidoDetalle del diagrama de clases del enunciado.
  *
  * @author gonzalo90fa
  */
+@Data
 @Entity
 @Table(name = "detallepedido")
 public class DetallePedido {

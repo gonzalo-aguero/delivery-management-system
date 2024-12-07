@@ -36,20 +36,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "vendedor")
 public class Vendedor extends Persona {
 
-    private String nombre;
-    private String direccion;
 
     @OneToMany(mappedBy = "vendedor")
     private List<ItemMenu> menu;
 
-    // constructor
-    public Vendedor(String nombre, String direccion, Coordenada coordenadas) {
-        super(coordenadas);
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.menu = new ArrayList<>();
-    }
-
+  
     public double distancia(Cliente cliente) {
         final double R = 6378;
 

@@ -23,11 +23,17 @@ import jakarta.persistence.Transient;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author gonzalo90fa
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="pedido")
 public class Pedido implements Observable {
@@ -55,50 +61,11 @@ public class Pedido implements Observable {
     @Transient
     private List<PedidoObserver> observers;
 
-    public Pedido() { }
-
-    /* HAY QUE VER ESTOS POR EL CAMBIO DE ESTRUCTURA
-    public Pedido(int idPedido ,ArrayList<ItemMenu> itemsPedido, Cliente cliente) {
-        this.id = idPedido;
-        this.detallePedido = new DetallePedido(itemsPedido);
-        this.cliente = cliente;
-        this.observers = new ArrayList<>();
-    }
-
-    public Pedido(int idPedido ,ArrayList<ItemMenu> itemsPedido, Cliente cliente, FormaPagoI formapago) {
-        this.id = idPedido;
-        this.detallePedido = new DetallePedido(itemsPedido);
-        this.cliente = cliente;
-        this.formapago = formapago;
-        this.observers = new ArrayList<>();
-    }*/
-
+    
     public enum EstadoPedido {
        RECIBIDO, EN_ENVIO, EN_PROCESO, PENDIENTE_DE_PAGO, ENTREGADO, FINALIZADO
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-    
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public void setDatosPago(Pago datosPago) {
-        this.datosPago = datosPago;
-    }
-    public Pago getDatosPago() {
-        return datosPago;
-    }
 
      public FormaPagoI getFormapago() {
         if (formapago == null && formaPagoTipo != null) {
@@ -133,7 +100,7 @@ public class Pedido implements Observable {
             return getFormapago().totalizar(total);
         }
     }
-
+/*
     public EstadoPedido getEstado() {
         return estado;
     }
@@ -161,7 +128,7 @@ public class Pedido implements Observable {
         this.detallePedido = detallePedido;
     }
 
-
+*/
     @Override
     public void addObserver(PedidoObserver o) {
         if (o != null && !observers.contains(o)) {

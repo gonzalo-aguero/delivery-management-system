@@ -29,7 +29,10 @@ public class VendedorService {
 
     public Vendedor saveVendedor(VendedorDTO vendedorDTO) {
         Coordenada coordenadas = new Coordenada(vendedorDTO.getCoordenadas().getLatitud(), vendedorDTO.getCoordenadas().getLongitud());
-        Vendedor vendedor = new Vendedor(vendedorDTO.getNombre(), vendedorDTO.getDireccion(), coordenadas);
+        Vendedor vendedor = new Vendedor();
+        vendedor.setNombre(vendedorDTO.getNombre());
+        vendedor.setDireccion(vendedorDTO.getDireccion());
+        vendedor.setCoordenadas(coordenadas);
         coordenadas.setPersona(vendedor);
         try {
             vendedor = vendedorRepository.save(vendedor);

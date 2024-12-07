@@ -24,25 +24,27 @@ public class ClienteService {
     @Autowired
     ClienteRepository clienteRepository;
     
-    public List<Cliente> getAll() {
-       return clienteRepository.findAll();
+    public List<ClienteDTO> getAll() {
+         return 
     }
 
-    public Optional<Cliente> getById(int id) {
+    public ClienteDTO getById(int id) {
         return clienteRepository.findById(id);  
     }
 
-    public Cliente saveCliente(ClienteDTO clienteDTO) {
+    public ClienteDTO saveCliente(ClienteDTO clienteDTO) {
         Coordenada coordenadas = new Coordenada(clienteDTO.getCoordenadas().getLatitud(),clienteDTO.getCoordenadas().getLongitud());
-        Cliente cliente = new Cliente(clienteDTO.getCuit(),
-                clienteDTO.getNombre(),
-                clienteDTO.getEmail(),
-                clienteDTO.getDireccion(),
-                coordenadas);
+        Cliente cliente = new Cliente();
+        cliente.setCuit(clienteDTO.getCuit()); 
+        cliente.setNombre(clienteDTO.getNombre());      
+        cliente.setEmail(clienteDTO.getEmail());
+        cliente.setDireccion(clienteDTO.getDireccion());
+        cliente.setCoordenadas(coordenadas);
         coordenadas.setPersona(cliente);
         try{
             cliente = clienteRepository.save(cliente);
-            return cliente;
+            clienteDTO.setId(cliente.getId());
+            return clienteDTO;
         }catch(RuntimeException ex){
             throw new RuntimeException("No se pudo guardar el cliente", ex);
         }
@@ -52,7 +54,7 @@ public class ClienteService {
        clienteRepository.deleteById(id);
     }
 
-    public Cliente updateCliente(ClienteDTO clienteDTO) {
+    public ClienteDTO updateCliente(ClienteDTO clienteDTO) {
         int id = clienteDTO.getId();
         Optional<Cliente> clienteOpt = clienteRepository.findById(id);
         if(clienteOpt.isPresent()){
@@ -72,7 +74,8 @@ public class ClienteService {
             
             try{
                 cliente = clienteRepository.save(cliente);
-                return cliente;
+                clienteDTO.setId(cliente.getId());
+                return clienteDTO;
             }catch(RuntimeException ex){
                 throw new RuntimeException("No se pudo guardar el cliente", ex);
             }
