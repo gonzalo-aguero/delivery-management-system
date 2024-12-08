@@ -15,6 +15,7 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author giuli
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/cliente")
 public class ClienteController {
     
@@ -56,7 +58,7 @@ public class ClienteController {
         }catch(NotFoundException e){
             return ResponseEntity.notFound().build();
         }catch(RuntimeException e){
-              return ResponseEntity.internalServerError().build();
+             return ResponseEntity.internalServerError().build();
         }
     }
     
@@ -78,7 +80,7 @@ public class ClienteController {
             }
     }
     
-    @PutMapping("/update/{id}")
+    @PutMapping
     public ResponseEntity<ClienteDTO> updateCliente(@RequestBody ClienteDTO clienteDTO){
         try{
             ClienteDTO nuevoCliente = clienteService.updateCliente(clienteDTO);

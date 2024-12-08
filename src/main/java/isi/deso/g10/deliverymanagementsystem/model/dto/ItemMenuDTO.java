@@ -46,7 +46,7 @@ public class ItemMenuDTO {
     this.aptoVegano = itemMenu.isAptoVegano();
     this.vendedorId = itemMenu.getVendedor().getId();
 
-    // Manejar campos específicos de Plato o Bebida
+
     if (itemMenu instanceof Plato) {
         Plato plato = (Plato) itemMenu;
         this.peso = plato.getPeso();

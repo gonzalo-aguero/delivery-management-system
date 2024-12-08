@@ -37,8 +37,12 @@
         <td>{{ cliente.email }}</td>
         <td>{{ cliente.direccion }}</td>
         <td>
+          @if (cliente.coordenadas) {
           [ {{ cliente.coordenadas.latitud }} ;
           {{ cliente.coordenadas.longitud }} ]
+          }@else {
+            <p>null</p>
+          }
         </td>
         <td>
           <button (click)="editarCliente(cliente)">Editar</button>
@@ -48,3 +52,11 @@
     </tbody>
   </table>
 </div>
+
+@if(modal){
+<div class="modals">
+  <div class="modal">
+    <app-cliente-modal [modo]="modo" [cliente]="clienteSeleccionado" (submit)="onSubmit($event)" (cancel)="onCancel()"></app-cliente-modal>
+  </div>
+ </div>
+}

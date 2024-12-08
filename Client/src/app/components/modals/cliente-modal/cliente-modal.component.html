@@ -1,0 +1,31 @@
+  <div class="form">
+    <h3>{{modo}} Cliente</h3>
+    <form [formGroup]="clienteForm"(ngSubmit)="onSubmit()">
+        <label for="nombre">Nombre:</label>
+        <input id="nombre" formControlName="nombre" type="text">
+        
+        <label for="cuit">CUIT:</label>
+        <input id="cuit" formControlName="cuit" type="text">
+        
+        <label for="email">Email:</label>
+        <input id="email" formControlName="email" type="email">
+        
+        <label for="direccion">Dirección:</label>
+        <input id="direccion" formControlName="direccion" type="text">
+        
+        <div class="coordenadas" formGroupName="coordenadas">
+          <label for="latitud">Latitud:</label>
+          <input id="latitud" formControlName="latitud" type="text">
+          
+          <label for="longitud">Longitud:</label>
+          <input id="longitud" formControlName="longitud" type="text">
+        </div>
+   <div class="buttons">
+    <button type="submit">Aceptar</button>
+    <button class="secondary" type="button" (click)="onCancel()">Cancelar</button>
+   </div>
+   
+    </form>
+    
+  </div>
+

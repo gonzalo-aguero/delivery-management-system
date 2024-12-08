@@ -14,6 +14,7 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author giuli
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/itemmenu")
 public class ItemMenuController {
     
@@ -76,7 +78,7 @@ public class ItemMenuController {
         }
     }
     
-    @PutMapping("/update/{id}")
+    @PutMapping
     public ResponseEntity<ItemMenuDTO> updateItemMenu(@RequestBody ItemMenuDTO itemMenuDTO){
         try{
             ItemMenuDTO nuevoItemMenu = itemMenuService.updateItemMenu(itemMenuDTO);

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Controlador para manejar las operaciones relacionadas con Vendedor.
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/vendedor")
 public class VendedorController {
 
@@ -71,7 +73,7 @@ public class VendedorController {
         }
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping
     public ResponseEntity<VendedorDTO> updateVendedor(@RequestBody VendedorDTO vendedorDTO) {
         try {
             VendedorDTO nuevoVendedor = vendedorService.updateVendedor(vendedorDTO);
