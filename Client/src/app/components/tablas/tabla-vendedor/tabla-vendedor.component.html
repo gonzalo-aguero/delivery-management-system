@@ -44,3 +44,15 @@
     </tbody>
   </table>
 </div>
+@if(modal){
+<div class="modals">
+  <div class="modal">
+    <app-vendedor-modal
+      [modo]="modo"
+      [vendedor]="vendedorSeleccionado"
+      (submit)="onSubmit($event)"
+      (cancel)="onCancel()"
+    ></app-vendedor-modal>
+  </div>
+</div>
+}

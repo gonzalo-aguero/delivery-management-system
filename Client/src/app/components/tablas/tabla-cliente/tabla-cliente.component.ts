@@ -20,7 +20,7 @@ export class TablaClienteComponent {
 
 
   filtro: string = '';
-  
+
   clientes: Cliente[] = [];
 
   modal: ClienteModalComponent | null = null;
@@ -34,9 +34,9 @@ export class TablaClienteComponent {
   clientesFiltrados = [...this.clientes];
 
   ngOnInit(): void {
-    this.obtenerClientes(); 
+    this.obtenerClientes();
   }
-  
+
   async obtenerClientes() {
     try {
       const clientes = await lastValueFrom(this._clienteService.getClientes());
@@ -57,16 +57,16 @@ export class TablaClienteComponent {
     this.modo = "Editar";
     this.clienteSeleccionado = cliente;
     this.modal = new ClienteModalComponent();
-    
+
   }
 
   async eliminarCliente(id: number) {
     try {
-     
+
       await lastValueFrom(this._clienteService.deleteCliente(id));
-     
+
       this.clientes = this.clientes.filter(cliente => cliente.id !== id);
-      this.clientesFiltrados = [...this.clientes];  
+      this.clientesFiltrados = [...this.clientes];
       console.log('Cliente eliminado con éxito');
     } catch (error) {
       console.error('Error al eliminar el cliente:', error);
@@ -110,7 +110,7 @@ export class TablaClienteComponent {
 
   this.obtenerClientes();
   }
-  
-  
+
+
 
 }
