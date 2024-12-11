@@ -1,17 +1,19 @@
 import { Plato } from './plato.model';
 import { Bebida } from './bebida.model';
+import { Categoria } from './categoria.model';
+import { Vendedor } from './vendedor.model';
 
 export class ItemMenu {
   id: number;
   nombre: string;
   descripcion: string;
   precio: number;
-  categoriaId: number;
+  categoria: Categoria;
   calorias: number;
   aptoCeliaco: boolean;
   aptoVegetariano: boolean;
   aptoVegano: boolean;
-  vendedorId: number;
+  vendedor: Vendedor;
   peso?: number;
   graduacionAlcoholica?: number; 
   volumenEnMl?: number;  
@@ -21,12 +23,12 @@ export class ItemMenu {
     this.nombre = itemMenu.nombre || '';
     this.descripcion = itemMenu.descripcion || '';
     this.precio = itemMenu.precio || 0;
-    this.categoriaId = itemMenu.categoriaId || 0;
+    this.categoria = itemMenu.categoria || null;
     this.calorias = itemMenu.calorias || 0;
     this.aptoCeliaco = itemMenu.aptoCeliaco || false;
     this.aptoVegetariano = itemMenu.aptoVegetariano || false;
     this.aptoVegano = itemMenu.aptoVegano || false;
-    this.vendedorId = itemMenu.vendedorId || 0;
+    this.vendedor = itemMenu.vendedorId || 0;
 
   
     if (itemMenu instanceof Plato) {

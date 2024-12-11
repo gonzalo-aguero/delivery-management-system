@@ -40,7 +40,6 @@ export class TablaClienteComponent {
   async obtenerClientes() {
     try {
       const clientes = await lastValueFrom(this._clienteService.getClientes());
-      console.log('Clientes obtenidos:', clientes);
       this.clientes = clientes;
       this.clientesFiltrados = [...this.clientes];
     } catch (error) {
@@ -62,7 +61,6 @@ export class TablaClienteComponent {
 
   async eliminarCliente(id: number) {
     try {
-
       await lastValueFrom(this._clienteService.deleteCliente(id));
 
       this.clientes = this.clientes.filter(cliente => cliente.id !== id);

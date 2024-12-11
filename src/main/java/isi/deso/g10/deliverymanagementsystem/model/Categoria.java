@@ -17,11 +17,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author lucas
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "categoria")
 public class Categoria {
@@ -35,7 +41,7 @@ public class Categoria {
     private TipoItem tipoItem;
     
     @OneToMany(cascade = CascadeType.REFRESH, fetch= FetchType.LAZY)
-    @JoinColumn(name = "item_id")
+    @JoinColumn(name = "categoria_id")
     private List<ItemMenu> itemMenu;
     
     
@@ -43,41 +49,6 @@ public class Categoria {
         COMIDA, BEBIDA
     }
 
-    public Categoria(int id, String descripcion, TipoItem tipoItem) {
-        this.id = id;
-        this.descripcion = descripcion;
-        this.tipoItem = tipoItem;
-    }
-
-    
-
-    public int getId() {
-        return id;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public TipoItem getTipoItem() {
-        return tipoItem;
-    }
-
-    
-    
-    
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public void setTipoItem(TipoItem tipoItem) {
-        this.tipoItem = tipoItem;
-    }
-    
     @Override
     public String toString(){
         return descripcion;

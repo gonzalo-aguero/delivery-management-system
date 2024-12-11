@@ -11,6 +11,7 @@ import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
 import isi.deso.g10.deliverymanagementsystem.model.Plato;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
 import isi.deso.g10.deliverymanagementsystem.model.dto.BebidaDTO;
+import isi.deso.g10.deliverymanagementsystem.model.dto.CategoriaDTO;
 import isi.deso.g10.deliverymanagementsystem.model.dto.ItemMenuDTO;
 import isi.deso.g10.deliverymanagementsystem.model.dto.PlatoDTO;
 import isi.deso.g10.deliverymanagementsystem.repository.CategoriaRepository;
@@ -84,7 +85,9 @@ public class ItemMenuService {
         }
 
         return itemMenus.stream()
-                .map(itemMenu -> {
+                .map(itemMenu ->    
+                    {
+                   
                     if (itemMenu instanceof Plato) {
                         Plato plato = (Plato) itemMenu;
                         PlatoDTO platoDTO = new PlatoDTO();
@@ -97,6 +100,7 @@ public class ItemMenuService {
                         platoDTO.setAptoCeliaco(plato.isAptoCeliaco());
                         platoDTO.setAptoVegetariano(plato.isAptoVegetariano());
                         platoDTO.setAptoVegano(plato.isAptoVegano());
+                        platoDTO.setCategoria(new CategoriaDTO(itemMenu.getCategoria()));
                         return platoDTO;
                     } else if (itemMenu instanceof Bebida) {
                         Bebida bebida = (Bebida) itemMenu;
@@ -111,6 +115,7 @@ public class ItemMenuService {
                         bebidaDTO.setAptoCeliaco(bebida.isAptoCeliaco());
                         bebidaDTO.setAptoVegetariano(bebida.isAptoVegetariano());
                         bebidaDTO.setAptoVegano(bebida.isAptoVegano());
+                        bebidaDTO.setCategoria(new CategoriaDTO(itemMenu.getCategoria()));
                         return bebidaDTO;
                     }
                     return null;
@@ -119,10 +124,10 @@ public class ItemMenuService {
     }
 
     public ItemMenuDTO saveItemMenu(ItemMenuDTO itemMenuDTO) {
-        Optional<Categoria> categoria = categoriaRepository.findById(itemMenuDTO.getCategoriaId());
+        Optional<Categoria> categoria = categoriaRepository.findById(itemMenuDTO.getCategoria().getId());
         Optional<Vendedor> vendedor = vendedorRepository.findById(itemMenuDTO.getVendedorId());
                 if(vendedor.isEmpty()){throw new RuntimeException("No existe vendedor con id:" + itemMenuDTO.getVendedorId());}
-                if(categoria.isEmpty()){throw new RuntimeException("No existe categoria con id:" + itemMenuDTO.getCategoriaId());}
+                if(categoria.isEmpty()){throw new RuntimeException("No existe categoria con id:" + itemMenuDTO.getCategoria().getId());}
 
                 ItemMenu nuevoItemMenu;
 
@@ -181,10 +186,10 @@ public class ItemMenuService {
 
                 if(itemMenuOpt.isPresent()){
 
-                   Optional<Categoria> categoria = categoriaRepository.findById(itemMenuDTO.getCategoriaId());
+                   Optional<Categoria> categoria = categoriaRepository.findById(itemMenuDTO.getCategoria().getId());
                    Optional<Vendedor> vendedor = vendedorRepository.findById(itemMenuDTO.getVendedorId());
                    if(vendedor.isEmpty()){throw new RuntimeException("No existe vendedor con id:" + itemMenuDTO.getVendedorId());}
-                   if(categoria.isEmpty()){throw new RuntimeException("No existe categoria con id:" + itemMenuDTO.getCategoriaId());}
+                   if(categoria.isEmpty()){throw new RuntimeException("No existe categoria con id:" + itemMenuDTO.getCategoria().getId());}
                     ItemMenu itemMenu = itemMenuOpt.get();
 
                     itemMenu.setNombre(itemMenuDTO.getNombre());

@@ -38,8 +38,9 @@ export class TablaVendedorComponent {
     try {
       const vendedores = await lastValueFrom(this._vendedorService.getVendedores());
       console.log('Vendedores obtenidos:', vendedores);
-      this.vendedores = this.vendedores;
+      this.vendedores = vendedores;
       this.vendedoresFiltrados = [...this.vendedores];
+      
     } catch (error) {
       console.error('Error al obtener los vendedores:', error);
     }

@@ -24,7 +24,7 @@ public class ItemMenuDTO {
     private String nombre;
     private String descripcion;
     private double precio;
-    private int categoriaId;
+    private CategoriaDTO categoria;
     private int calorias;
     private boolean aptoCeliaco;
     private boolean aptoVegetariano;
@@ -39,7 +39,7 @@ public class ItemMenuDTO {
     this.nombre = itemMenu.getNombre();
     this.descripcion = itemMenu.getDescripcion();
     this.precio = itemMenu.getPrecio();
-    this.categoriaId = itemMenu.getCategoria().getId();
+    this.categoria = new CategoriaDTO(itemMenu.getCategoria());
     this.calorias = itemMenu.getCalorias();
     this.aptoCeliaco = itemMenu.isAptoCeliaco();
     this.aptoVegetariano = itemMenu.isAptoVegetariano();

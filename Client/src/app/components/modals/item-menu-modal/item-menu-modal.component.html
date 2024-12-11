@@ -1,1 +1,71 @@
-<p>item-menu-modal works!</p>
+<div class="form">
+    <h3>{{modo}} Item menu</h3>
+    <form [formGroup] = "itemForm">
+    <div class="maincontainer">
+       <div class="container">
+        <label for="vendedor">Vendedor:</label>
+        <select id="vendedor">
+            @for (vendedor of vendedores; track $index) {
+                <option value="{{vendedor}}">{{vendedor.nombre}}</option>
+            }
+        </select>
+        <div style="
+            display: flex;
+            gap:5px;
+        ">
+            <label for="nombre">Nombre:</label>
+            <input id="nombre" formControlName="nombre" type="text" style="flex-grow: 1;">
+            <select>
+                @for(tipo of tipos; track $index ){
+                    <option value="{{tipo}}">{{tipo}}</option>
+                }
+            </select>
+        </div>
+        <label for="descripcion">Descripcion:</label>
+        <textarea formControlName="descripcion" id ="descripcion" 
+                formControlName="descripcion" 
+                type="text"
+                maxlength="255"   ></textarea>
+        <label for="precio">Precio:</label>
+        <input id="precio" formControlName="precio" type="number">
+        
+        </div>
+        <div class="container">
+            <label for="categoria">Categoria:</label>
+            <select id="categoria">
+                @for (categoria of categorias; track $index) {
+                <option value="{{categoria}}">{{categoria.descripcion}}</option>
+                }
+            </select>
+            <fieldset>
+                <legend>Apto para:</legend>
+                <div>
+                  <input formControlName="celiaco" type="checkbox" id="celiaco" name="apto" value="celiaco" />
+                  <label for="celiaco">Celiaco</label>
+                </div>
+                <div>
+                  <input formControlName="vegetariano" type="checkbox" id="vegetariano" name="apto" value="vegetariano" />
+                  <label for="vegetariano">Vegetariano</label>
+                </div>
+                <div>
+                    <input formControlName="vegano" type="checkbox" id="vegano" name="apto" value="vegano" />
+                    <label for="vegano">Vegano</label>
+                  </div>
+              </fieldset>
+              <label for="calorias">Calorias:</label>
+              <input id="calorias" formControlName="calorias">
+              <label for="peso">Peso:</label>
+              <input id="peso" formControlName="peso">
+              <label for="graduacion">Graduacion:</label>
+              <input id="graduacion" formControlName="graduacionAlcoholica">
+              <label for="volumen">Volumen(en ml):</label>
+              <input id="volumen" formControlName="volumen">
+        </div>
+    </div>
+        <div class="buttons">
+            <button type="submit">Guardar</button>
+            <button type="button" class="secondary">Cancelar</button>
+        </div>
+    </form>
+    
+</div>

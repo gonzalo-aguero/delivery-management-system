@@ -38,7 +38,6 @@ public abstract class ItemMenu {
     protected String descripcion;
     protected double precio;
     @ManyToOne()
-    @JoinColumn(name = "categoria_id", foreignKey = @ForeignKey(name = "FK_item_categoria"))
     protected Categoria categoria;
     protected int calorias;
     protected boolean aptoCeliaco;
