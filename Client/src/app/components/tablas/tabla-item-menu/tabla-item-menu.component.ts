@@ -7,6 +7,8 @@ import { ItemMenuService } from '../../../services/item-menu.service';
 import { VendedorService } from '../../../services/vendedor.service';
 import { CategoriaService } from '../../../services/categoria.service';
 import { lastValueFrom } from 'rxjs';
+import { Categoria } from '../../../models/categoria.model';
+import { Vendedor } from '../../../models/vendedor.model';
 
 @Component({
   selector: 'app-tabla-item-menu',
@@ -16,9 +18,15 @@ import { lastValueFrom } from 'rxjs';
   styleUrl: './tabla-item-menu.component.css'
 })
 export class TablaItemMenuComponent {
-  filtro: string = '';
-  modal?: ItemMenuModalComponent;
 
+  filtro: string = '';
+
+  modal?: ItemMenuModalComponent;
+  modo: string = '';
+
+
+  vendedores : Vendedor[] = [];
+  categorias : Categoria[] = [];
   items : ItemMenu[] = [];
 
   itemsFiltrados = [...this.items];
@@ -42,18 +50,39 @@ export class TablaItemMenuComponent {
   }
 
 
-  crearItem() {
-    alert('Crear pedido');
+  async crearItem() {
+    this.modo = 'Crear';
+  
+    try {
+      // Espera a que categorías y vendedores se carguen
+      const [categorias, vendedores] = await Promise.all([
+        this.getCategorias(),
+        this.getVendedores(),
+      ]);
+  
+      this.categorias= categorias;
+      this.vendedores= vendedores;
+      this.modal = new ItemMenuModalComponent();
+  
+      console.log('Categorías y vendedores cargados:', categorias, vendedores);
+    } catch (error) {
+      console.error('Error al cargar datos para crear el ítem:', error);
+    }
   }
 
   editarItem(item: any) {
     alert(`Editar item: ${item.nombre}`);
   }
 
-  eliminarItem(id: number) {
-    this.items = this.items.filter(v => v.id !== id);
-    this.filtrarItems();
-    alert('Item eliminado');
+  async eliminarItem(id: number) {
+    try {
+      await lastValueFrom(this._itemMenuService.deleteItem(id));
+      this.items = this.items.filter(items => items.id !== id);
+      this.itemsFiltrados = [...this.items];
+      console.log('Cliente eliminado con éxito');
+    } catch (error) {
+      console.error('Error al eliminar el item:', error);
+    }
   }
 
   filtrarItems() {
@@ -62,5 +91,26 @@ export class TablaItemMenuComponent {
       item.nombre.toLowerCase().includes(filtro)
     );
   }
+
+  async getCategorias(): Promise<Categoria[]> {
+    try {
+      const categorias = await lastValueFrom(this._categoriaService.getCategorias());
+      return categorias; 
+    } catch (error) {
+      console.error('Error al obtener categorías:', error);
+      return []; // Devuelve un array vacío en caso de error
+    }
+  }
+  
+  async getVendedores(): Promise<Vendedor[]> {
+    try {
+      const vendedores = await lastValueFrom(this._vendedorService.getVendedores());
+      return vendedores;
+    } catch (error) {
+      console.error('Error al obtener vendedores:', error);
+      return []; 
+    }
+  }
+  
 }
   

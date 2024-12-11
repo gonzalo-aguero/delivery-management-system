@@ -13,10 +13,11 @@ import { Categoria } from '../../../models/categoria.model';
 export class ItemMenuModalComponent {
 
   @Input() modo = '';
-  categorias : Categoria[] = [];
-  vendedores : Vendedor[] = []; 
+  @Input() categorias : Categoria[] = [];
+  @Input() vendedores : Vendedor[] = []; 
   tipos : string [] = ["Plato","Bebida"];
 
+  
 
 
 

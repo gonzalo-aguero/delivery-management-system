@@ -53,7 +53,12 @@
 @if(modal){
   <div class="modals">
     <div class="modal">
-      <app-item-menu-modal></app-item-menu-modal></div>
+      <app-item-menu-modal 
+      [modo] = "modo"
+      [vendedores]="vendedores"
+      [categorias]="categorias">
+    </app-item-menu-modal>
+  </div>
     
   </div>
  
