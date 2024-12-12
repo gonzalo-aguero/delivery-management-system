@@ -10,10 +10,9 @@ import isi.deso.g10.deliverymanagementsystem.model.Categoria.TipoItem;
 import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
 import isi.deso.g10.deliverymanagementsystem.model.Plato;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
-import isi.deso.g10.deliverymanagementsystem.model.dto.BebidaDTO;
 import isi.deso.g10.deliverymanagementsystem.model.dto.CategoriaDTO;
 import isi.deso.g10.deliverymanagementsystem.model.dto.ItemMenuDTO;
-import isi.deso.g10.deliverymanagementsystem.model.dto.PlatoDTO;
+import isi.deso.g10.deliverymanagementsystem.model.dto.ItemMenuDTO.Tipo;
 import isi.deso.g10.deliverymanagementsystem.repository.CategoriaRepository;
 import isi.deso.g10.deliverymanagementsystem.repository.ItemMenuRepository;
 import isi.deso.g10.deliverymanagementsystem.repository.VendedorRepository;
@@ -46,36 +45,10 @@ public class ItemMenuService {
              throw new NotFoundException();
          }
          ItemMenu itemMenu = itemMenuOpt.get();
-
-         if (itemMenu instanceof Plato) {
-             Plato plato = (Plato) itemMenu;
-             PlatoDTO platoDTO = new PlatoDTO();
-             platoDTO.setId(plato.getId());
-             platoDTO.setNombre(plato.getNombre());
-             platoDTO.setDescripcion(plato.getDescripcion());
-             platoDTO.setPrecio(plato.getPrecio());
-             platoDTO.setPeso(plato.getPeso());
-             platoDTO.setCalorias(plato.getCalorias());
-             platoDTO.setAptoCeliaco(plato.isAptoCeliaco());
-             platoDTO.setAptoVegetariano(plato.isAptoVegetariano());
-             platoDTO.setAptoVegano(plato.isAptoVegano());
-             return platoDTO;
-         } else if (itemMenu instanceof Bebida) {
-             Bebida bebida = (Bebida) itemMenu;
-             BebidaDTO bebidaDTO = new BebidaDTO();
-             bebidaDTO.setId(bebida.getId());
-             bebidaDTO.setNombre(bebida.getNombre());
-             bebidaDTO.setDescripcion(bebida.getDescripcion());
-             bebidaDTO.setPrecio(bebida.getPrecio());
-             bebidaDTO.setVolumenEnMl(bebida.getVolumenEnMl());
-             bebidaDTO.setGraduacionAlcoholica(bebida.getGraduacionAlcoholica());
-             bebidaDTO.setCalorias(bebida.getCalorias());
-             bebidaDTO.setAptoCeliaco(bebida.isAptoCeliaco());
-             bebidaDTO.setAptoVegetariano(bebida.isAptoVegetariano());
-             bebidaDTO.setAptoVegano(bebida.isAptoVegano());
-             return bebidaDTO;
-         }
-         return null;
+         
+         ItemMenuDTO itemMenuDTO = new ItemMenuDTO(itemMenu);
+         
+         return itemMenuDTO;
     }
 
     public List<ItemMenuDTO> getAll() throws NotFoundException {
@@ -87,52 +60,23 @@ public class ItemMenuService {
         return itemMenus.stream()
                 .map(itemMenu ->    
                     {
-                   
-                    if (itemMenu instanceof Plato) {
-                        Plato plato = (Plato) itemMenu;
-                        PlatoDTO platoDTO = new PlatoDTO();
-                        platoDTO.setId(plato.getId());
-                        platoDTO.setNombre(plato.getNombre());
-                        platoDTO.setDescripcion(plato.getDescripcion());
-                        platoDTO.setPrecio(plato.getPrecio());
-                        platoDTO.setPeso(plato.getPeso());
-                        platoDTO.setCalorias(plato.getCalorias());
-                        platoDTO.setAptoCeliaco(plato.isAptoCeliaco());
-                        platoDTO.setAptoVegetariano(plato.isAptoVegetariano());
-                        platoDTO.setAptoVegano(plato.isAptoVegano());
-                        platoDTO.setCategoria(new CategoriaDTO(itemMenu.getCategoria()));
-                        return platoDTO;
-                    } else if (itemMenu instanceof Bebida) {
-                        Bebida bebida = (Bebida) itemMenu;
-                        BebidaDTO bebidaDTO = new BebidaDTO();
-                        bebidaDTO.setId(bebida.getId());
-                        bebidaDTO.setNombre(bebida.getNombre());
-                        bebidaDTO.setDescripcion(bebida.getDescripcion());
-                        bebidaDTO.setPrecio(bebida.getPrecio());
-                        bebidaDTO.setVolumenEnMl(bebida.getVolumenEnMl());
-                        bebidaDTO.setGraduacionAlcoholica(bebida.getGraduacionAlcoholica());
-                        bebidaDTO.setCalorias(bebida.getCalorias());
-                        bebidaDTO.setAptoCeliaco(bebida.isAptoCeliaco());
-                        bebidaDTO.setAptoVegetariano(bebida.isAptoVegetariano());
-                        bebidaDTO.setAptoVegano(bebida.isAptoVegano());
-                        bebidaDTO.setCategoria(new CategoriaDTO(itemMenu.getCategoria()));
-                        return bebidaDTO;
-                    }
-                    return null;
+                    ItemMenuDTO itemMenuDTO = new ItemMenuDTO(itemMenu);
+                    
+                    return itemMenuDTO;
                 })
                 .collect(Collectors.toList());
     }
 
     public ItemMenuDTO saveItemMenu(ItemMenuDTO itemMenuDTO) {
         Optional<Categoria> categoria = categoriaRepository.findById(itemMenuDTO.getCategoria().getId());
-        Optional<Vendedor> vendedor = vendedorRepository.findById(itemMenuDTO.getVendedorId());
-                if(vendedor.isEmpty()){throw new RuntimeException("No existe vendedor con id:" + itemMenuDTO.getVendedorId());}
+        Optional<Vendedor> vendedor = vendedorRepository.findById(itemMenuDTO.getVendedor().getId());
+                if(vendedor.isEmpty()){throw new RuntimeException("No existe vendedor con id:" + itemMenuDTO.getVendedor().getId());}
                 if(categoria.isEmpty()){throw new RuntimeException("No existe categoria con id:" + itemMenuDTO.getCategoria().getId());}
 
                 ItemMenu nuevoItemMenu;
 
 
-                if(categoria.get().getTipoItem() == TipoItem.COMIDA){
+                if(itemMenuDTO.getTipo() == Tipo.PLATO){
                     Plato plato = new Plato(itemMenuDTO.getPeso(),
                             0,
                     itemMenuDTO.getNombre(),
@@ -187,8 +131,8 @@ public class ItemMenuService {
                 if(itemMenuOpt.isPresent()){
 
                    Optional<Categoria> categoria = categoriaRepository.findById(itemMenuDTO.getCategoria().getId());
-                   Optional<Vendedor> vendedor = vendedorRepository.findById(itemMenuDTO.getVendedorId());
-                   if(vendedor.isEmpty()){throw new RuntimeException("No existe vendedor con id:" + itemMenuDTO.getVendedorId());}
+                   Optional<Vendedor> vendedor = vendedorRepository.findById(itemMenuDTO.getVendedor().getId());
+                   if(vendedor.isEmpty()){throw new RuntimeException("No existe vendedor con id:" + itemMenuDTO.getVendedor().getId());}
                    if(categoria.isEmpty()){throw new RuntimeException("No existe categoria con id:" + itemMenuDTO.getCategoria().getId());}
                     ItemMenu itemMenu = itemMenuOpt.get();
 
@@ -209,7 +153,6 @@ public class ItemMenuService {
                        } else {
                                    throw new RuntimeException("Error: tipo desconocido de ItemMenu: " + itemMenu.getClass().getName());
                                }
-
                      try{
                      itemMenu = itemMenuRepository.save(itemMenu);
                      return itemMenuDTO;

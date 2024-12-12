@@ -20,7 +20,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ItemMenuDTO {
     
+    public enum Tipo{
+        PLATO,
+        BEBIDA
+    }
+    
     private int id;
+    private Tipo tipo;
     private String nombre;
     private String descripcion;
     private double precio;
@@ -29,7 +35,7 @@ public class ItemMenuDTO {
     private boolean aptoCeliaco;
     private boolean aptoVegetariano;
     private boolean aptoVegano;
-    private int vendedorId;
+    private VendedorDTO vendedor;
     private double peso;
     private double graduacionAlcoholica;
     private double volumenEnMl;
@@ -44,14 +50,16 @@ public class ItemMenuDTO {
     this.aptoCeliaco = itemMenu.isAptoCeliaco();
     this.aptoVegetariano = itemMenu.isAptoVegetariano();
     this.aptoVegano = itemMenu.isAptoVegano();
-    this.vendedorId = itemMenu.getVendedor().getId();
+    this.vendedor = new VendedorDTO(itemMenu.getVendedor());
 
 
     if (itemMenu instanceof Plato) {
         Plato plato = (Plato) itemMenu;
+        this.tipo = Tipo.PLATO;
         this.peso = plato.getPeso();
     } else if (itemMenu instanceof Bebida) {
         Bebida bebida = (Bebida) itemMenu;
+        this.tipo = Tipo.BEBIDA;
         this.graduacionAlcoholica = bebida.getGraduacionAlcoholica();
         this.volumenEnMl = bebida.getVolumenEnMl();
     }

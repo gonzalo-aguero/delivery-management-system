@@ -56,7 +56,11 @@
       <app-item-menu-modal 
       [modo] = "modo"
       [vendedores]="vendedores"
-      [categorias]="categorias">
+      [categorias]="categorias"
+      [itemMenu]="itemSeleccionado"
+      (cancel)="onCancel()"
+      (submit)="onSubmit($event)"
+      >
     </app-item-menu-modal>
   </div>
     

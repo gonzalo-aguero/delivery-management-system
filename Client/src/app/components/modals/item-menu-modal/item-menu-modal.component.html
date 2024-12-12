@@ -4,7 +4,7 @@
     <div class="maincontainer">
        <div class="container">
         <label for="vendedor">Vendedor:</label>
-        <select id="vendedor">
+        <select id="vendedor" formControlName="vendedor">
             @for (vendedor of vendedores; track $index) {
                 <option value="{{vendedor}}">{{vendedor.nombre}}</option>
             }
@@ -15,7 +15,7 @@
         ">
             <label for="nombre">Nombre:</label>
             <input id="nombre" formControlName="nombre" type="text" style="flex-grow: 1;">
-            <select>
+            <select formControlName="tipo">
                 @for(tipo of tipos; track $index ){
                     <option value="{{tipo}}">{{tipo}}</option>
                 }
@@ -32,7 +32,7 @@
         </div>
         <div class="container">
             <label for="categoria">Categoria:</label>
-            <select id="categoria">
+            <select id="categoria" formControlName="categoria">
                 @for (categoria of categorias; track $index) {
                 <option value="{{categoria}}">{{categoria.descripcion}}</option>
                 }
@@ -57,14 +57,14 @@
               <label for="peso">Peso:</label>
               <input id="peso" formControlName="peso">
               <label for="graduacion">Graduacion:</label>
-              <input id="graduacion" formControlName="graduacionAlcoholica">
+              <input id="graduacion" formControlName="graduacion">
               <label for="volumen">Volumen(en ml):</label>
               <input id="volumen" formControlName="volumen">
         </div>
     </div>
         <div class="buttons">
-            <button type="submit">Guardar</button>
-            <button type="button" class="secondary">Cancelar</button>
+            <button type="submit" (click)="onSubmit()">Guardar</button>
+            <button type="button" class="secondary" (click)="onCancel()">Cancelar</button>
         </div>
     </form>
     

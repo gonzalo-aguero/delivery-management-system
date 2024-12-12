@@ -30,6 +30,7 @@ export class TablaItemMenuComponent {
   items : ItemMenu[] = [];
 
   itemsFiltrados = [...this.items];
+  itemSeleccionado: any;
 
 
   constructor(private _itemMenuService:ItemMenuService,private _vendedorService:VendedorService,private _categoriaService: CategoriaService){}
@@ -70,8 +71,26 @@ export class TablaItemMenuComponent {
     }
   }
 
-  editarItem(item: any) {
-    alert(`Editar item: ${item.nombre}`);
+  async editarItem(item: any) {
+    this.modo = "Editar";
+    try {
+      // Espera a que categorías y vendedores se carguen
+      const [categorias, vendedores] = await Promise.all([
+        this.getCategorias(),
+        this.getVendedores(),
+      ]);
+  
+      this.categorias= categorias;
+      this.vendedores= vendedores;
+      this.itemSeleccionado = item;
+      this.modal = new ItemMenuModalComponent();
+  
+      console.log('Categorías y vendedores cargados:', categorias, vendedores);
+    } catch (error) {
+      console.error('Error al cargar datos para crear el ítem:', error);
+    }
+    
+    
   }
 
   async eliminarItem(id: number) {
@@ -92,13 +111,40 @@ export class TablaItemMenuComponent {
     );
   }
 
+  onCancel() {
+    this.modal = undefined;
+    this.modo = ''  
+    this.itemSeleccionado = undefined;
+  }
+
+  onSubmit(item: ItemMenu){
+    if(this.modo == "Crear"){
+      this._itemMenuService.crearItem(item).subscribe((data) => {
+        this.items.push(data);
+        this.itemsFiltrados = [...this.items];
+        this.modal = undefined;
+        this.modo = '';
+    }
+      )
+  }
+  else if(this.modo == "Editar"){
+    this._itemMenuService.editarItem(item).subscribe((data) => {
+      this.items.push(data);
+      this.itemsFiltrados = [...this.items];
+      this.modal = undefined;
+      this.modo = '';
+      this.itemSeleccionado=undefined;
+    }
+    )
+  }
+  }
   async getCategorias(): Promise<Categoria[]> {
     try {
       const categorias = await lastValueFrom(this._categoriaService.getCategorias());
       return categorias; 
     } catch (error) {
       console.error('Error al obtener categorías:', error);
-      return []; // Devuelve un array vacío en caso de error
+      return []; 
     }
   }
   
@@ -111,6 +157,7 @@ export class TablaItemMenuComponent {
       return []; 
     }
   }
+
   
 }
   
