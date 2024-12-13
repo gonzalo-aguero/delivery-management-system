@@ -40,15 +40,20 @@ public class ItemMenuService {
     
     
     public ItemMenuDTO getById(Integer id) throws NotFoundException {
+        try{
             Optional<ItemMenu> itemMenuOpt = itemMenuRepository.findById(id);
-         if (itemMenuOpt.isEmpty()) {
-             throw new NotFoundException();
-         }
-         ItemMenu itemMenu = itemMenuOpt.get();
-         
-         ItemMenuDTO itemMenuDTO = new ItemMenuDTO(itemMenu);
-         
-         return itemMenuDTO;
+            if (itemMenuOpt.isEmpty()) {
+                throw new NotFoundException();
+            }
+            ItemMenu itemMenu = itemMenuOpt.get();
+
+            ItemMenuDTO itemMenuDTO = new ItemMenuDTO(itemMenu);
+
+            return itemMenuDTO;
+        }
+        catch(Exception ex){ 
+            throw new RuntimeException(ex.getMessage());
+        }
     }
 
     public List<ItemMenuDTO> getAll() throws NotFoundException {
@@ -56,7 +61,7 @@ public class ItemMenuService {
         if (itemMenus.isEmpty()) {
             throw new NotFoundException();
         }
-
+        
         return itemMenus.stream()
                 .map(itemMenu ->    
                     {
@@ -68,10 +73,10 @@ public class ItemMenuService {
     }
 
     public ItemMenuDTO saveItemMenu(ItemMenuDTO itemMenuDTO) {
-        Optional<Categoria> categoria = categoriaRepository.findById(itemMenuDTO.getCategoria().getId());
-        Optional<Vendedor> vendedor = vendedorRepository.findById(itemMenuDTO.getVendedor().getId());
-                if(vendedor.isEmpty()){throw new RuntimeException("No existe vendedor con id:" + itemMenuDTO.getVendedor().getId());}
-                if(categoria.isEmpty()){throw new RuntimeException("No existe categoria con id:" + itemMenuDTO.getCategoria().getId());}
+        Optional<Categoria> categoria = categoriaRepository.findById(itemMenuDTO.getCategoriaId());
+        Optional<Vendedor> vendedor = vendedorRepository.findById(itemMenuDTO.getVendedorId());
+                if(vendedor.isEmpty()){throw new RuntimeException("No existe vendedor con id:" + itemMenuDTO.getVendedorId());}
+                if(categoria.isEmpty()){throw new RuntimeException("No existe categoria con id:" + itemMenuDTO.getCategoriaId());}
 
                 ItemMenu nuevoItemMenu;
 
@@ -130,10 +135,10 @@ public class ItemMenuService {
 
                 if(itemMenuOpt.isPresent()){
 
-                   Optional<Categoria> categoria = categoriaRepository.findById(itemMenuDTO.getCategoria().getId());
-                   Optional<Vendedor> vendedor = vendedorRepository.findById(itemMenuDTO.getVendedor().getId());
-                   if(vendedor.isEmpty()){throw new RuntimeException("No existe vendedor con id:" + itemMenuDTO.getVendedor().getId());}
-                   if(categoria.isEmpty()){throw new RuntimeException("No existe categoria con id:" + itemMenuDTO.getCategoria().getId());}
+                   Optional<Categoria> categoria = categoriaRepository.findById(itemMenuDTO.getCategoriaId());
+                   Optional<Vendedor> vendedor = vendedorRepository.findById(itemMenuDTO.getVendedorId());
+                   if(vendedor.isEmpty()){throw new RuntimeException("No existe vendedor con id:" + itemMenuDTO.getVendedorId());}
+                   if(categoria.isEmpty()){throw new RuntimeException("No existe categoria con id:" + itemMenuDTO.getCategoriaId());}
                     ItemMenu itemMenu = itemMenuOpt.get();
 
                     itemMenu.setNombre(itemMenuDTO.getNombre());

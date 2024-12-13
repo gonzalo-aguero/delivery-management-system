@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Cliente } from '../../../models/cliente.model';
 import { Coordenada } from '../../../models/coordenada.model';
 
@@ -21,13 +21,13 @@ export class ClienteModalComponent {
 
 
   clienteForm = new FormGroup({
-    nombre: new FormControl(''),
-    cuit: new FormControl(''),
-    email: new FormControl(''),
-    direccion: new FormControl(''),
+    nombre: new FormControl('', Validators.required),
+    cuit: new FormControl('', Validators.required),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    direccion: new FormControl('', Validators.required),
     coordenadas: new FormGroup({
-      latitud: new FormControl(''),
-      longitud: new FormControl('')
+      latitud: new FormControl('', Validators.required),
+      longitud: new FormControl('', Validators.required)
     })
   })
 
@@ -37,7 +37,8 @@ export class ClienteModalComponent {
     }
   }
 
-  onSubmit() {
+  onSubmit(event: Event) {
+    event.preventDefault();
     if (this.clienteForm.valid) {
       const cliente = new Cliente({
         id: this.cliente ? this.cliente.id : 0,
@@ -52,11 +53,9 @@ export class ClienteModalComponent {
           })
           : undefined,
       });
-
-      console.log('Cliente creado:', cliente);
       this.submit.emit(cliente);
     } else {
-      console.error('Formulario inválido:', this.clienteForm.errors);
+      alert('Falta algun campo o valores incorrectos');
     }
   }
 
@@ -66,7 +65,6 @@ export class ClienteModalComponent {
 
 
   rellenarFormulario(cliente: Cliente) {
-
     this.clienteForm.patchValue({
       nombre: cliente.nombre,
       cuit: cliente.cuit,

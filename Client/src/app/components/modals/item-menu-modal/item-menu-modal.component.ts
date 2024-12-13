@@ -34,9 +34,9 @@ export class ItemMenuModalComponent {
         celiaco: new FormControl(false),
         vegano: new FormControl(false),
         vegetariano: new FormControl(false),
-        peso: new FormControl(''),
-        graduacion: new FormControl(''),
-        volumen : new FormControl('')
+        peso: new FormControl({value: '', disabled: true}),
+        graduacion: new FormControl({value: '', disabled: true}),
+        volumen : new FormControl({value: '', disabled: true})
   });
 
   ngOnInit(){
@@ -48,31 +48,31 @@ export class ItemMenuModalComponent {
 
   onSubmit(){
     if(this.itemForm.valid){
+      console.log(this.itemForm.value)
         const itemMenu = new ItemMenu({
-          id: this.itemMenu ? this.itemMenu.id : 0 ,
-          nombre : this.itemForm.get('nombre')?.value,
-          descripcion : this.itemForm.get('descripcion')?.value,
-          precio : this.itemForm.get('precio')?.value,
-          categoria: this.itemForm.get('categoria')?.value,
-          calorias : this.itemForm.get('calorias')?.value,
-          celiaco : this.itemForm.get('celiaco')?.value,
-          vegano : this.itemForm.get('vegano')?.value,
-          vegetariano : this.itemForm.get('vegetariano')?.value,
-          vendedor: this.itemForm.get('vendedor')?.value
+          id: 0,
+          nombre : this.itemForm.value.nombre,
+          descripcion : this.itemForm.value.descripcion,
+          precio : this.itemForm.value.precio,
+          categoriaId: Number(this.itemForm.value.categoria),
+          calorias : this.itemForm.value.calorias,
+          celiaco : this.itemForm.value.celiaco,
+          vegano : this.itemForm.value.vegano,
+          vegetariano : this.itemForm.value.vegetariano,
+          vendedorId: Number(this.itemForm.value.vendedor)
         })
 
-          if (this.itemForm.get('tipo')?.value == 'PLATO') {
+          if (this.itemForm.value.tipo == 'PLATO') {
             itemMenu.tipo = Tipo.PLATO;
-            itemMenu.peso = Number(this.itemForm.get('peso')?.value);
-          } else if(this.itemForm.get('tipo')?.value == 'BEBIDA') {
+            itemMenu.peso = Number(this.itemForm.value.peso);
+          } else if(this.itemForm.value.tipo == 'BEBIDA') {
             itemMenu.tipo = Tipo.BEBIDA;
-            itemMenu.graduacionAlcoholica = Number(this.itemForm.get('graduacion')?.value);
-            itemMenu.volumenEnMl = Number(this.itemForm.get('volumen')?.value);
+            itemMenu.graduacionAlcoholica = Number(this.itemForm.value.graduacion);
+            itemMenu.volumenEnMl = Number(this.itemForm.value.volumen);
           }
           else{
             throw new Error('Tipo erroneo ' + this.itemForm.get('tipo')?.value)
           }
-          console.log('Categoria:', JSON.stringify(itemMenu.categoria));
           console.log('Vendedor:', JSON.stringify(itemMenu.vendedor));
           console.log("Item menu creado: " , itemMenu)
           console.log(itemMenu.categoria)
@@ -112,4 +112,17 @@ export class ItemMenuModalComponent {
     }
   }
 
+  onChangeTipo(event: Event){
+    event.preventDefault();
+    if(this.itemForm.value.tipo == 'PLATO'){
+      this.itemForm.controls['peso'].enable();
+      this.itemForm.controls['volumen'].disable();
+      this.itemForm.controls['graduacion'].disable();
+    } else if(this.itemForm.value.tipo == 'BEBIDA'){
+      this.itemForm.controls['peso'].disable();
+      this.itemForm.controls['volumen'].enable();
+      this.itemForm.controls['graduacion'].enable();
+    }
+    console.log(this.itemForm.value.vendedor);
+  }
 }

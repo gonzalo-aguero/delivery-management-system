@@ -85,7 +85,6 @@ export class TablaClienteComponent {
   }
 
   onSubmit(cliente: Cliente) {
-
     console.log(cliente);
     if(this.modo == "Crear"){
       this._clienteService.crearCliente(cliente).subscribe((data) => {

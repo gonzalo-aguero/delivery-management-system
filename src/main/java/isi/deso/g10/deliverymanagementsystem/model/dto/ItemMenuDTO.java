@@ -31,11 +31,13 @@ public class ItemMenuDTO {
     private String descripcion;
     private double precio;
     private CategoriaDTO categoria;
+    private int categoriaId;
     private int calorias;
     private boolean aptoCeliaco;
     private boolean aptoVegetariano;
     private boolean aptoVegano;
     private VendedorDTO vendedor;
+    private int vendedorId;
     private double peso;
     private double graduacionAlcoholica;
     private double volumenEnMl;
@@ -51,6 +53,8 @@ public class ItemMenuDTO {
     this.aptoVegetariano = itemMenu.isAptoVegetariano();
     this.aptoVegano = itemMenu.isAptoVegano();
     this.vendedor = new VendedorDTO(itemMenu.getVendedor());
+    this.vendedorId = this.vendedor.getId();
+    this.categoriaId = this.categoria.getId();
 
 
     if (itemMenu instanceof Plato) {

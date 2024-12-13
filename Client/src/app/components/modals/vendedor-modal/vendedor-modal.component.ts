@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Vendedor } from '../../../models/vendedor.model';
@@ -19,11 +19,11 @@ export class VendedorModalComponent {
   @Output() cancel = new EventEmitter<void>();
 
   vendedorForm = new FormGroup({
-    nombre: new FormControl(''),
-    direccion: new FormControl(''),
+    nombre: new FormControl('', Validators.required),
+    direccion: new FormControl('', Validators.required),
     coordenadas: new FormGroup({
-      latitud: new FormControl(''),
-      longitud: new FormControl('')
+      latitud: new FormControl('', Validators.required),
+      longitud: new FormControl('', Validators.required)
     })
   });
 
@@ -50,7 +50,7 @@ export class VendedorModalComponent {
       console.log('Vendedor creado:', vendedor);
       this.submit.emit(vendedor);
     } else {
-      console.error('Formulario inválido:', this.vendedorForm.errors);
+      alert('Formulario inválido');
     }
   }
 

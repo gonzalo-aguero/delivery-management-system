@@ -37,11 +37,9 @@
         <td>{{ cliente.email }}</td>
         <td>{{ cliente.direccion }}</td>
         <td>
-          @if (cliente.coordenadas) {
-          [ {{ cliente.coordenadas.latitud }} ;
-          {{ cliente.coordenadas.longitud }} ]
-          }@else {
-            <p>null</p>
+          @if (cliente.coordenadas) { [ {{ cliente.coordenadas.latitud }} ;
+          {{ cliente.coordenadas.longitud }} ] }@else {
+          <p>null</p>
           }
         </td>
         <td>
@@ -56,7 +54,12 @@
 @if(modal){
 <div class="modals">
   <div class="modal">
-    <app-cliente-modal [modo]="modo" [cliente]="clienteSeleccionado" (submit)="onSubmit($event)" (cancel)="onCancel()"></app-cliente-modal>
+    <app-cliente-modal
+      [modo]="modo"
+      [cliente]="clienteSeleccionado"
+      (submit)="onSubmit($event)"
+      (cancel)="onCancel()"
+    ></app-cliente-modal>
   </div>
- </div>
+</div>
 }
