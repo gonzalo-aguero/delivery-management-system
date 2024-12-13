@@ -111,6 +111,9 @@ public class ItemMenuService {
                     nuevoItemMenu = bebida;
                 }
 
+                nuevoItemMenu.setCategoria(categoria.get());
+                nuevoItemMenu.setVendedor(vendedor.get());
+                
                 try{
                     nuevoItemMenu = itemMenuRepository.save(nuevoItemMenu);
                     itemMenuDTO.setId(nuevoItemMenu.getId());
