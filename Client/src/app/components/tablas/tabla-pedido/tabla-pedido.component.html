@@ -31,10 +31,10 @@
     <tbody>
       <tr *ngFor="let pedido of pedidosFiltrados">
         <td>{{ pedido.id }}</td>
-        <td>{{ pedido.idCliente }}</td>
+        <td>{{ pedido.cliente.id }}</td>
         <td>{{ pedido.estado }}</td>
-        <td>{{ pedido.monto }}</td>
-        <td>{{ pedido.formaDePago }}</td>
+        <td>{{ pedido.datosPago.monto }}</td>
+        <td>{{ pedido.formaPagoTipo }}</td>
         <td>
           <button (click)="editarPedido(pedido)">Editar</button>
           <button (click)="eliminarPedido(pedido.id)">Eliminar</button>
