@@ -11,11 +11,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -26,6 +28,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  *
@@ -40,15 +43,20 @@ public class Pedido{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    
     @ManyToOne()
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
+    
     @Enumerated(EnumType.STRING)
     @Column(name="estado")
     private EstadoPedido estado;
+    
     @OneToMany(mappedBy="pedido")
     private List<DetallePedido> detallePedido;
+    
     @OneToOne(mappedBy="pedido")
+    @JsonManagedReference
     private Pago datosPago;
     
     @Column(name = "forma_pago_tipo")

@@ -1,33 +1,76 @@
-INSERT INTO vendedor (id_vendedor, nombre, direccion, latitud, longitud) VALUES
-(1, 'McDonald\'s', 'Av. de la Ciudad de Barcelona, 45, Madrid', 40.4168, -3.7038),
-(2, 'Coca-Cola', 'Calle de Recoletos, 22, Madrid', 40.4270, -3.7010),
-(3, 'Starbucks', 'Calle Gran Vía, 50, Madrid', 40.4237, -3.7049),
-(4, 'Burger King', 'Calle de Alcalá, 125, Madrid', 40.4210, -3.6861),
-(5, 'PepsiCo', 'Avenida de América, 4, Madrid', 40.4362, -3.6842);
+-- Inserción en la tabla 'persona' (padre de 'cliente' y 'vendedor')
+INSERT INTO persona (id, nombre, direccion) VALUES
+(1, 'Juan Pérez', 'Calle Falsa 123'),
+(2, 'María Gómez', 'Avenida Siempre Viva 742'),
+(3, 'Carlos López', 'Boulevard de los Sueños 99'),
+(4, 'Sofía Martínez', 'Calle del Sol 456'),
+(5, 'Pedro Sánchez', 'Paseo de la Luna 789');
 
-INSERT INTO cliente (id_cliente, cuit, nombre, email, direccion, latitud, longitud) VALUES 
-(1, '20-12345678-9', 'Juan Perez', 'juan.perez@example.com', 'Calle Falsa, 123, Madrid', 40.4165, -3.7026),
-(2, '23-87654321-0', 'Maria Gomez', 'maria.gomez@example.com', 'Calle Verdadera, 456, Madrid', 40.4170, -3.7030),
-(3, '27-11223344-5', 'Carlos Lopez', 'carlos.lopez@example.com', 'Calle Imaginaria, 789, Madrid', 40.4180, -3.7040),
-(4, '30-55667788-1', 'Ana Martinez', 'ana.martinez@example.com', 'Calle Inventada, 101, Madrid', 40.4190, -3.7050),
-(5, '33-99887766-2', 'Luis Rodriguez', 'luis.rodriguez@example.com', 'Calle Real, 202, Madrid', 40.4200, -3.7060);
+-- Inserción en la tabla 'coordenada' (relacionada con 'persona')
+INSERT INTO coordenada (id, latitud, longitud, persona_id) VALUES
+(1, 40.4168, -3.7038, 1),
+(2, 40.4379, -3.6796, 2),
+(3, 40.4520, -3.6878, 3),
+(4, 40.4260, -3.6860, 4),
+(5, 40.4300, -3.7000, 5);
 
+-- Inserción en la tabla 'cliente' (hereda de 'persona')
+INSERT INTO cliente (id, cuit, email) VALUES
+(1, '20-12345678-9', 'juan.perez@example.com'),
+(2, '23-87654321-0', 'maria.gomez@example.com'),
+(3, '27-11223344-5', 'carlos.lopez@example.com');
 
+-- Inserción en la tabla 'vendedor' (hereda de 'persona')
+INSERT INTO vendedor (id) VALUES
+(4),
+(5);
 
-INSERT INTO ItemMenu (id, nombre, descripcion, precio, categoria, calorias, aptoCeliaco, aptoVegetariano, aptoVegano, id_vendedor) VALUES
-(1, 'Milanesa de Pollo', 'Milanesa de pollo con guarnición', 12.99, 'Plato Principal', 800, true, false, false, 1),
-(2, 'Pizza Margarita', 'Pizza con tomate, mozzarella y albahaca', 9.99, 'Plato Principal', 700, true, true, false, 1),
-(3, 'Ensalada César', 'Ensalada con pollo, lechuga, crutones y aderezo César', 7.99, 'Plato Principal', 400, true, false, false, 1),
-(4, 'Coca-Cola', 'Bebida gaseosa', 1.99, 'Bebida', 150, true, true, true, 2),
-(5, 'Cerveza Artesanal', 'Cerveza artesanal de trigo', 3.99, 'Bebida', 200, true, true, true, 2),
-(6, 'Jugo de Naranja', 'Jugo de naranja natural', 2.99, 'Bebida', 100, true, true, true, 2);
+-- Inserción en la tabla 'categoria'
+INSERT INTO categoria (id, descripcion, tipo_item) VALUES
+(1, 'Bebidas sin alcohol', 'BEBIDA'),
+(2, 'Bebidas alcohólicas', 'BEBIDA'),
+(3, 'Entrantes', 'COMIDA'),
+(4, 'Platos principales', 'COMIDA'),
+(5, 'Postres', 'COMIDA');
 
-INSERT INTO Plato (id_item, peso) VALUES
-(1, 500),
-(2, 600),
-(3, 300);
+-- Inserción en la tabla 'itemmenu'
+INSERT INTO itemmenu (id, nombre, descripcion, precio, apto_celiaco, apto_vegetariano, apto_vegano, calorias, categoria_id, vendedor_id) VALUES
+(1, 'Agua Mineral', 'Agua embotellada', 1.50, b'1', b'1', b'1', 0, 1, 4),
+(2, 'Cerveza Artesanal', 'Cerveza local', 3.50, b'1', b'0', b'0', 150, 2, 4),
+(3, 'Ensalada César', 'Lechuga, pollo y aderezo', 5.00, b'1', b'0', b'0', 350, 3, 4),
+(4, 'Hamburguesa Clásica', 'Carne, queso y bacon', 8.00, b'0', b'0', b'0', 800, 4, 4),
+(5, 'Tarta de Queso', 'Postre casero', 4.50, b'1', b'1', b'0', 400, 5, 4),
+(6, 'Zumo de Naranja', 'Zumo natural', 2.00, b'1', b'1', b'1', 100, 1, 5),
+(7, 'Vino Tinto', 'Copa de vino', 4.00, b'1', b'1', b'1', 120, 2, 5);
 
-INSERT INTO Bebida (id_item, graduacionAlcoholica, volumenEnMl) VALUES
-(4, 0, 500),
-(5, 5.0, 330),
-(6, 0, 250);
+-- Inserción en la tabla 'bebida' (extiende 'itemmenu')
+INSERT INTO bebida (id, volumen_en_ml, graduacion_alcoholica) VALUES
+(1, 500, 0),
+(2, 330, 5),
+(6, 250, 0),
+(7, 200, 13);
+
+-- Inserción en la tabla 'plato' (extiende 'itemmenu')
+INSERT INTO plato (id, peso) VALUES
+(3, 300),
+(4, 450),
+(5, 200);
+
+-- Inserción en la tabla 'pedido'
+INSERT INTO pedido (id, cliente_id, forma_pago_tipo, estado) VALUES
+(1, 1, 'Tarjeta', 'EN_PROCESO'),
+(2, 2, 'Efectivo', 'PENDIENTE_DE_PAGO'),
+(3, 3, 'Tarjeta', 'FINALIZADO');
+
+-- Inserción en la tabla 'detallepedido' (relaciona 'pedido' e 'itemmenu')
+INSERT INTO detallepedido (pedido_id, itemmenu_id, cantidad) VALUES
+(1, 4, 2),
+(1, 1, 1),
+(2, 3, 1),
+(2, 2, 2),
+(3, 5, 1),
+(3, 6, 2);
+
+-- Inserción en la tabla 'pago' (relacionada con 'pedido')
+INSERT INTO pago (pedido_id, monto, fecha, forma_pago, nombre_cliente, cuit_cliente) VALUES
+(3, 25.00, '2023-12-14 12:00:00', 'Tarjeta', 'Carlos López', '27-11223344-5');

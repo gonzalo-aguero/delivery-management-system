@@ -60,7 +60,8 @@ public class PedidoController {
         }catch(NotFoundException e){
             return ResponseEntity.notFound().build();
         }catch(RuntimeException e){
-              return ResponseEntity.internalServerError().build();
+            Logger.getLogger(PedidoController.class.getName()).log(Level.SEVERE, "Ha ocurrido un error al obtener todos los pedidos", e);
+            return ResponseEntity.internalServerError().build();
         }
     }
     

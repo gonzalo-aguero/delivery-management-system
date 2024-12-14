@@ -18,22 +18,27 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class PedidoDTO {
-    
+
     private int id;
     private ClienteDTO cliente;
     private EstadoPedido estado;
     private List<DetallePedidoDTO> detallePedido;
     private PagoDTO datosPago;
     private String formaPagoTipo;
-    
+
     public PedidoDTO(Pedido pedido) {
-    this.id = pedido.getId();
-    this.estado = pedido.getEstado();
-    this.cliente = new ClienteDTO(pedido.getCliente());
-    this.datosPago = new PagoDTO(pedido.getDatosPago());
-    this.detallePedido = pedido.getDetallePedido().stream()
-            .map(DetallePedidoDTO::new)
-            .collect(Collectors.toList());
-    this.formaPagoTipo = pedido.getDatosPago() != null ? pedido.getDatosPago().getFormaPago() : null;
-}
+        this.id = pedido.getId();
+        this.estado = pedido.getEstado();
+        this.cliente = new ClienteDTO(pedido.getCliente());
+
+        if(pedido.getDatosPago() != null){
+            this.datosPago = new PagoDTO(pedido.getDatosPago());
+        }
+
+        this.detallePedido = pedido.getDetallePedido().stream()
+                .map(DetallePedidoDTO::new)
+                .collect(Collectors.toList());
+                
+        this.formaPagoTipo = pedido.getFormaPagoTipo() != null ? pedido.getFormaPagoTipo() : "No especificado";
+    }
 }

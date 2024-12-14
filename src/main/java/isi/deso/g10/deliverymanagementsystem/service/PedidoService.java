@@ -45,10 +45,9 @@ public class PedidoService {
 
     @Autowired
     private ItemMenuRepository itemMenuRepository;
-    
+
     @Autowired
     private DetallePedidoRepository detallePedidoRepository;
-
 
     public List<PedidoDTO> getAll() throws NotFoundException {
         List<Pedido> pedidos = pedidoRepository.findAll();
@@ -57,17 +56,14 @@ public class PedidoService {
         }
 
         return pedidos.stream()
-                .map(pedido -> new PedidoDTO(
-                       pedido
-                ))
+                .map(pedido -> new PedidoDTO(pedido))
                 .collect(Collectors.toList());
     }
 
     public PedidoDTO getById(int id) throws NotFoundException {
         return pedidoRepository.findById(id)
                 .map(pedido -> new PedidoDTO(
-                      pedido
-                ))
+                        pedido))
                 .orElseThrow(() -> new NotFoundException());
     }
 
@@ -75,7 +71,8 @@ public class PedidoService {
         Pedido pedido = new Pedido();
         pedido.setEstado(pedidoDTO.getEstado());
         pedido.setCliente(clienteRepository.findById(pedidoDTO.getCliente().getId())
-                .orElseThrow(() -> new RuntimeException("No se encontró el cliente con ID: " + pedidoDTO.getCliente().getId())));
+                .orElseThrow(() -> new RuntimeException(
+                        "No se encontró el cliente con ID: " + pedidoDTO.getCliente().getId())));
 
         if (pedidoDTO.getDatosPago() != null) {
             Pago pago = new Pago();
@@ -94,7 +91,8 @@ public class PedidoService {
             DetallePedido detallePedido = new DetallePedido();
             detallePedido.setCantidad(detallePedidoDTO.getCantidad());
             detallePedido.setItem(itemMenuRepository.findById(detallePedidoDTO.getItem().getId())
-                    .orElseThrow(() -> new RuntimeException("No se encontró el ItemMenu con ID: " + detallePedidoDTO.getItem().getId())));
+                    .orElseThrow(() -> new RuntimeException(
+                            "No se encontró el ItemMenu con ID: " + detallePedidoDTO.getItem().getId())));
             detallePedido.setPedido(pedidoGuardado);
             detallePedidoRepository.save(detallePedido);
         });
@@ -115,7 +113,8 @@ public class PedidoService {
 
         pedido.setEstado(pedidoDTO.getEstado());
         pedido.setCliente(clienteRepository.findById(pedidoDTO.getCliente().getId())
-                .orElseThrow(() -> new RuntimeException("No se encontró el cliente con ID: " + pedidoDTO.getCliente().getId())));
+                .orElseThrow(() -> new RuntimeException(
+                        "No se encontró el cliente con ID: " + pedidoDTO.getCliente().getId())));
 
         if (pedidoDTO.getDatosPago() != null) {
             Pago pago = pedido.getDatosPago() != null ? pedido.getDatosPago() : new Pago();
@@ -134,7 +133,8 @@ public class PedidoService {
             DetallePedido detallePedido = new DetallePedido();
             detallePedido.setCantidad(detallePedidoDTO.getCantidad());
             detallePedido.setItem(itemMenuRepository.findById(detallePedidoDTO.getItem().getId())
-                    .orElseThrow(() -> new RuntimeException("No se encontró el ItemMenu con ID: " + detallePedidoDTO.getItem().getId())));
+                    .orElseThrow(() -> new RuntimeException(
+                            "No se encontró el ItemMenu con ID: " + detallePedidoDTO.getItem().getId())));
             detallePedido.setPedido(pedidoActualizado);
             detallePedidoRepository.save(detallePedido);
         });

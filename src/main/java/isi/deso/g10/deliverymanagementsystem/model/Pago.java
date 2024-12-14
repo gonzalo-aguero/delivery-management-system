@@ -2,6 +2,8 @@ package isi.deso.g10.deliverymanagementsystem.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
@@ -9,6 +11,7 @@ import jakarta.persistence.Table;
 import java.util.Date;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Data
 @NoArgsConstructor
@@ -18,11 +21,12 @@ public class Pago {
     
     @Id
     private int id;
-
     
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     private Pedido pedido;
+
     private double monto;
     private String formaPago;
     private Date fecha;
