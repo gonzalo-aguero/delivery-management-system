@@ -61,7 +61,9 @@ public class ItemMenuController {
         }catch(NotFoundException e){
             return ResponseEntity.notFound().build();
         }catch(RuntimeException e){
-              return ResponseEntity.internalServerError().build();
+              //return ResponseEntity.internalServerError().build();
+              throw new RuntimeException(e.getMessage());
+              //
         }
     }
     
