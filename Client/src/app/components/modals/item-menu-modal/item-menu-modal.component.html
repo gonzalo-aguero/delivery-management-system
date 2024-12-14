@@ -5,9 +5,9 @@
       <div class="container">
         <label for="vendedor">Vendedor:</label>
         <select id="vendedor" formControlName="vendedor">
-          @for (vendedor of vendedores; track $index) {
-          <option value="{{ vendedor.id }}">{{ vendedor.nombre }}</option>
-          }
+          <option *ngFor="let vendedor of vendedores" value="{{ vendedor.id }}">
+            {{ vendedor.nombre }}
+          </option>
         </select>
         <div style="display: flex; gap: 5px">
           <label for="nombre">Nombre:</label>

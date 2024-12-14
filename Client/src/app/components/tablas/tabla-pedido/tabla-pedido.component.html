@@ -31,7 +31,7 @@
     <tbody>
       <tr *ngFor="let pedido of pedidosFiltrados">
         <td>{{ pedido.id }}</td>
-        <td>{{ pedido.cliente.id }}</td>
+        <td>{{ pedido.clienteId }}</td>
         <td>{{ pedido.estado }}</td>
         <td>{{ pedido.datosPago.monto }}</td>
         <td>{{ pedido.formaPagoTipo }}</td>
@@ -43,3 +43,11 @@
     </tbody>
   </table>
 </div>
+
+@if(!isModal){
+  <div class="modals">
+    <div class="modal">
+      <app-pedido-modal></app-pedido-modal>
+    </div>
+  </div>
+}

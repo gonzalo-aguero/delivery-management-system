@@ -172,4 +172,14 @@ public class ItemMenuService {
                 }
            }
 
+    public List<ItemMenuDTO> getByVendedorId(Integer vendedorId) throws NotFoundException {
+        List<ItemMenu> itemMenus = itemMenuRepository.findByVendedorId(vendedorId);
+        if (itemMenus.isEmpty()) {
+            throw new NotFoundException();
+        }
+        return itemMenus.stream()
+                .map(ItemMenuDTO::new)
+                .collect(Collectors.toList());
+    }
+
 }

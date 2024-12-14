@@ -37,9 +37,8 @@
         <td>{{ item.categoria.descripcion }}</td>
         <td>{{ item.calorias }}</td>
         <td>
-          @if(item.aptoCeliaco){Celiaco }
-          @if(item.aptoVegetariano){Vegetariano }
-          @if(item.aptoVegano){Vegano}
+          @if(item.aptoCeliaco){Celiaco } @if(item.aptoVegetariano){Vegetariano
+          } @if(item.aptoVegano){Vegano}
         </td>
         <td>
           <button (click)="editarItem(item)">Editar</button>
@@ -50,20 +49,14 @@
   </table>
 </div>
 
-@if(modal){
-  <div class="modals">
-    <div class="modal">
-      <app-item-menu-modal 
-      [modo] = "modo"
-      [vendedores]="vendedores"
-      [categorias]="categorias"
+<div class="modals" *ngIf="mostrarModal">
+  <div class="modal">
+    <app-item-menu-modal
+      [modo]="modo"
       [itemMenu]="itemSeleccionado"
       (cancel)="onCancel()"
-      (submit)="onSubmit($event)"
-      >
+      (enviar)="onSubmit($event)"
+    >
     </app-item-menu-modal>
   </div>
-    
-  </div>
- 
-}
+</div>

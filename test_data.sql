@@ -62,14 +62,15 @@ INSERT INTO pedido (id, cliente_id, forma_pago_tipo, estado) VALUES
 (2, 2, 'Efectivo', 'PENDIENTE_DE_PAGO'),
 (3, 3, 'Tarjeta', 'FINALIZADO');
 
+
 -- Inserción en la tabla 'detallepedido' (relaciona 'pedido' e 'itemmenu')
-INSERT INTO detallepedido (pedido_id, itemmenu_id, cantidad) VALUES
-(1, 4, 2),
-(1, 1, 1),
-(2, 3, 1),
-(2, 2, 2),
-(3, 5, 1),
-(3, 6, 2);
+INSERT INTO detallepedido (detalle_pedido_id, pedido_id, itemmenu_id, cantidad) VALUES
+(1, 1, 4, 2),
+(2, 1, 1, 1),
+(3, 2, 3, 1),
+(4, 2, 2, 2),
+(5, 3, 5, 1),
+(6, 3, 6, 2);
 
 -- Inserción en la tabla 'pago' (relacionada con 'pedido')
 INSERT INTO pago (pedido_id, monto, fecha, forma_pago, nombre_cliente, cuit_cliente) VALUES

@@ -19,12 +19,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemMenuDTO {
-    
-    public enum Tipo{
+
+    public enum Tipo {
         PLATO,
         BEBIDA
     }
-    
+
     private int id;
     private Tipo tipo;
     private String nombre;
@@ -41,31 +41,30 @@ public class ItemMenuDTO {
     private double peso;
     private double graduacionAlcoholica;
     private double volumenEnMl;
-    
+
     public ItemMenuDTO(ItemMenu itemMenu) {
-    this.id = itemMenu.getId();
-    this.nombre = itemMenu.getNombre();
-    this.descripcion = itemMenu.getDescripcion();
-    this.precio = itemMenu.getPrecio();
-    this.categoria = new CategoriaDTO(itemMenu.getCategoria());
-    this.calorias = itemMenu.getCalorias();
-    this.aptoCeliaco = itemMenu.isAptoCeliaco();
-    this.aptoVegetariano = itemMenu.isAptoVegetariano();
-    this.aptoVegano = itemMenu.isAptoVegano();
-    this.vendedor = new VendedorDTO(itemMenu.getVendedor());
-    this.vendedorId = this.vendedor.getId();
-    this.categoriaId = this.categoria.getId();
+        this.id = itemMenu.getId();
+        this.nombre = itemMenu.getNombre();
+        this.descripcion = itemMenu.getDescripcion();
+        this.precio = itemMenu.getPrecio();
+        this.categoria = new CategoriaDTO(itemMenu.getCategoria());
+        this.calorias = itemMenu.getCalorias();
+        this.aptoCeliaco = itemMenu.isAptoCeliaco();
+        this.aptoVegetariano = itemMenu.isAptoVegetariano();
+        this.aptoVegano = itemMenu.isAptoVegano();
+        this.vendedor = new VendedorDTO(itemMenu.getVendedor());
+        this.vendedorId = this.vendedor.getId();
+        this.categoriaId = this.categoria.getId();
 
-
-    if (itemMenu instanceof Plato) {
-        Plato plato = (Plato) itemMenu;
-        this.tipo = Tipo.PLATO;
-        this.peso = plato.getPeso();
-    } else if (itemMenu instanceof Bebida) {
-        Bebida bebida = (Bebida) itemMenu;
-        this.tipo = Tipo.BEBIDA;
-        this.graduacionAlcoholica = bebida.getGraduacionAlcoholica();
-        this.volumenEnMl = bebida.getVolumenEnMl();
+        if (itemMenu instanceof Plato) {
+            Plato plato = (Plato) itemMenu;
+            this.tipo = Tipo.PLATO;
+            this.peso = plato.getPeso();
+        } else if (itemMenu instanceof Bebida) {
+            Bebida bebida = (Bebida) itemMenu;
+            this.tipo = Tipo.BEBIDA;
+            this.graduacionAlcoholica = bebida.getGraduacionAlcoholica();
+            this.volumenEnMl = bebida.getVolumenEnMl();
+        }
     }
-}
 }

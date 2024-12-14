@@ -13,6 +13,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,14 +25,14 @@ public class ClienteDTO {
     private String email;
     private String direccion;
     private CoordenadaDTO coordenadas;
-    
+
     public ClienteDTO(Cliente cliente) {
-    this.id = cliente.getId();
-    this.nombre = cliente.getNombre();
-    this.direccion = cliente.getDireccion();
-    this.cuit = cliente.getCuit();
-    this.email = cliente.getEmail();
-    this.coordenadas = cliente.getCoordenadas() != null ? new CoordenadaDTO(cliente.getCoordenadas()) : null;
+        this.id = cliente.getId();
+        this.nombre = cliente.getNombre();
+        this.direccion = cliente.getDireccion();
+        this.cuit = cliente.getCuit();
+        this.email = cliente.getEmail();
+        this.coordenadas = cliente.getCoordenadas() != null ? new CoordenadaDTO(cliente.getCoordenadas()) : null;
     }
 
 }

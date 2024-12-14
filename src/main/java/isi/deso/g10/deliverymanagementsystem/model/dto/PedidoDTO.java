@@ -8,6 +8,7 @@ import isi.deso.g10.deliverymanagementsystem.model.Pedido;
 import isi.deso.g10.deliverymanagementsystem.model.Pedido.EstadoPedido;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,27 +19,23 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class PedidoDTO {
-
-    private int id;
-    private ClienteDTO cliente;
+    private Integer id;
+    private Integer idCliente;
     private EstadoPedido estado;
     private List<DetallePedidoDTO> detallePedido;
     private PagoDTO datosPago;
-    private String formaPagoTipo;
 
     public PedidoDTO(Pedido pedido) {
         this.id = pedido.getId();
+        this.idCliente = pedido.getCliente().getId();
         this.estado = pedido.getEstado();
-        this.cliente = new ClienteDTO(pedido.getCliente());
 
         if(pedido.getDatosPago() != null){
             this.datosPago = new PagoDTO(pedido.getDatosPago());
         }
-
+        
         this.detallePedido = pedido.getDetallePedido().stream()
-                .map(DetallePedidoDTO::new)
-                .collect(Collectors.toList());
-                
-        this.formaPagoTipo = pedido.getFormaPagoTipo() != null ? pedido.getFormaPagoTipo() : "No especificado";
+            .map(DetallePedidoDTO::new)
+            .collect(Collectors.toList());
     }
 }

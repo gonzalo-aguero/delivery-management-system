@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.persistence.EmbeddedId;
 
 /**
  * Equivalente a la clase PedidoDetalle del diagrama de clases del enunciado.
@@ -34,27 +35,20 @@ import lombok.NoArgsConstructor;
 @Table(name = "detallepedido")
 public class DetallePedido {
 
-    @Id
-    private int id;
+    @EmbeddedId
+    private DetallePedidoId id;
     
     @ManyToOne
+    @MapsId("pedidoId")// mapea el atributo pedidoId de la clase DetallePedidoId
     @JoinColumn(name = "pedido_id")
-    @MapsId
     private Pedido pedido;
     
     @ManyToOne
     @JoinColumn(name = "itemmenu_id")
     private ItemMenu item;
+    
     private int cantidad;
     
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public Pedido getPedido() {
         return pedido;
     }
