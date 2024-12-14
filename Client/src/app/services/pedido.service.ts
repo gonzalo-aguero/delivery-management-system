@@ -8,6 +8,7 @@ import { Pedido } from '../models/pedido.model';
   providedIn: 'root'
 })
 export class PedidoService {
+  
 
   private apiUrl = `${API_URL}/pedido`;
 
@@ -26,5 +27,9 @@ export class PedidoService {
 
   editarPedido(pedido : Pedido) {
     return this.http.put<Pedido>(`${this.apiUrl}`,pedido);
+  }
+
+  calcularTotal(data: (string | number)[]) : Observable<number>{
+    return this.http.get<number>(`${this.apiUrl}?monto=${data[1]}&formaPago=${data[0]}`);
   }
 }

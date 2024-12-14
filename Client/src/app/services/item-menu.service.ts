@@ -27,4 +27,9 @@ export class ItemMenuService {
   editarItem(item : ItemMenu): Observable<ItemMenu> {
     return this.http.put<ItemMenu>(`${this.apiUrl}`,item);
   }
+
+  getItemsByVendedor(id : string): Observable<ItemMenu[]>{
+    return this.http.get<ItemMenu[]>(`${this.apiUrl}?vendedor=${id}`);
+  }
+  
 }

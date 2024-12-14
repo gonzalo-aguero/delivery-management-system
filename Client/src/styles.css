@@ -23,6 +23,10 @@ button.secondary{
     border:solid rgb(0, 153, 255) 1px;
 }
 
+button.delete{
+    background-color: rgb(172, 40, 40);
+}
+
 
 .modals{
     position: fixed;
