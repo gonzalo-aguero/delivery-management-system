@@ -5,6 +5,9 @@
 package isi.deso.g10.deliverymanagementsystem.repository;
 
 import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
+
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -12,5 +15,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author giuli
  */
 public interface ItemMenuRepository extends JpaRepository<ItemMenu,Integer> {
-    
+    List<ItemMenu> findByVendedorId(Integer vendedorId);
 }
