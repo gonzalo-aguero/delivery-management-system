@@ -7,6 +7,7 @@ package isi.deso.g10.deliverymanagementsystem.model;
 import isi.deso.g10.deliverymanagementsystem.observer.Observable;
 import isi.deso.g10.deliverymanagementsystem.observer.PedidoObserver;
 import isi.deso.g10.deliverymanagementsystem.strategy.FormaPagoI;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -52,10 +53,10 @@ public class Pedido{
     @Column(name="estado")
     private EstadoPedido estado;
     
-    @OneToMany(mappedBy="pedido")
+    @OneToMany(mappedBy="pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetallePedido> detallePedido;
     
-    @OneToOne(mappedBy="pedido")
+    @OneToOne(mappedBy="pedido", cascade = CascadeType.ALL)
     @JsonManagedReference
     private Pago datosPago;
     
@@ -138,4 +139,18 @@ public class Pedido{
 
 */
 
+    /**
+     * Agrega un detalle de pedido a la lista de detalles del pedido,
+     * asegurandose de crear la id compuesta correctamente.
+     *
+     * @param detalle El detalle de pedido que se va a agregar.
+     */
+    public void addDetallePedido(DetallePedido detalle) {
+        DetallePedidoId detalleId = new DetallePedidoId();
+        detalleId.setPedidoId(this.id);
+        detalleId.setDetallePedidoId(detallePedido.size() + 1);
+        detalle.setId(detalleId);
+        detalle.setPedido(this);
+        detallePedido.add(detalle);
+    }
 }
