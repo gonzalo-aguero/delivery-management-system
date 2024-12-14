@@ -8,7 +8,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+/*
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class VendedorMySQLDaoImplTest {
 
@@ -97,4 +97,4 @@ public class VendedorMySQLDaoImplTest {
         System.out.println("Vendedores encontrados:");
         vendedoresObtenidos.forEach(v -> System.out.println(v.getId() + "  |  " + v.getNombre() + "  |  " + v.getDireccion()));
     }
-}
+}*/

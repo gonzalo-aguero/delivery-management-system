@@ -34,7 +34,4 @@ public class ClienteDTO {
     this.coordenadas = cliente.getCoordenadas() != null ? new CoordenadaDTO(cliente.getCoordenadas()) : null;
     }
 
-
-   
-    
 }
