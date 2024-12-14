@@ -19,11 +19,11 @@ export class TablaPedidoComponent {
 
     pedidos: Pedido[] = [];
 
-    modal: PedidoModalComponent | null = null;
 
     pedidoSeleccionado: Pedido | undefined = undefined;
 
     modo:string = '';
+    isModal= false;
 
     constructor(private _pedidoService: PedidoService){}
 
@@ -41,7 +41,6 @@ export class TablaPedidoComponent {
         console.log("PEDIDOS OBTENIDOS:", this.pedidos);
       } catch (error) {
         console.error('Error al obtener los pedidos:', error);
-        alert('Error al cargar los pedidos');
       }
     }
 
@@ -52,7 +51,7 @@ export class TablaPedidoComponent {
     // Actualizar método crearPedido
     async crearPedido() {
       this.modo = 'crear';
-      this.pedidoSeleccionado = undefined;
+      this.isModal=true;
       // Después de crear, refrescar lista
       await this.refreshPedidos();
     }

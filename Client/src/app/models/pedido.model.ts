@@ -1,10 +1,10 @@
-import { Cliente } from './cliente.model';
+
 import { DetallePedido } from './detalle-pedido.model';
 import { Pago } from './pago.model';
 
 export class Pedido {
   id: number;
-  cliente: Cliente;
+  clienteId: number;
   estado: string;
   detallePedido: DetallePedido[];
   datosPago: Pago;
@@ -12,7 +12,7 @@ export class Pedido {
 
   constructor(pedido: any) {
     this.id = pedido.id || 0;
-    this.cliente = new Cliente(pedido.cliente);
+    this.clienteId = pedido.clienteId || 0;
     this.estado = pedido.estado || '';
     this.detallePedido = (pedido.detallePedido || []).map((detalle: any) => new DetallePedido(detalle));
     this.datosPago = new Pago(pedido.datosPago);

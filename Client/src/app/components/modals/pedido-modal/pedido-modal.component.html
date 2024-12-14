@@ -1,1 +1,56 @@
-<p>pedido-modal works!</p>
+<div class="form">
+    <h3>Crear Pedido</h3>
+    <form>
+        <div class="container">
+            <label for="vendedor">Vendedor:</label>
+            <select (change)="onSelectChange($event)"
+            id="vendedor" name="vendedor">
+                <option *ngFor="let vendedor of vendedores" value="{{vendedor.id}}">
+                    {{vendedor.nombre}}
+                </option>
+            </select>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                    </tr>
+                </thead>
+                <tr *ngFor="let item of items; let i = index"
+                [class.selected]="selectedTI === i"
+                (click)="selectTI(i)">
+                    <td>{{item.id}}</td>
+                    <td>{{item.nombre}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="main-btn-container">
+            <button type="button"
+            [class.delete]="!seleccionar"
+            (click)="seleccionarBtn()">{{seleccionar? 'Seleccionar' : 'Eliminar'}}</button>
+            <div class="btn-container">
+                <button type="button">Pedir</button>
+                <button type="button" class="secondary">Cancelar</button>
+            </div>
+        </div>
+        <div class="container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tr *ngFor="let item of itemSeleccionados; let i = index"
+                [class.selected]="selectedTS === i"
+                (click)="selectTS(i)">
+                    <td>{{item[0].id}}</td>
+                    <td>{{item[0].nombre}}</td>
+                    <td>{{item[1]}}</td>
+                </tr>
+            </table>
+        </div>
+    </form>
+
+</div>
