@@ -15,15 +15,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class DetallePedidoDTO {
-    private int id;
-    private PedidoDTO pedido;  // Relación con PedidoDTO
-    private ItemMenuDTO item;  // Relación con ItemMenuDTO
-    private int cantidad;
+    private Integer idItemMenu;
+    private Integer cantidad;
     
     public DetallePedidoDTO(DetallePedido detallePedido) {
-    this.id = detallePedido.getId();
-    this.cantidad = detallePedido.getCantidad();
-    this.pedido = detallePedido.getPedido() != null ? new PedidoDTO(detallePedido.getPedido()) : null;
-    this.item = detallePedido.getItem() != null ? new ItemMenuDTO(detallePedido.getItem()) : null;
+        this.cantidad = detallePedido.getCantidad();
+        this.idItemMenu = detallePedido.getItem() != null ? detallePedido.getItem().getId() : null;
     }
 }

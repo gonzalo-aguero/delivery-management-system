@@ -4,13 +4,9 @@
  */
 package isi.deso.g10.deliverymanagementsystem.controller.springboot;
 
-
-import isi.deso.g10.deliverymanagementsystem.model.Pedido;
-import isi.deso.g10.deliverymanagementsystem.model.dto.ItemMenuDTO;
 import isi.deso.g10.deliverymanagementsystem.model.dto.PedidoDTO;
 import isi.deso.g10.deliverymanagementsystem.service.PedidoService;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,71 +31,75 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RequestMapping("/pedido")
 public class PedidoController {
-    
+
     @Autowired
     PedidoService pedidoService;
-    
+
     @GetMapping("/{id}")
-    public ResponseEntity<PedidoDTO> getPedido(@PathVariable(value = "id") Integer id){
-        
-        try{
+    public ResponseEntity<PedidoDTO> getPedido(@PathVariable(value = "id") Integer id) {
+
+        try {
             PedidoDTO pedido = pedidoService.getById(id);
             return ResponseEntity.ok(pedido);
-          }catch(NotFoundException e){
+        } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
-          }catch(RuntimeException e){
-              return ResponseEntity.internalServerError().build();
-          }
-    }
-    
-    @GetMapping
-    public ResponseEntity<List<PedidoDTO>> getPedidos(){
-        try{
-        List<PedidoDTO> pedidos = pedidoService.getAll();
-        return ResponseEntity.ok(pedidos);
-        }catch(NotFoundException e){
-            return ResponseEntity.notFound().build();
-        }catch(RuntimeException e){
-            Logger.getLogger(PedidoController.class.getName()).log(Level.SEVERE, "Ha ocurrido un error al obtener todos los pedidos", e);
+        } catch (RuntimeException e) {
             return ResponseEntity.internalServerError().build();
         }
     }
-    
+
+    @GetMapping
+    public ResponseEntity<List<PedidoDTO>> getPedidos() {
+        try {
+            List<PedidoDTO> pedidos = pedidoService.getAll();
+            return ResponseEntity.ok(pedidos);
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (RuntimeException e) {
+            Logger.getLogger(PedidoController.class.getName()).log(Level.SEVERE,
+                    "Ha ocurrido un error al obtener todos los pedidos", e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
     @PostMapping
-    public ResponseEntity<PedidoDTO> crearPedido(@RequestBody PedidoDTO pedidoDTO){
+    public ResponseEntity<PedidoDTO> crearPedido(@RequestBody PedidoDTO pedidoDTO) {
         try {
             PedidoDTO nuevoPedido = pedidoService.savePedido(pedidoDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPedido);
-        }catch(NotFoundException e){
+        } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
-        }catch(RuntimeException e){
-              return ResponseEntity.internalServerError().build();
+        } catch (RuntimeException e) {
+            Logger.getLogger(PedidoController.class.getName()).log(Level.SEVERE,
+                    "Ha ocurrido un error al crear el pedido", e);
+            return ResponseEntity.internalServerError().build();
         }
     }
-    
+
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deletePedido(@PathVariable("id") Integer id){
-         try{
-             pedidoService.deleteById(id);
-             return ResponseEntity.status(HttpStatus.OK).build();
-         }catch(NotFoundException e){
+    public ResponseEntity<Void> deletePedido(@PathVariable("id") Integer id) {
+        try {
+            pedidoService.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
-        }catch(RuntimeException e){
-              return ResponseEntity.internalServerError().build();
+        } catch (RuntimeException e) {
+            Logger.getLogger(PedidoController.class.getName()).log(Level.SEVERE,
+                    "Ha ocurrido un error al eliminar el pedido", e);
+            return ResponseEntity.internalServerError().build();
         }
     }
-    
+
     @PutMapping
-    public ResponseEntity<PedidoDTO> updatePedido(@RequestBody PedidoDTO pedidoDTO){
-        try{
+    public ResponseEntity<PedidoDTO> updatePedido(@RequestBody PedidoDTO pedidoDTO) {
+        try {
             PedidoDTO pedido = pedidoService.updatePedido(pedidoDTO);
             return ResponseEntity.status(HttpStatus.OK).body(pedido);
-        }catch(NotFoundException e){
+        } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
-        }catch(RuntimeException e){
-              return ResponseEntity.internalServerError().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.internalServerError().build();
         }
     }
-    
 
 }
