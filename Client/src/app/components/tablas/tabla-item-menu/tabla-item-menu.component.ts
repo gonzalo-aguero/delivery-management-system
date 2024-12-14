@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ItemMenuModalComponent } from '../../modals/item-menu-modal/item-menu-modal.component';
 import { ItemMenu } from '../../../models/item-menu.model';
@@ -18,7 +18,7 @@ import { Vendedor } from '../../../models/vendedor.model';
   styleUrl: './tabla-item-menu.component.css'
 })
 export class TablaItemMenuComponent {
-
+  mostrarModal = false;
   filtro: string = '';
 
   modal?: ItemMenuModalComponent;
@@ -33,7 +33,12 @@ export class TablaItemMenuComponent {
   itemSeleccionado: any;
 
 
-  constructor(private _itemMenuService:ItemMenuService,private _vendedorService:VendedorService,private _categoriaService: CategoriaService){}
+  constructor(
+    private _itemMenuService: ItemMenuService,
+    private _vendedorService: VendedorService,
+    private _categoriaService: CategoriaService,
+    private cdr: ChangeDetectorRef
+  ){}
 
   ngOnInit(){
     this.obtenerItems();
@@ -42,7 +47,6 @@ export class TablaItemMenuComponent {
   async obtenerItems() {
     try {
       const items = await lastValueFrom(this._itemMenuService.getItems());
-      console.log('Items obtenidos:', items);
       this.items = items;
       this.itemsFiltrados = [...this.items];
     } catch (error) {
@@ -52,6 +56,7 @@ export class TablaItemMenuComponent {
 
 
   async crearItem() {
+    this.mostrarModal = true;
     this.modo = 'Crear';
   
     try {
@@ -63,34 +68,27 @@ export class TablaItemMenuComponent {
   
       this.categorias= categorias;
       this.vendedores= vendedores;
-      this.modal = new ItemMenuModalComponent();
-  
-      console.log('Categorías y vendedores cargados:', categorias, vendedores);
     } catch (error) {
       console.error('Error al cargar datos para crear el ítem:', error);
     }
   }
 
   async editarItem(item: any) {
+    this.mostrarModal = true;
     this.modo = "Editar";
     try {
-      // Espera a que categorías y vendedores se carguen
       const [categorias, vendedores] = await Promise.all([
         this.getCategorias(),
         this.getVendedores(),
       ]);
-  
+
       this.categorias= categorias;
       this.vendedores= vendedores;
       this.itemSeleccionado = item;
-      this.modal = new ItemMenuModalComponent();
-  
-      console.log('Categorías y vendedores cargados:', categorias, vendedores);
+      this.cdr.detectChanges();
     } catch (error) {
       console.error('Error al cargar datos para crear el ítem:', error);
     }
-    
-    
   }
 
   async eliminarItem(id: number) {
@@ -98,7 +96,7 @@ export class TablaItemMenuComponent {
       await lastValueFrom(this._itemMenuService.deleteItem(id));
       this.items = this.items.filter(items => items.id !== id);
       this.itemsFiltrados = [...this.items];
-      console.log('Cliente eliminado con éxito');
+      console.log('Item eliminado con éxito');
     } catch (error) {
       console.error('Error al eliminar el item:', error);
     }
@@ -112,7 +110,7 @@ export class TablaItemMenuComponent {
   }
 
   onCancel() {
-    this.modal = undefined;
+    this.mostrarModal = false;
     this.modo = ''  
     this.itemSeleccionado = undefined;
   }
@@ -122,22 +120,21 @@ export class TablaItemMenuComponent {
       this._itemMenuService.crearItem(item).subscribe((data) => {
         this.items.push(data);
         this.itemsFiltrados = [...this.items];
-        this.modal = undefined;
+        this.mostrarModal = false;
         this.modo = '';
+      });
     }
-      )
-  }
-  else if(this.modo == "Editar"){
-    this._itemMenuService.editarItem(item).subscribe((data) => {
-      this.items.push(data);
-      this.itemsFiltrados = [...this.items];
-      this.modal = undefined;
-      this.modo = '';
-      this.itemSeleccionado=undefined;
+    else if(this.modo == "Editar"){
+      this._itemMenuService.editarItem(item).subscribe((data) => {
+        console.log(data);
+        this.items.push(data);
+        this.itemsFiltrados = [...this.items];
+        this.mostrarModal = false;
+        this.modo = '';
+      });
     }
-    )
   }
-  }
+
   async getCategorias(): Promise<Categoria[]> {
     try {
       const categorias = await lastValueFrom(this._categoriaService.getCategorias());
@@ -160,4 +157,3 @@ export class TablaItemMenuComponent {
 
   
 }
-  
