@@ -28,7 +28,7 @@ export class ItemMenuService {
     return this.http.put<ItemMenu>(`${this.apiUrl}`,item);
   }
 
-  getItemsByVendedor(id : number): Observable<ItemMenu[]>{
+  getItemsByVendedor(id : string): Observable<ItemMenu[]>{
     return this.http.get<ItemMenu[]>(`${this.apiUrl}?vendedor=${id}`);
   }
   

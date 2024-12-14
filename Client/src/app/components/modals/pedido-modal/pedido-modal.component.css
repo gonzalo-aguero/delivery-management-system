@@ -69,6 +69,13 @@
       flex-direction: row;
       justify-content: end;
     }
+
+    .total{
+      margin-top:auto;
+      margin-left: auto;
+      padding: 5px;
+      border:#000 solid 1px;
+    }
   
     button {
       height: 40px;

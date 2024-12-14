@@ -1,4 +1,5 @@
 <div class="form">
+    @if(pedir){
     <h3>Crear Pedido</h3>
     <form>
         <div class="container">
@@ -29,7 +30,7 @@
             [class.delete]="!seleccionar"
             (click)="seleccionarBtn()">{{seleccionar? 'Seleccionar' : 'Eliminar'}}</button>
             <div class="btn-container">
-                <button type="button">Pedir</button>
+                <button type="button" (click)="onPedir()">Pedir</button>
                 <button type="button" class="secondary">Cancelar</button>
             </div>
         </div>
@@ -50,7 +51,26 @@
                     <td>{{item[1]}}</td>
                 </tr>
             </table>
+            
+            <p class="total">Total = {{total}}</p>
         </div>
     </form>
-
+    }
+    @else {
+        <form [formGroup]="pagoForm">
+        <select
+        (change)="cambiaMetodo($event)"
+        formControlName="metodo">
+            <option value="mercadopago">Mercado Pago</option>
+            <option value="transferencia">Transferencia</option>
+        </select>
+        <label formControlName="cuit" for="cuit">Cuit:</label>
+        <input id="cuit">
+        <label formControlName="cbu" for="cbu">Alias/Cbu:</label>
+        <input id="cbu">
+        <label formControlName="cliente" for="cliente">Cliente</label>
+        <input id="cliente">
+    </form>
+    <p class="total">Total: {{subtotal}}</p>
+    }
 </div>
