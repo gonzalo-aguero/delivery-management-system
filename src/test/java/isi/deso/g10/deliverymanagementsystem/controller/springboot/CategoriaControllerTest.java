@@ -1,5 +1,6 @@
 package isi.deso.g10.deliverymanagementsystem.controller.springboot;
 
+import isi.deso.g10.deliverymanagementsystem.exception.NotFoundException;
 import isi.deso.g10.deliverymanagementsystem.model.Categoria;
 import isi.deso.g10.deliverymanagementsystem.model.dto.CategoriaDTO;
 import isi.deso.g10.deliverymanagementsystem.service.CategoriaService;
@@ -42,7 +43,7 @@ public class CategoriaControllerTest {
 
     @Test
     public void getCategoriasNoEncontradas() throws Exception {
-        Mockito.when(service.getAll()).thenThrow(new ChangeSetPersister.NotFoundException());
+        Mockito.when(service.getAll()).thenThrow(new NotFoundException("no se encontraron las categorias"));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/categoria").
                 accept(MediaType.APPLICATION_JSON)).

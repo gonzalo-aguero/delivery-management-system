@@ -64,19 +64,19 @@ public class PedidoController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<PedidoDTO> crearPedido(@RequestBody PedidoDTO pedidoDTO) {
-        try {
-            PedidoDTO nuevoPedido = pedidoService.savePedido(pedidoDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPedido);
-        } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (RuntimeException e) {
-            Logger.getLogger(PedidoController.class.getName()).log(Level.SEVERE,
-                    "Ha ocurrido un error al crear el pedido", e);
-            return ResponseEntity.internalServerError().build();
+        @PostMapping
+        public ResponseEntity<PedidoDTO> crearPedido(@RequestBody PedidoDTO pedidoDTO) {
+            try {
+                PedidoDTO nuevoPedido = pedidoService.savePedido(pedidoDTO);
+                return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPedido);
+            } catch (NotFoundException e) {
+                return ResponseEntity.notFound().build();
+            } catch (RuntimeException e) {
+                Logger.getLogger(PedidoController.class.getName()).log(Level.SEVERE,
+                        "Ha ocurrido un error al crear el pedido", e);
+                return ResponseEntity.internalServerError().build();
+            }
         }
-    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deletePedido(@PathVariable("id") Integer id) {

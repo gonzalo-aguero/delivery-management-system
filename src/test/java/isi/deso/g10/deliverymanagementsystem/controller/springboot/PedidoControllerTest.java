@@ -1,5 +1,6 @@
 package isi.deso.g10.deliverymanagementsystem.controller.springboot;
 
+import isi.deso.g10.deliverymanagementsystem.exception.NotFoundException;
 import isi.deso.g10.deliverymanagementsystem.model.dto.PedidoDTO;
 import isi.deso.g10.deliverymanagementsystem.repository.PedidoRepository;
 import isi.deso.g10.deliverymanagementsystem.service.PedidoService;
@@ -27,6 +28,12 @@ public class PedidoControllerTest {
 
     @MockBean
     private PedidoService pedidoService;
+
+    private final String requestPedidoDTO = """
+            {
+                "id":1
+            }
+            """;
 
     @Test
     public void getPedidoOk() throws Exception {
@@ -96,6 +103,47 @@ public class PedidoControllerTest {
         Mockito.when(pedidoService.getAll()).thenThrow(new RuntimeException());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/pedido")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    public void crearPedidoOk() throws Exception {
+        PedidoDTO pedidoCreado = new PedidoDTO();
+        pedidoCreado.setId(1);
+
+        Mockito.when(pedidoService.savePedido(Mockito.any(PedidoDTO.class))).thenReturn(pedidoCreado);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/pedido")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestPedidoDTO)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(1));
+    }
+
+    @Test
+    public void crearPedidoNotFound() throws Exception {
+        // Simula que el servicio lanza una excepción NotFoundException
+        Mockito.when(pedidoService.savePedido(Mockito.any(PedidoDTO.class)))
+                .thenThrow(new NotFoundException("No se ha encontrado el pedido"));
+
+        // Realiza la solicitud POST y verifica que el estado sea 404
+        mockMvc.perform(MockMvcRequestBuilders.post("/pedido")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestPedidoDTO)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void crearPedidoInternalServerError() throws Exception {
+        Mockito.when(pedidoService.savePedido(Mockito.any(PedidoDTO.class)))
+                .thenThrow(new RuntimeException());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/pedido")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestPedidoDTO)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError());
     }

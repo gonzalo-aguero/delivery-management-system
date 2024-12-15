@@ -8,7 +8,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
-/*
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ClienteMySQLDaoImplTest {
 
@@ -98,4 +98,4 @@ public class ClienteMySQLDaoImplTest {
         System.out.println("Clientes encontrados:");
         clientesObtenidos.forEach(c -> System.out.println(c.getId() + "  |  " + c.getNombre() + "  |  " + c.getDireccion()));
     }
-}*/
+}

@@ -1,5 +1,6 @@
 package isi.deso.g10.deliverymanagementsystem.controller.springboot;
 
+import isi.deso.g10.deliverymanagementsystem.exception.NotFoundException;
 import isi.deso.g10.deliverymanagementsystem.model.Categoria;
 import isi.deso.g10.deliverymanagementsystem.model.dto.*;
 import isi.deso.g10.deliverymanagementsystem.service.ClienteService;
@@ -78,7 +79,7 @@ public class ItemMenuControllerTest {
     public void getItemMenuIdNotFound() throws Exception {
         ItemMenuDTO itemMenuDTO = new ItemMenuDTO();
 
-        Mockito.when(itemMenuService.getById(1)).thenThrow(new ChangeSetPersister.NotFoundException());
+        Mockito.when(itemMenuService.getById(1)).thenThrow(new NotFoundException("no se ha encontrado el item menu"));
         mockMvc.perform(MockMvcRequestBuilders.get("/itemmenu/1")
                     .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
@@ -117,20 +118,12 @@ public class ItemMenuControllerTest {
 
     @Test
     public void getItemsMenuNotFound() throws Exception {
-        Mockito.when(itemMenuService.getAll()).thenThrow(new ChangeSetPersister.NotFoundException());
+        Mockito.when(itemMenuService.getAll()).thenThrow(new NotFoundException("No se encontraron items menu"));
         mockMvc.perform(MockMvcRequestBuilders.get("/itemmenu")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
-/*
-    @Test
-    public void getItemmenusInternalServerError() throws Exception {
-        Mockito.when(itemMenuService.getAll()).thenThrow(new RuntimeException());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/itemmenu")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError());
-    }*/
 
     @Test
     public void getItemsByVendedorIdOk() throws Exception {
@@ -159,7 +152,7 @@ public class ItemMenuControllerTest {
 
     @Test
     public void getItemsByVendedorIdNotFound() throws Exception {
-        Mockito.when(itemMenuService.getByVendedorId(1)).thenThrow(new ChangeSetPersister.NotFoundException());
+        Mockito.when(itemMenuService.getByVendedorId(1)).thenThrow(new NotFoundException("No se ha encontrado el item menu con ese id"));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/itemmenu/by-vendedor")
                         .param("vendedorId", "1")
@@ -207,7 +200,7 @@ public class ItemMenuControllerTest {
 
     @Test
     public void deleteItemMenuNotFound() throws Exception {
-        Mockito.doThrow(new ChangeSetPersister.NotFoundException())
+        Mockito.doThrow(new NotFoundException("No se ha encontrado el item pedido a elimiar"))
                 .when(itemMenuService).deleteById(1);
 
         // Realiza la solicitud DELETE
@@ -251,7 +244,7 @@ public class ItemMenuControllerTest {
     public void updateItemMenuNotFound() throws Exception {
 
         Mockito.when(itemMenuService.updateItemMenu(Mockito.any(ItemMenuDTO.class)))
-                .thenThrow(new ChangeSetPersister.NotFoundException());
+                .thenThrow(new NotFoundException("No se ha encontrado el item menu para actualizar"));
 
         mockMvc.perform(MockMvcRequestBuilders.put("/itemmenu")
                         .contentType(MediaType.APPLICATION_JSON)

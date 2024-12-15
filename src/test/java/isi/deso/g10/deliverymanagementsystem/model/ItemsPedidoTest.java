@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author gonzalo90fa
  */
-/*
+
 public class ItemsPedidoTest {
 
     Pedido pedido;
@@ -51,7 +51,7 @@ public class ItemsPedidoTest {
     /**
      * Test of calcularMontoTotal method, of class ItemsPedido.
      */
-/*
+
     @Test
     public void testCalcularMontoTotal() {
         double expectedTotal = 140;
@@ -62,4 +62,3 @@ public class ItemsPedidoTest {
     }
 
 }
-*/

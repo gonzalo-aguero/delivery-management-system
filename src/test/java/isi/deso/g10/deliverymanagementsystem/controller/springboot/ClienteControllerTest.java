@@ -1,5 +1,6 @@
 package isi.deso.g10.deliverymanagementsystem.controller.springboot;
 
+import isi.deso.g10.deliverymanagementsystem.exception.NotFoundException;
 import isi.deso.g10.deliverymanagementsystem.model.Cliente;
 import isi.deso.g10.deliverymanagementsystem.model.dto.ClienteDTO;
 import isi.deso.g10.deliverymanagementsystem.model.dto.CoordenadaDTO;
@@ -67,7 +68,7 @@ public class ClienteControllerTest {
 
     @Test
     public void getClienteIdNotFound() throws Exception {
-        Mockito.when(clienteService.getById(1)).thenThrow(new ChangeSetPersister.NotFoundException());
+        Mockito.when(clienteService.getById(1)).thenThrow(new NotFoundException("cliente no encontrado"));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/cliente/1").accept(MediaType.APPLICATION_JSON)).
                 andExpect(status().isNotFound());
@@ -112,7 +113,7 @@ public class ClienteControllerTest {
 
     @Test
     public void getClientesNotFound() throws Exception {
-        Mockito.when(clienteService.getAll()).thenThrow(new ChangeSetPersister.NotFoundException());
+        Mockito.when(clienteService.getAll()).thenThrow(new NotFoundException("cliente no encontrado"));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/cliente")
                         .accept(MediaType.APPLICATION_JSON))
@@ -191,7 +192,7 @@ public class ClienteControllerTest {
     @Test
     public void updateClienteNotFound() throws Exception {
         // Simular que el servicio lanza NotFoundException
-        Mockito.doThrow(new ChangeSetPersister.NotFoundException()).when(clienteService).updateCliente(Mockito.any(ClienteDTO.class));
+        Mockito.doThrow(new NotFoundException("no se ha encontrado el cliente a actualizar")).when(clienteService).updateCliente(Mockito.any(ClienteDTO.class));
 
         ClienteDTO clienteDTO = new ClienteDTO();
         clienteDTO.setId(1);
