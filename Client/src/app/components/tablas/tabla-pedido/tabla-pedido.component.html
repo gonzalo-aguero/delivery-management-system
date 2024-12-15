@@ -51,3 +51,10 @@
   </div>
 </div>
 }
+@if (modalEditar) {
+  <div class="modals">
+    <div class="modal">
+      <app-editar-pedido-modal [pedidoId]="pedidoSeleccionado?.id" (cancel)="onCancel()" (enviar)="onEditarSubmit($event)"></app-editar-pedido-modal>
+    </div>
+  </div>
+}

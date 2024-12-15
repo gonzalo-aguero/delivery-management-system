@@ -8,15 +8,17 @@ import { lastValueFrom } from 'rxjs';
 import { PedidoModalComponent } from '../../modals/pedido-modal/pedido-modal.component';
 import { Cliente } from '../../../models/cliente.model';
 import { ClienteService } from '../../../services/cliente.service';
+import { EditarPedidoModalComponent } from "../../modals/editar-pedido-modal/editar-pedido-modal.component";
 
 @Component({
   selector: 'app-tabla-pedido',
   standalone: true,
-  imports: [FormsModule, CommonModule, HttpClientModule, PedidoModalComponent],
+  imports: [FormsModule, CommonModule, HttpClientModule, PedidoModalComponent, EditarPedidoModalComponent],
   templateUrl: './tabla-pedido.component.html',
   styleUrl: './tabla-pedido.component.css'
 })
 export class TablaPedidoComponent {
+
     filtro: string = '';
 
     pedidos: Pedido[] = [];
@@ -27,6 +29,7 @@ export class TablaPedidoComponent {
 
     modo:string = '';
     isModal= false;
+    modalEditar= false;
 
     constructor(private _pedidoService: PedidoService, private _clienteService: ClienteService){}
 
@@ -52,22 +55,23 @@ export class TablaPedidoComponent {
       await this.obtenerPedidos();
     }
 
-    // Actualizar método crearPedido
+
     async crearPedido() {
       this.modo = 'crear';
       this.isModal=true;
-      // Después de crear, refrescar lista
+
       await this.refreshPedidos();
     }
 
-    // Actualizar método editarPedido
+
     async editarPedido(pedido: Pedido) {
       this.modo = 'editar';
       this.pedidoSeleccionado = pedido;
+      this.modalEditar = true;
       await this.refreshPedidos();
     }
 
-    // Actualizar método eliminarPedido
+
     async eliminarPedido(id: number) {
       try {
         this._pedidoService.deletePedido(id).subscribe();
@@ -88,9 +92,22 @@ export class TablaPedidoComponent {
 
     onCancel(){
       this.isModal = false;
+      this.modalEditar = false;
     }
+
     getCliente(pedido: any){
       return this.clientes.find(c => c.id == Number(pedido.idCliente))?.nombre;
     }
+
+    onEditarSubmit(pedido: Pedido) {
+      this._pedidoService.editarPedido(pedido).subscribe((data) => {
+        this.pedidos.push(data);
+        this.pedidosFiltrados = [...this.pedidos];
+        this.modalEditar = false;
+        this.modo = '';
+      });
+    
+    }
+
   }
 
