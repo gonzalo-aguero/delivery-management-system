@@ -1,0 +1,35 @@
+<div class="form">
+    <form [formGroup]="pedidoForm" (ngSubmit)="onSubmit($event)">
+        <label for="estado">Estado:</label>
+        <select 
+        formControlName ="estado"    
+        id="estado">
+            <option *ngFor="let estado of estados"
+            value="{{estado}}" >
+                {{estado}}
+            </option>
+        </select>
+        <label for="formapago">Forma de Pago:</label>
+        <select (onChange)="onChange($event)" formControlName="formapago" id="formapago">
+            <option value="mercadopago" >
+                Mercado Pago
+            </option>
+            <option value="tranferencia" >
+                Transferencia
+            </option>
+        </select>
+        <div>
+            <label for="cbu">Cbu/Alias:</label>
+            <input id="cbu" formControlName="cbu">
+            <label for="cuit">Cuit:</label>
+            <input id="cuit" formControlName="cuit">
+        </div>
+        <p>Subtotal : {{pedido ? (pedido.datosPago.monto + (pedido.datosPago.monto * recargo) / 100).toFixed(2) : 0}}</p>
+        <div>
+            <button type="submit">Aceptar</button>
+            <button class="secondary" type="button" (click)="onCancel()">Cancelar</button>
+        </div>
+        
+    </form> 
+
+</div>
