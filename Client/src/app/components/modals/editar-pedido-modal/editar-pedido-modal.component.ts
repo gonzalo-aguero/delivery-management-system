@@ -2,11 +2,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup , FormControl, ReactiveFormsModule } from '@angular/forms';
 import { PedidoService } from '../../../services/pedido.service';
 import { EstadoPedido, Pedido } from '../../../models/pedido.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-editar-pedido-modal',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,CommonModule],
   templateUrl: './editar-pedido-modal.component.html',
   styleUrl: './editar-pedido-modal.component.css'
 })
@@ -15,11 +16,11 @@ export class EditarPedidoModalComponent {
 
     subtotal= 0;
     recargo = 0;
-    @Input() pedidoId = 0;
+    @Input() pedidoId? = 0;
     
 
     @Output() cancel = new EventEmitter<void>();
-    @Output() submit = new EventEmitter<Pedido>();
+    @Output() enviar = new EventEmitter<Pedido>();
 
 
     pedido? : Pedido = undefined;
@@ -37,23 +38,25 @@ export class EditarPedidoModalComponent {
     constructor(private _pedidoService:PedidoService){}
 
     ngOnInit(){
+      if(this.pedidoId){
       this._pedidoService.getPedidoById(this.pedidoId).subscribe({
         next: (data) => {
+          console.log(data)
           this.pedido = data;
           this.pedidoForm.patchValue(data);
           this.subtotal = data.datosPago.monto;
           },
       })
+      }
     }
 
     onSubmit(event: any) {
-
       const formData = this.pedidoForm.value;
 
       if(this.pedido){
       const updatedPedido = new Pedido({
         id: this.pedidoId,
-        clienteId: this.pedido.clienteId,
+        clienteId: this.pedido.idCliente,
         estado: formData.estado,
         detallePedido: [], 
         datosPago: {
@@ -64,7 +67,8 @@ export class EditarPedidoModalComponent {
         },
         formaPagoTipo: formData.formapago
       })
-      this.submit.emit(updatedPedido);
+      this.enviar.emit(updatedPedido);
+      console.log("Emite")
     } else throw Error("Pedido nulo")
       
     }
