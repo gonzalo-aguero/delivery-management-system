@@ -44,6 +44,8 @@ public class PedidoController {
         } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (RuntimeException e) {
+            Logger.getLogger(PedidoController.class.getName()).log(Level.SEVERE,
+                    "Ha ocurrido un error al obtener el pedido por id " + id, e);
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -98,6 +100,8 @@ public class PedidoController {
         } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (RuntimeException e) {
+            Logger.getLogger(PedidoController.class.getName()).log(Level.SEVERE,
+                    "Ha ocurrido un error al actualizar el pedido", e);
             return ResponseEntity.internalServerError().build();
         }
     }
