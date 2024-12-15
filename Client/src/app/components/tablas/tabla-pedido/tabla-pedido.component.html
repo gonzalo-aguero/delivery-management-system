@@ -44,10 +44,10 @@
   </table>
 </div>
 
-@if(!isModal){
-  <div class="modals">
-    <div class="modal">
-      <app-pedido-modal></app-pedido-modal>
-    </div>
+@if(isModal){
+<div class="modals">
+  <div class="modal">
+    <app-pedido-modal (cancel)="onCancel()"></app-pedido-modal>
   </div>
+</div>
 }

@@ -81,5 +81,9 @@ export class TablaPedidoComponent {
         pedido.id.toString().includes(filtro)
       );
     }
+
+    onCancel(){
+      this.isModal = false;
+    }
   }
 

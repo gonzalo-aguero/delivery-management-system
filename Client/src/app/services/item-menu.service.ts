@@ -29,7 +29,7 @@ export class ItemMenuService {
   }
 
   getItemsByVendedor(id : string): Observable<ItemMenu[]>{
-    return this.http.get<ItemMenu[]>(`${this.apiUrl}?vendedor=${id}`);
+    return this.http.get<ItemMenu[]>(`${this.apiUrl}/by-vendedor?vendedorId=${id}`);
   }
   
 }
