@@ -147,6 +147,7 @@ public class ItemMenuService {
                     itemMenu.setNombre(itemMenuDTO.getNombre());
                     itemMenu.setDescripcion(itemMenuDTO.getDescripcion()); 
                     itemMenu.setCategoria(categoria.get());
+                    itemMenu.setVendedor(vendedor.get());
                     itemMenu.setPrecio(itemMenuDTO.getPrecio());
                     itemMenu.setCalorias(itemMenuDTO.getCalorias());
                     itemMenu.setAptoCeliaco(itemMenuDTO.isAptoCeliaco());

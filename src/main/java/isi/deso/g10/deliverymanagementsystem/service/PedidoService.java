@@ -149,6 +149,11 @@ public class PedidoService {
             pago.setCuitCliente(pedidoDTO.getDatosPago().getCuitCliente());
             pedido.setDatosPago(pago);
             pago.setPedido(pedido);
+        }else {
+            if(pedido.getDatosPago() != null){
+                pedido.getDatosPago().setPedido(null);
+            }
+            pedido.setDatosPago(null);
         }
 
 
