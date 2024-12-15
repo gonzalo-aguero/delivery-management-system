@@ -14,6 +14,10 @@ export class PedidoService {
 
   constructor(private http:HttpClient) { }
 
+  getPedidoById(id : number): Observable<Pedido>{
+    return this.http.get<Pedido>(`${this.apiUrl}/${id}`);
+  }
+
   getPedidos(): Observable<Pedido[]> {
     return this.http.get<Pedido[]>(this.apiUrl);
   }
