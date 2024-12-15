@@ -21,7 +21,7 @@
     <thead>
       <tr>
         <th>Id</th>
-        <th>Id Cliente</th>
+        <th>Nombre Cliente</th>
         <th>Estado</th>
         <th>Monto</th>
         <th>Forma de Pago</th>
@@ -31,10 +31,10 @@
     <tbody>
       <tr *ngFor="let pedido of pedidosFiltrados">
         <td>{{ pedido.id }}</td>
-        <td>{{ pedido.clienteId }}</td>
+        <td>{{ getCliente(pedido) }}</td>
         <td>{{ pedido.estado }}</td>
-        <td>{{ pedido.datosPago.monto }}</td>
-        <td>{{ pedido.formaPagoTipo }}</td>
+        <td>{{ pedido.datosPago?.monto || "No pago" }}</td>
+        <td>{{ pedido.datosPago?.formaPago || "No pago" }}</td>
         <td>
           <button (click)="editarPedido(pedido)">Editar</button>
           <button (click)="eliminarPedido(pedido.id)">Eliminar</button>

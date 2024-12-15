@@ -6,6 +6,8 @@ import { Pedido } from '../../../models/pedido.model';
 import { HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { PedidoModalComponent } from '../../modals/pedido-modal/pedido-modal.component';
+import { Cliente } from '../../../models/cliente.model';
+import { ClienteService } from '../../../services/cliente.service';
 
 @Component({
   selector: 'app-tabla-pedido',
@@ -18,6 +20,7 @@ export class TablaPedidoComponent {
     filtro: string = '';
 
     pedidos: Pedido[] = [];
+    clientes: Cliente[] = [];
 
 
     pedidoSeleccionado: Pedido | undefined = undefined;
@@ -25,23 +28,24 @@ export class TablaPedidoComponent {
     modo:string = '';
     isModal= false;
 
-    constructor(private _pedidoService: PedidoService){}
+    constructor(private _pedidoService: PedidoService, private _clienteService: ClienteService){}
 
     pedidosFiltrados = [...this.pedidos];
 
     ngOnInit(): void {
       this.obtenerPedidos();
+
+      this._clienteService.getClientes().subscribe(res => {
+        this.clientes = res;
+      }, error => console.error(error));
     }
 
     async obtenerPedidos() {
-      try {
-        const pedidos = await lastValueFrom(this._pedidoService.getPedidos());
-        this.pedidos = pedidos;
-        this.pedidosFiltrados = [...this.pedidos];
-        console.log("PEDIDOS OBTENIDOS:", this.pedidos);
-      } catch (error) {
-        console.error('Error al obtener los pedidos:', error);
-      }
+      this._pedidoService.getPedidos().subscribe(res => {
+        this.pedidos = res;
+        this.filtrarPedidos();
+        console.log(this.pedidos);
+      }, error => console.error(error));
     }
 
     async refreshPedidos() {
@@ -66,7 +70,7 @@ export class TablaPedidoComponent {
     // Actualizar método eliminarPedido
     async eliminarPedido(id: number) {
       try {
-        this._pedidoService.deletePedido(id);
+        this._pedidoService.deletePedido(id).subscribe();
         await this.refreshPedidos();
         alert('Pedido eliminado correctamente');
       } catch (error) {
@@ -84,6 +88,9 @@ export class TablaPedidoComponent {
 
     onCancel(){
       this.isModal = false;
+    }
+    getCliente(pedido: any){
+      return this.clientes.find(c => c.id == Number(pedido.idCliente))?.nombre;
     }
   }
 

@@ -53,7 +53,7 @@ export class EditarPedidoModalComponent {
       if(this.pedido){
       const updatedPedido = new Pedido({
         id: this.pedidoId,
-        clienteId: this.pedido.clienteId,
+        clienteId: this.pedido.idCliente,
         estado: formData.estado,
         detallePedido: [], 
         datosPago: {

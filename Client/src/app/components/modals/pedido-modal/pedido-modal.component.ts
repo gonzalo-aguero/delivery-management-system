@@ -142,8 +142,8 @@ export class PedidoModalComponent {
       clienteId: Number(this.pagoForm.value.cliente),
       estado: 'PENDIENTE_DE_PAGO',
       detallePedido: this.itemSeleccionados.map(([item, cantidad]) => ({itemId: item.id, cantidad})),
-      datosPago: {monto: this.subtotal, formaPago: this.pagoForm.value.metodo, cuitCliente: this.pagoForm.value.cuit, nombreCliente: this.clientes.find(c => c.id == Number(this.pagoForm.value.cliente))?.nombre},
-    });    
+      datosPago: {monto: this.subtotal, formaPago: this.pagoForm.value.metodo, cuitCliente: this.pagoForm.controls.cuit.value , nombreCliente: this.clientes.find(c => c.id == Number(this.pagoForm.value.cliente))?.nombre},
+    });
     console.log(this.items);
     console.log(pedido);
     this._pedidoService.crearPedido(pedido).subscribe(res => {
