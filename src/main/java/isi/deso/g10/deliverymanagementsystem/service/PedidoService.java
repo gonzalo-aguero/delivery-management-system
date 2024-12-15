@@ -13,6 +13,9 @@ import isi.deso.g10.deliverymanagementsystem.repository.ClienteRepository;
 import isi.deso.g10.deliverymanagementsystem.repository.DetallePedidoRepository;
 import isi.deso.g10.deliverymanagementsystem.repository.ItemMenuRepository;
 import isi.deso.g10.deliverymanagementsystem.repository.PedidoRepository;
+import isi.deso.g10.deliverymanagementsystem.strategy.FormaMercadoPago;
+import isi.deso.g10.deliverymanagementsystem.strategy.FormaPagoI;
+import isi.deso.g10.deliverymanagementsystem.strategy.FormaTransferencia;
 import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
@@ -64,7 +67,8 @@ public class PedidoService {
         Pedido pedido = new Pedido();
         pedido.setEstado(pedidoDTO.getEstado());
         pedido.setCliente(clienteRepository.findById(pedidoDTO.getIdCliente())
-            .orElseThrow(() -> new RuntimeException("No se encontró el cliente con ID: " + pedidoDTO.getIdCliente())));
+                .orElseThrow(
+                        () -> new RuntimeException("No se encontró el cliente con ID: " + pedidoDTO.getIdCliente())));
 
         if (pedidoDTO.getDatosPago() != null) {
             Pago pago = new Pago();
@@ -77,26 +81,23 @@ public class PedidoService {
             pedido.setDatosPago(pago);
         }
 
-        // List<DetallePedido> detallesPedido = new ArrayList<>();
         pedido.setDetallePedido(new ArrayList<>());
         pedidoDTO.getDetallePedido().forEach(detallePedidoDTO -> {
             DetallePedido detallePedido = new DetallePedido();
             ItemMenu item = itemMenuRepository.findById(detallePedidoDTO.getIdItemMenu())
-                .orElseThrow(() -> new RuntimeException(
-                    "No se encontró el ItemMenu con ID: " + detallePedidoDTO.getIdItemMenu()));
+                    .orElseThrow(() -> new RuntimeException(
+                            "No se encontró el ItemMenu con ID: " + detallePedidoDTO.getIdItemMenu()));
             detallePedido.setItem(item);
             detallePedido.setCantidad(detallePedidoDTO.getCantidad());
-            // detallePedido.setPedido(pedido);
-            // detallesPedido.add(detallePedido);
             pedido.addDetallePedido(detallePedido);
         });
-        // pedido.setDetallePedido(detallesPedido);
-        
+
         Pedido pedidoGuardado = pedidoRepository.save(pedido);
 
         return new PedidoDTO(pedidoGuardado);
     }
 
+    @Transactional
     public void deleteById(Integer id) throws NotFoundException {
         if (!pedidoRepository.existsById(id)) {
             throw new NotFoundException();
@@ -104,6 +105,7 @@ public class PedidoService {
         pedidoRepository.deleteById(id);
     }
 
+    @Transactional
     public PedidoDTO updatePedido(PedidoDTO pedidoDTO) throws NotFoundException {
         Pedido pedido = pedidoRepository.findById(pedidoDTO.getId())
                 .orElseThrow(() -> new NotFoundException());
@@ -113,9 +115,34 @@ public class PedidoService {
                 .orElseThrow(() -> new RuntimeException(
                         "No se encontró el cliente con ID: " + pedidoDTO.getIdCliente())));
 
+        // Update detallePedido
+        pedido.getDetallePedido().clear();
+        pedidoDTO.getDetallePedido().forEach(detallePedidoDTO -> {
+            DetallePedido detallePedido = new DetallePedido();
+            detallePedido.setItem(itemMenuRepository.findById(detallePedidoDTO.getIdItemMenu())
+                    .orElseThrow(() -> new RuntimeException(
+                            "No se encontró el ItemMenu con ID: " + detallePedidoDTO.getIdItemMenu())));
+            detallePedido.setCantidad(detallePedidoDTO.getCantidad());
+            pedido.addDetallePedido(detallePedido);
+        });
+
         if (pedidoDTO.getDatosPago() != null) {
             Pago pago = pedido.getDatosPago() != null ? pedido.getDatosPago() : new Pago();
-            pago.setMonto(pedidoDTO.getDatosPago().getMonto());
+
+            // Calcular nuevo monto
+            Double nuevoMonto = (double) 0;
+            for (DetallePedido detalle : pedido.getDetallePedido()) {
+                nuevoMonto += detalle.getItem().getPrecio() *  detalle.getCantidad();
+            }
+            FormaPagoI formaPago;
+            if (pedidoDTO.getDatosPago().getFormaPago().equals("Transferencia")) {
+                formaPago = new FormaTransferencia();
+            } else {
+                formaPago = new FormaMercadoPago();
+            }
+            nuevoMonto = formaPago.totalizar(nuevoMonto);
+            pago.setMonto(nuevoMonto);
+
             pago.setFormaPago(pedidoDTO.getDatosPago().getFormaPago());
             pago.setFecha(pedidoDTO.getDatosPago().getFecha());
             pago.setNombreCliente(pedidoDTO.getDatosPago().getNombreCliente());
@@ -124,17 +151,9 @@ public class PedidoService {
             pago.setPedido(pedido);
         }
 
-        Pedido pedidoActualizado = pedidoRepository.save(pedido);
 
-        pedidoDTO.getDetallePedido().forEach(detallePedidoDTO -> {
-            DetallePedido detallePedido = new DetallePedido();
-            detallePedido.setCantidad(detallePedidoDTO.getCantidad());
-            detallePedido.setItem(itemMenuRepository.findById(detallePedidoDTO.getIdItemMenu())
-                    .orElseThrow(() -> new RuntimeException(
-                            "No se encontró el ItemMenu con ID: " + detallePedidoDTO.getIdItemMenu())));
-            detallePedido.setPedido(pedidoActualizado);
-            detallePedidoRepository.save(detallePedido);
-        });
+
+        Pedido pedidoActualizado = pedidoRepository.save(pedido);
 
         return new PedidoDTO(pedidoActualizado);
     }
