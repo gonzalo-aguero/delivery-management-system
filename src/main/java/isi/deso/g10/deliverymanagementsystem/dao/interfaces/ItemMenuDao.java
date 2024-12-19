@@ -4,6 +4,7 @@
  */
 package isi.deso.g10.deliverymanagementsystem.dao.interfaces;
 
+import isi.deso.g10.deliverymanagementsystem.model.Categoria;
 import isi.deso.g10.deliverymanagementsystem.model.ItemMenu;
 import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
 import java.util.ArrayList;
@@ -13,17 +14,11 @@ import java.util.List;
  *
  * @author giuli
  */
-public interface ItemMenuDao {
-
-    public List<ItemMenu> obtenerItemsMenu();
-
-    public ItemMenu agregarItemMenu(ItemMenu itemMenu);
-
-    public boolean actualizarItemMenu(ItemMenu itemMenu);
-
-    public boolean eliminarItemMenu(int id);
-
-    public ItemMenu buscarItemMenuPorId(int id);
+public interface ItemMenuDao extends GenericDao<ItemMenu>{
     
     public ArrayList<ItemMenu> buscarVendedor(Vendedor vendedor);
+    
+    public List<Categoria> getCategorias();
+    
+    public List<ItemMenu> buscarItemsPorNombre(String cadena);
 }

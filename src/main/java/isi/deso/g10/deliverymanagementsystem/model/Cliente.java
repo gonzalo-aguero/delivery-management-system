@@ -9,91 +9,51 @@ import java.util.Date;
 import isi.deso.g10.deliverymanagementsystem.model.Pedido.EstadoPedido;
 import isi.deso.g10.deliverymanagementsystem.observer.PedidoObserver;
 import isi.deso.g10.deliverymanagementsystem.strategy.FormaMercadoPago;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author giuli
  */
-public class Cliente implements PedidoObserver{
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "cliente")
+@EqualsAndHashCode(callSuper = false)
+public class Cliente extends Persona{
 
-    private int id;
+    @Column(unique = true)
     private String cuit;
-    private String nombre;
     private String email;
-    private String direccion;
-    private Coordenada coordenadas;
     
-    public Cliente(int id, String cuit, String nombre, String email, String direccion, Coordenada coordenadas) {
-        this.id = id;
-        this.cuit = cuit;
-        this.nombre = nombre;
-        this.email = email;
-        this.direccion = direccion;
-        this.coordenadas = coordenadas;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getCuit() {
-        return cuit;
-    }
-
-    public void setCuit(String cuit) {
-        this.cuit = cuit;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+  
+    @OneToMany(mappedBy= "cliente",cascade = CascadeType.ALL,orphanRemoval = false, fetch = FetchType.LAZY)
+    private List<Pedido> pedidos;
     
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public Coordenada getCoordenadas() {
-        return coordenadas;
-    }
-
-    public void setCoordenadas(Coordenada coordenadas) {
-        this.coordenadas = coordenadas;
-    }
-
-    @Override
-    public void update(Pedido pedido) {
-        System.out.println("El pedido " + pedido.getId() + " ha cambiado de estado a " + pedido.getEstado());    
-        if(pedido.getEstado().equals(EstadoPedido.EN_ENVIO)) {
-            pedido.setDatosPago(generarPago(pedido));
-        }
-    }
+   
     private Pago generarPago(Pedido pedido) {
        System.out.println("Generando pago para el pedido " + pedido.getId() + "...");
         if(pedido.getFormapago().getClass() == FormaMercadoPago.class) {
             Pago pago = new Pago(
-                    pedido.getId(),
+                    pedido,
                     new Date(),
-                    this.nombre,
+                    super.nombre,
                     this.cuit,
                     pedido.costoFinal(),
                     "Mercado Pago"
@@ -102,9 +62,9 @@ public class Cliente implements PedidoObserver{
             return pago;
         }else{
             Pago pago = new Pago(
-                    pedido.getId(),
+                    pedido,
                     new Date(),
-                    this.nombre,
+                    super.nombre,
                     this.cuit,
                     pedido.costoFinal(),
                     "Transferencia"

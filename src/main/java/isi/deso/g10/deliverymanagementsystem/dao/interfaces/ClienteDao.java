@@ -11,16 +11,10 @@ import java.util.List;
  *
  * @author giuli
  */
-public interface ClienteDao {
+public interface ClienteDao extends GenericDao<Cliente>{
 
-    public List<Cliente> obtenerClientes();
-
-    public Cliente agregarCliente(Cliente cliente);
-
-    public Cliente actualizarCliente(Cliente cliente);
-
-    public boolean eliminarCliente(int id);
-
-    public Cliente buscarClientePorId(int id);
+    // Métodos específicos de la entidad
+    
+    public List<Cliente> obtenerClientesPorNombre(String cadena);
 
 }

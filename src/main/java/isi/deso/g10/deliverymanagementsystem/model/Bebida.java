@@ -4,12 +4,19 @@
  */
 package isi.deso.g10.deliverymanagementsystem.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
 /**
  *
  * @author lucas
  */
+@Entity
+@Table(name="bebida")
 public class Bebida extends ItemMenu {
 
+    
+    
     //atributos propios de las bebidas
     private double graduacionAlcoholica;
     //sustituye al atributo tamanio del diagrama de clases del tp
@@ -29,6 +36,8 @@ public class Bebida extends ItemMenu {
         this.volumenEnMl = volumenEnMl;
     }
     
+    
+    
     /**
      * Constructor con todos los atributos.
      * @param id
@@ -44,6 +53,10 @@ public class Bebida extends ItemMenu {
      * @param graduacionAlcoholica
      * @param volumenEnMl 
      */
+    public Bebida(){
+        super();
+            };
+    
     public Bebida(int id, String nombre, String descripcion, double precio, Categoria categoria, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano, Vendedor vendedor, double graduacionAlcoholica, double volumenEnMl) {
         super(id, nombre, descripcion, precio, categoria, calorias, aptoCeliaco, aptoVegetariano, aptoVegano, vendedor);
         this.graduacionAlcoholica = graduacionAlcoholica;

@@ -9,6 +9,7 @@ import isi.deso.g10.deliverymanagementsystem.model.Vendedor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
@@ -48,8 +49,6 @@ public class CrearItemMenuDialog extends javax.swing.JDialog {
         descripcionTextPane = new javax.swing.JTextPane();
         jLabel5 = new javax.swing.JLabel();
         precioField = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        categoriaBox = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         celiacoCheck = new javax.swing.JCheckBox();
@@ -62,11 +61,13 @@ public class CrearItemMenuDialog extends javax.swing.JDialog {
         crearButton = new javax.swing.JButton();
         cancelarButton = new javax.swing.JButton();
         pesoField = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        pesoLabel = new javax.swing.JLabel();
+        graduacionLabel = new javax.swing.JLabel();
         graduacionField = new javax.swing.JTextField();
         volumenField = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
+        volumenLabel = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        categoriaBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -74,7 +75,6 @@ public class CrearItemMenuDialog extends javax.swing.JDialog {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Crear Item Menu");
 
@@ -96,55 +96,35 @@ public class CrearItemMenuDialog extends javax.swing.JDialog {
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Vendedor:");
 
-        vendedoresBox.setBackground(new java.awt.Color(255, 255, 255));
         vendedoresBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 vendedoresBoxActionPerformed(evt);
             }
         });
 
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Nombre:");
 
-        nombreField.setBackground(new java.awt.Color(255, 255, 255));
         nombreField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nombreFieldActionPerformed(evt);
             }
         });
 
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Descripción:");
 
         jScrollPane1.setForeground(new java.awt.Color(255, 255, 255));
-
-        descripcionTextPane.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane1.setViewportView(descripcionTextPane);
 
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Precio:");
 
-        precioField.setBackground(new java.awt.Color(255, 255, 255));
-        precioField.setForeground(new java.awt.Color(0, 0, 0));
-
-        jLabel6.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setText("Categoría:");
-
-        categoriaBox.setBackground(new java.awt.Color(255, 255, 255));
-        categoriaBox.setForeground(new java.awt.Color(0, 0, 0));
-
-        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Apto para:");
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
         jPanel5.setForeground(new java.awt.Color(255, 255, 255));
 
         celiacoCheck.setBackground(new java.awt.Color(255, 255, 255));
-        celiacoCheck.setForeground(new java.awt.Color(0, 0, 0));
         celiacoCheck.setText("Celíaco");
         celiacoCheck.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -153,11 +133,9 @@ public class CrearItemMenuDialog extends javax.swing.JDialog {
         });
 
         vegetarianoCheck.setBackground(new java.awt.Color(255, 255, 255));
-        vegetarianoCheck.setForeground(new java.awt.Color(0, 0, 0));
         vegetarianoCheck.setText("Vegetariano");
 
         veganoCheck.setBackground(new java.awt.Color(255, 255, 255));
-        veganoCheck.setForeground(new java.awt.Color(0, 0, 0));
         veganoCheck.setText("Vegano");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -181,11 +159,8 @@ public class CrearItemMenuDialog extends javax.swing.JDialog {
                 .addComponent(veganoCheck))
         );
 
-        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Tipo:");
 
-        tipoBox.setBackground(new java.awt.Color(255, 255, 255));
-        tipoBox.setForeground(new java.awt.Color(0, 0, 0));
         tipoBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Plato", "Bebida" }));
         tipoBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -193,39 +168,40 @@ public class CrearItemMenuDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Calorías:");
-
-        caloriasField.setBackground(new java.awt.Color(255, 255, 255));
-        caloriasField.setForeground(new java.awt.Color(0, 0, 0));
 
         crearButton.setBackground(new java.awt.Color(66, 176, 255));
         crearButton.setForeground(new java.awt.Color(255, 255, 255));
-        crearButton.setText("Crear");
+        crearButton.setText("Guardar");
+        crearButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                crearButtonActionPerformed(evt);
+            }
+        });
 
-        cancelarButton.setBackground(new java.awt.Color(255, 255, 255));
         cancelarButton.setForeground(new java.awt.Color(66, 176, 255));
         cancelarButton.setText("Cancelar");
 
-        pesoField.setBackground(new java.awt.Color(255, 255, 255));
-        pesoField.setForeground(new java.awt.Color(0, 0, 0));
+        pesoLabel.setText("Peso:");
 
-        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel10.setText("Peso:");
-
-        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel11.setText("Graduación:");
+        graduacionLabel.setText("Graduación:");
 
         graduacionField.setEditable(false);
         graduacionField.setBackground(new java.awt.Color(255, 255, 255));
-        graduacionField.setForeground(new java.awt.Color(0, 0, 0));
 
         volumenField.setEditable(false);
         volumenField.setBackground(new java.awt.Color(255, 255, 255));
-        volumenField.setForeground(new java.awt.Color(0, 0, 0));
 
-        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel12.setText("Volumen(en ml):");
+        volumenLabel.setText("Volumen(en ml):");
+
+        jLabel6.setText("Categoria");
+
+        categoriaBox.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        categoriaBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                categoriaBoxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -255,23 +231,23 @@ public class CrearItemMenuDialog extends javax.swing.JDialog {
                                 .addComponent(tipoBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGap(34, 34, 34)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(categoriaBox, 0, 236, Short.MAX_VALUE))
+                            .addComponent(caloriasField)
+                            .addComponent(pesoField)
+                            .addComponent(graduacionField)
+                            .addComponent(volumenField)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel7)
                                     .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel9)
-                                    .addComponent(jLabel10)
-                                    .addComponent(jLabel11)
-                                    .addComponent(jLabel12))
+                                    .addComponent(pesoLabel)
+                                    .addComponent(graduacionLabel)
+                                    .addComponent(volumenLabel))
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(caloriasField)
-                            .addComponent(pesoField)
-                            .addComponent(graduacionField)
-                            .addComponent(volumenField)))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(categoriaBox, 0, 239, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(crearButton)
@@ -314,15 +290,15 @@ public class CrearItemMenuDialog extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(caloriasField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel10)
+                        .addComponent(pesoLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pesoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel11)
+                        .addComponent(graduacionLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(graduacionField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel12)
+                        .addComponent(volumenLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(volumenField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -389,6 +365,14 @@ public class CrearItemMenuDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_vendedoresBoxActionPerformed
 
+    private void categoriaBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoriaBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_categoriaBoxActionPerformed
+
+    private void crearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_crearButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -438,10 +422,8 @@ public class CrearItemMenuDialog extends javax.swing.JDialog {
     private javax.swing.JButton crearButton;
     private javax.swing.JTextPane descripcionTextPane;
     private javax.swing.JTextField graduacionField;
+    public javax.swing.JLabel graduacionLabel;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -457,14 +439,28 @@ public class CrearItemMenuDialog extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nombreField;
     private javax.swing.JTextField pesoField;
+    public javax.swing.JLabel pesoLabel;
     private javax.swing.JTextField precioField;
     private javax.swing.JComboBox<String> tipoBox;
     private javax.swing.JCheckBox veganoCheck;
     private javax.swing.JCheckBox vegetarianoCheck;
     private javax.swing.JComboBox<Vendedor> vendedoresBox;
     private javax.swing.JTextField volumenField;
+    public javax.swing.JLabel volumenLabel;
     // End of variables declaration//GEN-END:variables
 
+    public JLabel getPesoLabel(){
+        return pesoLabel;
+    }
+    
+    public JLabel getVolumenLabel(){
+        return volumenLabel;
+    }
+    
+    public JLabel getGraduacionLabel(){
+        return graduacionLabel;
+    }
+    
     public JTextField getCaloriasField() {
         return caloriasField;
     }
@@ -473,12 +469,12 @@ public class CrearItemMenuDialog extends javax.swing.JDialog {
         return cancelarButton;
     }
 
-    public JComboBox<Categoria> getCategoriaBox() {
-        return categoriaBox;
-    }
-
     public JCheckBox getCeliacoCheck() {
         return celiacoCheck;
+    }
+    
+    public JComboBox getCategoriaBox() {
+        return categoriaBox;
     }
 
     public JButton getCrearButton() {

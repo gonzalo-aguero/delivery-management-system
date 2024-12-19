@@ -11,16 +11,10 @@ import java.util.List;
  *
  * @author giuli
  */
-public interface VendedorDao {
-
-    List<Vendedor> obtenerVendedores();
-
-    Vendedor agregarVendedor(Vendedor vendedor);
-
-    Vendedor actualizarVendedor(Vendedor vendedor);
-
-    boolean eliminarVendedor(int id);
-
-    Vendedor buscarVendedorPorId(int id);
+public interface VendedorDao extends GenericDao<Vendedor>{
+    
+    // Métodos específicos de la entidad
+    
+    public List<Vendedor> buscarVendedorPorNombre(String cadena);
 
 }

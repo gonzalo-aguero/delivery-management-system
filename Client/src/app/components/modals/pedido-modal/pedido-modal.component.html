@@ -1,0 +1,96 @@
+<div class="form">
+  @if(pedir){
+  <h3>Crear Pedido</h3>
+  <form>
+    <div class="container">
+      <label for="vendedor">Vendedor:</label>
+      <select (change)="onSelectChange($event)" id="vendedor" name="vendedor">
+        <option *ngFor="let vendedor of vendedores" value="{{ vendedor.id }}">
+          {{ vendedor.nombre }}
+        </option>
+      </select>
+      <table>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+          </tr>
+        </thead>
+        <tr
+          *ngFor="let item of items; let i = index"
+          [class.selected]="selectedTI === i"
+          (click)="selectTI(i)"
+        >
+          <td>{{ item.id }}</td>
+          <td>{{ item.nombre }}</td>
+          <td>{{ item.precio }}</td>
+        </tr>
+      </table>
+      <form [formGroup]="cantidad">
+        <label>Cantidad: </label>
+        <input type="number" formControlName="cantidad" style="width: 25%" />
+      </form>
+    </div>
+    <div class="main-btn-container">
+      <button
+        type="button"
+        [class.delete]="!seleccionar"
+        (click)="seleccionarBtn()"
+      >
+        {{ seleccionar ? "Seleccionar" : "Eliminar" }}
+      </button>
+      <div class="btn-container">
+        <button type="button" (click)="onPedir()">Pedir</button>
+        <button type="button" class="secondary" (click)="onCancel()">
+          Cancelar
+        </button>
+      </div>
+    </div>
+    <div class="container">
+      <table>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+          </tr>
+        </thead>
+        <tr
+          *ngFor="let item of itemSeleccionados; let i = index"
+          [class.selected]="selectedTS === i"
+          (click)="selectTS(i)"
+        >
+          <td>{{ item[0].id }}</td>
+          <td>{{ item[0].nombre }}</td>
+          <td>{{ item[1] }}</td>
+          <td>{{ item[1] * item[0].precio }}</td>
+        </tr>
+      </table>
+
+      <p class="total">Total = {{ total }}</p>
+    </div>
+  </form>
+  } @else {
+  <form [formGroup]="pagoForm" class="pago" *ngIf="clientes.length > 0">
+    <label>Metodo de pago:</label>
+    <select (change)="cambiaMetodo($event)" formControlName="metodo">
+      <option value="mercadopago">Mercado Pago</option>
+      <option value="transferencia">Transferencia</option>
+    </select>
+    <label>Cliente</label>
+    <select formControlName="cliente" (ngModelChange)="cambiaCliente()">
+      <option *ngFor="let cliente of clientes" [value]="cliente.id">
+        {{ cliente.nombre }}
+      </option>
+    </select>
+    <label>Cuit:</label>
+    <input id="cuit" formControlName="cuit" />
+    <label>Alias/Cbu:</label>
+    <input id="cbu" formControlName="cbu" />
+  </form>
+  <p class="total">Total: {{ subtotal }}</p>
+  <button (click)="onEnviarPedido()">Enviar Pedido</button>
+  }
+</div>

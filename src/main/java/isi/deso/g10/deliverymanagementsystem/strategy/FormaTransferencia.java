@@ -3,10 +3,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package isi.deso.g10.deliverymanagementsystem.strategy;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  *
  * @author giuli
  */
+@Data
+@NoArgsConstructor
 public class FormaTransferencia implements FormaPagoI {
     private  String cuitCliente;
     private  String cbuCliente;

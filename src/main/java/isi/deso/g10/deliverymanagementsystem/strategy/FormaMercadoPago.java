@@ -4,10 +4,15 @@
  */
 package isi.deso.g10.deliverymanagementsystem.strategy;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  *
  * @author giuli
  */
+@Data
+@NoArgsConstructor
 public class FormaMercadoPago implements FormaPagoI{
 
     private String alias;

@@ -7,83 +7,109 @@ package isi.deso.g10.deliverymanagementsystem.model;
 import isi.deso.g10.deliverymanagementsystem.observer.Observable;
 import isi.deso.g10.deliverymanagementsystem.observer.PedidoObserver;
 import isi.deso.g10.deliverymanagementsystem.strategy.FormaPagoI;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  *
  * @author gonzalo90fa
  */
-public class Pedido implements Observable {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name="pedido")
+public class Pedido{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    
+    @ManyToOne()
+    @JoinColumn(name = "cliente_id")
     private Cliente cliente;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name="estado")
     private EstadoPedido estado;
-    private DetallePedido detallePedido;
+    
+    @OneToMany(mappedBy="pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetallePedido> detallePedido;
+    
+    @OneToOne(mappedBy="pedido", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Pago datosPago;
+    
+    @Column(name = "forma_pago_tipo")
+    private String formaPagoTipo;
+    
+    @Transient
     private FormaPagoI formapago;
+    
+    
+    @Transient
     private List<PedidoObserver> observers;
 
-    public Pedido() { }
-
-    public Pedido(int idPedido ,ArrayList<ItemMenu> itemsPedido, Cliente cliente) {
-        this.id = idPedido;
-        this.detallePedido = new DetallePedido(itemsPedido);
-        this.cliente = cliente;
-        this.observers = new ArrayList<>();
-    }
-
-    public Pedido(int idPedido ,ArrayList<ItemMenu> itemsPedido, Cliente cliente, FormaPagoI formapago) {
-        this.id = idPedido;
-        this.detallePedido = new DetallePedido(itemsPedido);
-        this.cliente = cliente;
-        this.formapago = formapago;
-        this.observers = new ArrayList<>();
-    }
-
+    
     public enum EstadoPedido {
        RECIBIDO, EN_ENVIO, EN_PROCESO, PENDIENTE_DE_PAGO, ENTREGADO, FINALIZADO
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-    
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public void setDatosPago(Pago datosPago) {
-        this.datosPago = datosPago;
-    }
-    public Pago getDatosPago() {
-        return datosPago;
+     public FormaPagoI getFormapago() {
+        if (formapago == null && formaPagoTipo != null) {
+            // Recupera la implementación correspondiente
+            try {
+                // Usamos reflexión o una fábrica para instanciar la implementación
+                formapago = (FormaPagoI) Class.forName(formaPagoTipo).getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return formapago;
     }
 
     public void setFormapago(FormaPagoI formapago) {
         this.formapago = formapago;
-    }
-
-    public FormaPagoI getFormapago() {
-        return formapago;
+        // Guardar el nombre de la clase de la implementación
+        if (formapago != null) {
+            this.formaPagoTipo = formapago.getClass().getName();
+        }
     }
     public double costoFinal() {
         if(formapago == null) {
             System.out.println("No se ha ingresado una forma de pago aun :(");
             return 0d;
         }else{
-            return formapago.totalizar(detallePedido.calcularMontoTotal());
+            double total=0;
+            for(DetallePedido dp : detallePedido ){
+               total+= dp.calcularMontoTotal();
+            }
+            
+            return getFormapago().totalizar(total);
         }
     }
-
+/*
     public EstadoPedido getEstado() {
         return estado;
     }
@@ -97,35 +123,34 @@ public class Pedido implements Observable {
     }
 
     public ArrayList<ItemMenu> getItemsPedido() {
-        return this.detallePedido.getItems();
+        ArrayList<ItemMenu> itemsMenu = new ArrayList();
+        detallePedido.forEach(e -> itemsMenu.add(e.getItem()));
+        
+        return itemsMenu;
     }
 
-    public DetallePedido getDetallePedido() {
+    public List<DetallePedido> getDetallePedido() {
         return detallePedido;
     }
 
-    public void setDetallePedido(DetallePedido detallePedido) {
+    public void setDetallePedido(List<DetallePedido> detallePedido) {
         this.detallePedido = detallePedido;
     }
 
+*/
 
-    @Override
-    public void addObserver(PedidoObserver o) {
-        if (o != null && !observers.contains(o)) {
-            observers.add(o);
-        }
+    /**
+     * Agrega un detalle de pedido a la lista de detalles del pedido,
+     * asegurandose de crear la id compuesta correctamente.
+     *
+     * @param detalle El detalle de pedido que se va a agregar.
+     */
+    public void addDetallePedido(DetallePedido detalle) {
+        DetallePedidoId detalleId = new DetallePedidoId();
+        detalleId.setPedidoId(this.id);
+        detalleId.setDetallePedidoId(detallePedido.size() + 1);
+        detalle.setId(detalleId);
+        detalle.setPedido(this);
+        detallePedido.add(detalle);
     }
-
-    @Override
-    public boolean removeObserver(PedidoObserver o) {
-        return observers.remove(o);
-    }
-
-    @Override
-    public void notifyObservers() {
-        for (PedidoObserver observer : observers) {
-            observer.update(this);
-        }
-    }
-
 }

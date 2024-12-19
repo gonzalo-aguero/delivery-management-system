@@ -11,16 +11,7 @@ import java.util.List;
  *
  * @author giuli
  */
-public interface CategoriaDao {
-    
-    public List<Categoria> obtenerCategorias();
-    
-    public Categoria agregarCategoria(Categoria categoria);
-    
-    public Categoria actualizarCategoria(Categoria categoria);
-    
-    public boolean eliminarCategoria(int id);
-    
-    public Categoria buscarCategoriaPorId(int id);
-    
+public interface CategoriaDao extends GenericDao<Categoria>{
+
+    // Los métodos básicos ya están implementados en GenericDao
 }

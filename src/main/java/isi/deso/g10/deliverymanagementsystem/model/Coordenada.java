@@ -4,28 +4,50 @@
  */
 package isi.deso.g10.deliverymanagementsystem.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import isi.deso.g10.deliverymanagementsystem.model.dto.CoordenadaDTO;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  *
  * @author giuli
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name="coordenada")
 public class Coordenada {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private double latitud;
     private double longitud;
-
+    
+    @JsonBackReference
+    @OneToOne
+    @JoinColumn(name = "persona_id", referencedColumnName = "id")
+    private Persona persona;
+    
     public Coordenada(double lat,double lng){
         this.latitud=lat;
         this.longitud=lng;
     }
-    
-    public double getLatitud() {
-        return latitud;
+    public Coordenada(double lat,double lng,Persona persona){
+        this.latitud=lat;
+        this.longitud=lng;
     }
-
-    public double getLongitud() {
-        return longitud;
-    }
-    
-    
     
 }

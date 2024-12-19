@@ -1,0 +1,65 @@
+<div class="container">
+  <div class="header">
+    <h1>Lista de clientes</h1>
+  </div>
+  <div class="actions">
+    <button class="btn btn-primary" (click)="crearCliente()">
+      Crear un nuevo cliente
+    </button>
+    <div class="buscador">
+      <label for="buscador">Buscador:</label>
+      <input
+        id="buscador"
+        type="text"
+        [(ngModel)]="filtro"
+        placeholder="Buscar cliente"
+        (input)="filtrarClientes()"
+      />
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Cuit</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Direccion</th>
+        <th>Coordenadas</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cliente of clientesFiltrados">
+        <td>{{ cliente.id }}</td>
+        <td>{{ cliente.cuit }}</td>
+        <td>{{ cliente.nombre }}</td>
+        <td>{{ cliente.email }}</td>
+        <td>{{ cliente.direccion }}</td>
+        <td>
+          @if (cliente.coordenadas) { [ {{ cliente.coordenadas.latitud }} ;
+          {{ cliente.coordenadas.longitud }} ] }@else {
+          <p>null</p>
+          }
+        </td>
+        <td>
+          <button (click)="editarCliente(cliente)">Editar</button>
+          <button (click)="eliminarCliente(cliente.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+@if(modal){
+<div class="modals">
+  <div class="modal">
+    <app-cliente-modal
+      [modo]="modo"
+      [cliente]="clienteSeleccionado"
+      (submit)="onSubmit($event)"
+      (cancel)="onCancel()"
+    ></app-cliente-modal>
+  </div>
+</div>
+}

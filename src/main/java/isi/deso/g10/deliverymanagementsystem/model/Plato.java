@@ -4,15 +4,24 @@
  */
 package isi.deso.g10.deliverymanagementsystem.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
 /**
  *
  * @author lucas
  */
+@Entity
+@Table(name="plato")
 public class Plato extends ItemMenu {
 
     //atributos especificos de la clase
     private double peso;
 
+    
+    public Plato(){
+        super();
+    }
     
     //constructor (eliminar y dejar el completo)
     public Plato(double peso, int id, String nombre, String descripcion, double precio, Categoria categoria, int calorias, boolean aptoCeliaco, boolean aptoVegetariano, boolean aptoVegano) {

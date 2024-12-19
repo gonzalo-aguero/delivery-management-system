@@ -4,84 +4,55 @@
  */
 package isi.deso.g10.deliverymanagementsystem.model;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import static java.lang.Math.*;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  *
  * @author giuli
  */
-public class Vendedor {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@Entity
+@Table(name = "vendedor")
+public class Vendedor extends Persona {
 
-    //atributos
-    private int id;
-    private String nombre;
-    private String direccion;
-    private Coordenada coordenadas;
-    private ArrayList<ItemMenu> menu;
 
-    //constructor
-    public Vendedor(int id, String nombre, String direccion, Coordenada coordenadas) {
-        this.id = id;
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.coordenadas = coordenadas;
-        this.menu = new ArrayList();
-    }
+    @OneToMany(mappedBy = "vendedor")
+    private List<ItemMenu> menu;
 
-    //geters y setters
-    public ArrayList<ItemMenu> getMenu() {
-        return menu;
-    }
-
-    public void setMenu(ArrayList<ItemMenu> menu) {
-        this.menu = menu;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public Coordenada getCoordenadas() {
-        return coordenadas;
-    }
-
-    public void setCoordenadas(Coordenada coordenadas) {
-        this.coordenadas = coordenadas;
-    }
-
+  
     public double distancia(Cliente cliente) {
         final double R = 6378;
 
-        //Latitudes
-        double latV = toRadians(this.coordenadas.getLatitud());
+        // Latitudes
+        double latV = toRadians(getCoordenadas().getLatitud());
         double latC = toRadians(cliente.getCoordenadas().getLatitud());
 
-        //Longitudes
-        double lngV = toRadians(this.coordenadas.getLongitud());
+        // Longitudes
+        double lngV = toRadians(getCoordenadas().getLongitud());
         double lngC = toRadians(cliente.getCoordenadas().getLongitud());
 
-        //Deltas
+        // Deltas
         double dlat = latC - latV;
         double dlng = lngC - lngV;
 
@@ -93,104 +64,83 @@ public class Vendedor {
         return distancia;
     }
 
-    
-    
     /**
      * ----------- Métodos Etapa 2 -----------
      */
-    
-    
-    public ArrayList<Bebida> getItemsBebidas() {
-        ArrayList<Bebida> bebidas = new ArrayList();
-        for (ItemMenu item : menu) {
-            if (item.esBebida()) {
-                bebidas.add((Bebida)item);
-            }
-        }
-        return bebidas;
+
+    @JsonIgnore
+    public List<Bebida> getItemsBebidas() {
+        return menu.stream()
+                .filter(ItemMenu::esBebida)
+                .map(item -> (Bebida) item)
+                .collect(Collectors.toList());
     }
 
-    public ArrayList<Plato> getItemsComidas() {
-        ArrayList<Plato> comidas = new ArrayList();
-        for (ItemMenu item : menu) {
-            if (item.esComida()) {
-                comidas.add((Plato)item);
-            }
-        }
-        return comidas;
+    @JsonIgnore
+    public List<Plato> getItemsComidas() {
+        return menu.stream()
+                .filter(ItemMenu::esComida)
+                .map(item -> (Plato) item)
+                .collect(Collectors.toList());
     }
 
-    public ArrayList<Plato> getItemsComidasVeganas() {
-        ArrayList<Plato> comidasVeganas = new ArrayList();
-        for (ItemMenu item : menu) {
-            if (item.esComida() && item.aptoVegano()) {
-                comidasVeganas.add((Plato)item);
-            }
-        }
-        return comidasVeganas;
+    @JsonIgnore
+    public List<Plato> getItemsComidasVeganas() {
+        return menu.stream()
+                .filter(item -> item.esComida() && item.aptoVegano())
+                .map(item -> (Plato) item)
+                .collect(Collectors.toList());
     }
-    
-    public ArrayList<Bebida> getItemsBebidasVeganas() {
-        ArrayList<Bebida> bebidasVeganas = new ArrayList();
-        for (ItemMenu item : menu) {
-            if (item.esBebida() && item.aptoVegano()) {
-                bebidasVeganas.add((Bebida)item);
-            }
-        }
-        return bebidasVeganas;
+
+    @JsonIgnore
+    public List<Bebida> getItemsBebidasVeganas() {
+        return menu.stream()
+                .filter(item -> item.esBebida() && item.aptoVegano())
+                .map(item -> (Bebida) item)
+                .collect(Collectors.toList());
     }
-    
-    public ArrayList<Plato> getItemsComidasVegetarianas() {
-        ArrayList<Plato> comidasVegetarianas = new ArrayList();
-        for (ItemMenu item : menu) {
-            if (item.esComida() && item.aptoVegetariano()) {
-                comidasVegetarianas.add((Plato)item);
-            }
-        }
-        return comidasVegetarianas;
+
+    @JsonIgnore
+    public List<Plato> getItemsComidasVegetarianas() {
+        return menu.stream()
+                .filter(item -> item.esComida() && item.aptoVegetariano())
+                .map(item -> (Plato) item)
+                .collect(Collectors.toList());
     }
-        
-    public ArrayList<Bebida> getItemsBebidasVegetarianas() {
-        ArrayList<Bebida> bebidasVegetarianas = new ArrayList();
-        for (ItemMenu item : menu) {
-            if (item.esBebida() && item.aptoVegetariano()) {
-                bebidasVegetarianas.add((Bebida)item);
-            }
-        }
-        return bebidasVegetarianas;
+
+    @JsonIgnore
+    public List<Bebida> getItemsBebidasVegetarianas() {
+        return menu.stream()
+                .filter(item -> item.esBebida() && item.aptoVegetariano())
+                .map(item -> (Bebida) item)
+                .collect(Collectors.toList());
     }
-    
-    public ArrayList<Plato> getItemsComidasAptoCeliaco() {
-        ArrayList<Plato> comidasCeliaco = new ArrayList();
-        for (ItemMenu item : menu) {
-            if (item.esComida() && item.aptoCeliaco()) {
-                comidasCeliaco.add((Plato)item);
-            }
-        }
-        return comidasCeliaco;
+
+    @JsonIgnore
+    public List<Plato> getItemsComidasAptoCeliaco() {
+        return menu.stream()
+                .filter(item -> item.esComida() && item.aptoCeliaco())
+                .map(item -> (Plato) item)
+                .collect(Collectors.toList());
     }
-    
-    public ArrayList<Bebida> getItemsBebidasAptoCeliaco() {
-        ArrayList<Bebida> bebidasCeliaco = new ArrayList();
-        for (ItemMenu item : menu) {
-            if (item.esBebida() && item.aptoCeliaco()) {
-                bebidasCeliaco.add((Bebida)item);
-            }
-        }
-        return bebidasCeliaco;
+
+    @JsonIgnore
+    public List<Bebida> getItemsBebidasAptoCeliaco() {
+        return menu.stream()
+                .filter(item -> item.esBebida() && item.aptoCeliaco())
+                .map(item -> (Bebida) item)
+                .collect(Collectors.toList());
     }
-    
-    public ArrayList<Bebida> getItemsBebidaSinAlcohol() {
-        ArrayList<Bebida> bebidasSinAlcohol = new ArrayList();
-        for (ItemMenu item : menu) {
-            if (item.esBebida() && ((Bebida) item).getGraduacionAlcoholica() == 0) {
-                bebidasSinAlcohol.add((Bebida)item);
-            }
-        }
-        return bebidasSinAlcohol;
+
+    @JsonIgnore
+    public List<Bebida> getItemsBebidaSinAlcohol() {
+        return menu.stream()
+                .filter(item -> item.esBebida() && ((Bebida) item).getGraduacionAlcoholica() == 0)
+                .map(item -> (Bebida) item)
+                .collect(Collectors.toList());
     }
-    
-    //Esto permite agregarlo a un combobox y mantener la referencia
+
+    // Esto permite agregarlo a un combobox y mantener la referencia
     @Override
     public String toString() {
         return nombre; // Esto se mostrará en el JComboBox
